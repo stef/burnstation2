@@ -60,7 +60,7 @@ class AlbumBrowser(gtk.Layout):
 
 
     def cb_realize(self, widget):
-        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+        pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(functions.install_dir(), "images", "hspbp-burnstation.png"))
         pixmap, mask = pixbuf.render_pixmap_and_mask()
         width, height = pixmap.get_size()
         #win.resize(width, height)

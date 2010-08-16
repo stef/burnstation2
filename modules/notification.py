@@ -48,7 +48,7 @@ class TrayMenu(gtk.Menu):
     def draw_menu_items(self, play=None):
         self.mnuShow = gtk.ImageMenuItem(_("Show Pyjama"))
         w, h = gtk.icon_size_lookup(gtk.ICON_SIZE_MENU)
-        image = "pyjama.png"
+        image = "hspbp-burnstation.png"
         img = gtk.Image()
         if not os.path.exists(image):
             image = os.path.join(functions.install_dir(), "images", image)

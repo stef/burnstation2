@@ -457,7 +457,7 @@ class main():
         dialog = MyDialog(title,self.window, \
             gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, \
             (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT), gtk.STOCK_DIALOG_INFO, text)
-        dialog.set_icon_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+        dialog.set_icon_from_file(os.path.join(functions.install_dir(), "images", "hspbp-burnstation.png"))
         dialog.run()
         dialog.destroy()
 
