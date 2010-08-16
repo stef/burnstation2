@@ -345,7 +345,7 @@ class winGTK(gtk.Window):
         #
         # TABLE FOR PLAYLIST- CONTROL
         #
-        self.tbPlaylist = gtk.Table(1, 4, True)
+        self.tbPlaylist = gtk.Table(1, 2, True)
         # DELETE- Button
         self.bDelete = StockButton(gtk.STOCK_REMOVE)#STOCK_DELETE
         self.bDelete.connect("clicked", self.on_bDelete_clicked)
@@ -356,16 +356,6 @@ class winGTK(gtk.Window):
         self.bClear.connect("clicked", self.on_bClear_clicked)
         self.bClear.set_tooltip_text(_("Clear playlist"))
         self.tbPlaylist.attach(self.bClear, 1, 2, 0, 1)
-        # SAVE- Button
-        self.bSave = StockButton(gtk.STOCK_SAVE)
-        self.bSave.connect("clicked", self.on_bSave_clicked)
-        self.bSave.set_tooltip_text(_("Save Playlist"))
-        self.tbPlaylist.attach(self.bSave, 2, 3, 0, 1)
-        # LOAD- Button
-        self.bLoad = StockButton(gtk.STOCK_OPEN)
-        self.bLoad.connect("clicked", self.on_bLoad_clicked)
-        self.bLoad.set_tooltip_text(_("Load Playlist"))
-        self.tbPlaylist.attach(self.bLoad, 3, 4, 0, 1)
         #################################################################
 
         #################################################################
@@ -958,36 +948,6 @@ class winGTK(gtk.Window):
         self.on_bStop_clicked(None)    
         self.main.player.prev()
         self.main.icon.menu.switch_play_button("pause")
-
-    def on_bLoad_clicked(self, ev):
-        # Append menu entrys
-        mnu = gtk.Menu()
-        counter = 0
-        #~ if self.main.settings.section_exists("Playlists"):
-            #~ for name, ids in self.main.settings.config.items("Playlists"):
-        sql = "SELECT option, value FROM settings WHERE section='playlists'"
-        playlists = self.main.settingsdb.query(sql)
-        if playlists:
-            for name, ids in playlists:
-                counter += 1
-                playlist = gtk.ImageMenuItem(name.replace("_", "__"), False)
-                playlist.show()
-                mnu.append(playlist)
-                playlist.connect("activate", self.main.playlists.cb_load_playlist, name)
-        if counter == 0:
-            tmp = gtk.ImageMenuItem("No playlists saved, yet.")
-            tmp.show()
-            tmp.set_sensitive(False)
-            mnu.append(tmp)
-
-        mnu.show()
-        mnu.popup(None, None, None, 1,0)
-        #self.main.playlists.cb_load_playlist(None)
-
-
-    def on_bSave_clicked(self, ev):
-        self.main.playlists.cb_save_playlist(None)
-        return
 
     def cb_export_playlist(self, widget):
         m3u = ""
