@@ -1,0 +1,907 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-08-17 00:37+CEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:81
+#: clLayouts/default_layouts/clAlbumBrowser.py:301 modules/clWidgets.py:668
+#: plugins/jamlists/__init__.py:249 plugins/randomplayback/__init__.py:130
+#: plugins/randomplayback/__init__.py:220
+#: plugins/randomplayback/__init__.py:277
+#: plugins/starred_albums/clStarLayout.py:93
+#: plugins/starred_albums/clStarLayout.py:351
+msgid "--all--"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:90
+msgid "Showing top %i albums in '%s'"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:91
+#: plugins/starred_albums/clStarLayout.py:108
+msgid "Page %i of %i"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:94
+msgid "Showing %i albums tagged '%s' ordered by '%s'"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:95
+#: plugins/artist_browser/clArtistBrowser.py:67 plugins/radios/__init__.py:192
+#: plugins/starred_albums/clStarLayout.py:112
+msgid "Page %i"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:245
+#: plugins/radios/__init__.py:320 plugins/starred_albums/clStarLayout.py:258
+msgid "Next page"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:253
+#: plugins/radios/__init__.py:330 plugins/starred_albums/clStarLayout.py:268
+msgid "Previous page"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:259
+#: plugins/radios/__init__.py:337 plugins/starred_albums/clStarLayout.py:275
+msgid "Jump to page..."
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:321
+#: plugins/radios/__init__.py:354 plugins/starred_albums/clStarLayout.py:366
+msgid "Jump to page"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:322
+#: plugins/radios/__init__.py:355 plugins/starred_albums/clStarLayout.py:367
+msgid "Enter Page"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:327
+#: plugins/radios/__init__.py:360 plugins/starred_albums/clStarLayout.py:372
+msgid "invalid expression"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumBrowser.py:330
+#: plugins/radios/__init__.py:363 plugins/starred_albums/clStarLayout.py:375
+msgid "'%s' is not a valid page"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "#Tracks"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "Album's title"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "Genre"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "Length"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "Rating"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+msgid "Releasedate"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58
+#: clLayouts/default_layouts/clAlbumLayout.py:61
+#: clLayouts/default_layouts/clArtistLayout.py:58
+#: clLayouts/default_layouts/clArtistLayout.py:61
+msgid "link"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:58 modules/clWidgets.py:423
+msgid "Artist"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:80
+#: clLayouts/default_layouts/clAlbumLayout.py:259
+msgid "<b>Similar Albums:</b>"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:108
+msgid "Showing album infos for '%s'"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:123 modules/clWidgets.py:1105
+#: modules/clWidgets.py:1121 modules/clWidgets.py:1359
+#: modules/clWidgets.py:1375
+msgid "Album non existant."
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:124 modules/clWidgets.py:1108
+#: modules/clWidgets.py:1124 modules/clWidgets.py:1362
+#: modules/clWidgets.py:1378
+msgid ""
+"This album is not in the database.\n"
+"Perhaps Jamendo did not unloack that album, yet\n"
+" or you are using a old local database."
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:210
+msgid "Showing informations and albums from '%s'"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:263
+msgid "<b>No similar albums found</b>"
+msgstr ""
+
+#: clLayouts/default_layouts/clAlbumLayout.py:354 modules/clToolbar.py:186
+msgid "Requesting local database"
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:58
+msgid "#Albums"
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:58
+msgid "Country"
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:58
+msgid "Name"
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:94
+msgid "Showing infos and albums concerning '%s'"
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:97
+msgid "Artist non existant."
+msgstr ""
+
+#: clLayouts/default_layouts/clArtistLayout.py:100
+msgid ""
+"This artist is not in the database.\n"
+"Perhaps you are using a old local database\n"
+"or Jamendo did not update their dump, yet"
+msgstr ""
+
+#: extended_modules/clBookmarkDialog.py:28 extended_modules/clBookmarks.py:216
+msgid "Bookmarks"
+msgstr ""
+
+#: extended_modules/clBookmarkDialog.py:33
+msgid ""
+"Here you can edit your Bookmarks. Doubleclick on a field to change its name.\n"
+"Select a field by singleclicking it and delete it with clicking 'remove'"
+msgstr ""
+
+#: extended_modules/clBookmarkDialog.py:114
+msgid "Your Bookmarks"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:142 extended_modules/clBookmarks.py:144
+msgid "Bookmark"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:143
+msgid "Please enter a Name for this bookmark"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:196
+msgid "Could not read bookmark file"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:218
+msgid "Add Bookmark"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:218
+msgid "Edit Bookmarks"
+msgstr ""
+
+#: extended_modules/clBookmarks.py:218
+msgid "Set this page as homepage"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:41
+msgid "Jamendo Playlist Import"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:46
+msgid ""
+"Enter a jamendo username below to show all his playlists.\n"
+"To import a playlist check the checkbox in the list."
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:119
+msgid "Import"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:144
+msgid "No playlists found"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:164
+msgid "Playlist Manager"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:169
+msgid "Select the playlists you want to delete and click the delete button."
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:232
+msgid "Delete"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:261 modules/clWindow.py:969
+msgid "Save Playlist"
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:266
+msgid "Enter a new Playlist name or select a playlist to overwrite."
+msgstr ""
+
+#: extended_modules/clPlaylistDialog.py:276
+msgid "Select or enter playlist name"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:134 modules/clWindow.py:366
+msgid "Playlist"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:135
+msgid ""
+"Please enter a name for your new playlist.\n"
+"Existing playlists will be overwritten"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:165
+msgid "Playlists"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:167
+msgid "Export Playlist"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:167
+msgid "Import Playlist"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:167
+msgid "Import Playlist from Jamendo"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:167
+msgid "Manage Playlists"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:167
+msgid "Save playlist"
+msgstr ""
+
+#: extended_modules/clPlaylists.py:239
+msgid "Load Playlist"
+msgstr ""
+
+#: modules/clJamendo.py:262
+msgid "From Cache. Reload in %iD, %i:%i:%i"
+msgstr ""
+
+#: modules/clJamendo.py:266
+msgid "Refreshing Cache"
+msgstr ""
+
+#: modules/clJamendo.py:269
+msgid "Cached from Jamendo"
+msgstr ""
+
+#: modules/clMain.py:358
+msgid ""
+"Downloading database dump from Jamendo right now. Please be patient.\n"
+"\n"
+"For more information please run Pyjama from console.\n"
+"\n"
+"This might take up to a minute"
+msgstr ""
+
+#: modules/clMain.py:376 modules/clWindow.py:425
+#: plugins/downloadGUI/__init__.py:165
+msgid "Artists: %i, Albums: %i, Tracks: %i"
+msgstr ""
+
+#: modules/clMain.py:747 modules/clMain.py:753
+msgid "paused"
+msgstr ""
+
+#: modules/clMenu.py:45
+msgid "Browse"
+msgstr ""
+
+#: modules/clMenu.py:45
+msgid "Extras"
+msgstr ""
+
+#: modules/clMenu.py:45
+msgid "File"
+msgstr ""
+
+#: modules/clMenu.py:45
+msgid "View"
+msgstr ""
+
+#: modules/clMenu.py:45 modules/clMenu.py:47
+msgid "Help"
+msgstr ""
+
+#: modules/clMenu.py:46
+msgid "Quit"
+msgstr ""
+
+#: modules/clMenu.py:46
+msgid "Save"
+msgstr ""
+
+#: modules/clMenu.py:47
+msgid "About"
+msgstr ""
+
+#: modules/clMenu.py:47
+msgid "Developer Information"
+msgstr ""
+
+#: modules/clMenu.py:47
+msgid "Report a Bug"
+msgstr ""
+
+#: modules/clMenu.py:47
+msgid "Translation"
+msgstr ""
+
+#: modules/clMenu.py:48 modules/clPlugin.py:292 modules/clPreferences.py:467
+msgid "Plugins"
+msgstr ""
+
+#: modules/clMenu.py:48 modules/clPreferences.py:571
+#: modules/clPreferences.py:594 modules/clWindow.py:554
+msgid "Preferences"
+msgstr ""
+
+#: modules/clMenu.py:49
+msgid "Fast Reload"
+msgstr ""
+
+#: modules/clMenu.py:49
+msgid "Full Reload"
+msgstr ""
+
+#: modules/clMenu.py:49
+msgid "Fullscreen"
+msgstr ""
+
+#: modules/clPlugin.py:297
+msgid "Deselect Plugins you don't want to be started with pyjama."
+msgstr ""
+
+#: modules/clPlugin.py:426
+msgid ""
+"This plugin was not loaded yet.\n"
+"If you want to configure it, please check it and restart Pyjama."
+msgstr ""
+
+#: modules/clPlugin.py:448
+msgid "Load"
+msgstr ""
+
+#: modules/clPlugin.py:565
+msgid ""
+"You (un)selected some plugins.\n"
+"Please note, that you will need to restart pyjama\n"
+"to let the changes take effect."
+msgstr ""
+
+#: modules/clPreferences.py:342
+msgid "<-- To configure a plugins, select if from the list on the left side."
+msgstr ""
+
+#: modules/clPreferences.py:364
+msgid ""
+"Learn more about\n"
+"pyjama's plugin interface:"
+msgstr ""
+
+#: modules/clPreferences.py:367
+msgid "Pyjama's Documentation"
+msgstr ""
+
+#: modules/clToolbar.py:62
+msgid "Show previous page in history"
+msgstr ""
+
+#: modules/clToolbar.py:69
+msgid "Home"
+msgstr ""
+
+#: modules/clToolbar.py:70
+msgid "Show start-page"
+msgstr ""
+
+#: modules/clToolbar.py:78
+msgid "Show next page in history"
+msgstr ""
+
+#: modules/clToolbar.py:89 modules/clWidgets.py:1267
+msgid "Append this album on playlist"
+msgstr ""
+
+#: modules/clToolbar.py:95
+msgid "Get more music from this artist"
+msgstr ""
+
+#: modules/clWidgets.py:55
+msgid "to fast"
+msgstr ""
+
+#: modules/clWidgets.py:58
+msgid ""
+"Some requests may only be send once a second\n"
+"in order not to slow down jamendo's database"
+msgstr ""
+
+#: modules/clWidgets.py:209 plugins/artist_browser/clArtistBrowser.py:142
+msgid "Show artist's page"
+msgstr ""
+
+#: modules/clWidgets.py:219
+msgid "Show album's page"
+msgstr ""
+
+#: modules/clWidgets.py:241
+msgid "Remove from Playlist"
+msgstr ""
+
+#: modules/clWidgets.py:436
+msgid "Album"
+msgstr ""
+
+#: modules/clWidgets.py:458
+msgid "Track"
+msgstr ""
+
+#: modules/clWidgets.py:481
+msgid "Licence"
+msgstr ""
+
+#: modules/clWidgets.py:489
+msgid " "
+msgstr ""
+
+#: modules/clWidgets.py:596 plugins/artist_browser/clArtistBrowser.py:285
+msgid "How many results should be shown?"
+msgstr ""
+
+#: modules/clWidgets.py:624
+msgid "Select how to order results"
+msgstr ""
+
+#: modules/clWidgets.py:650
+msgid "Select tags to show"
+msgstr ""
+
+#: modules/clWidgets.py:1009
+msgid "<b>Artist</b>: %s"
+msgstr ""
+
+#: modules/clWidgets.py:1012
+msgid "<b>Album</b>: %s"
+msgstr ""
+
+#: modules/clWidgets.py:1263
+msgid "Append this album on playlist and play it"
+msgstr ""
+
+#: modules/clWidgets.py:1429
+msgid "Select a preset"
+msgstr ""
+
+#: modules/clWindow.py:308
+msgid "Play previous"
+msgstr ""
+
+#: modules/clWindow.py:325
+msgid "Play/pause"
+msgstr ""
+
+#: modules/clWindow.py:325
+msgid "Right click for stop"
+msgstr ""
+
+#: modules/clWindow.py:338
+msgid "Play next"
+msgstr ""
+
+#: modules/clWindow.py:352
+msgid "Remove selected song from playlist"
+msgstr ""
+
+#: modules/clWindow.py:357
+msgid "Clear playlist"
+msgstr ""
+
+#: modules/clWindow.py:474
+msgid "Tracklist"
+msgstr ""
+
+#: modules/functions.py:220 modules/functions.py:227
+msgid "No theme for entry '%s'"
+msgstr ""
+
+#: modules/notification.py:49
+msgid "Show Pyjama"
+msgstr ""
+
+#: plugins/PVC/__init__.py:282
+msgid "Show Autoupdater"
+msgstr ""
+
+#: plugins/artist_browser/__init__.py:36
+msgid "Artists"
+msgstr ""
+
+#: plugins/artist_browser/clArtistBrowser.py:63
+msgid "Showing %i artists beginning with '%s' - Page %i"
+msgstr ""
+
+#: plugins/artist_browser/clArtistBrowser.py:271
+msgid "Select first letter of artists to show"
+msgstr ""
+
+#: plugins/configtool/__init__.py:224
+msgid ""
+"Configtool is a simple dynamic config editor for Pyjama. Please take care when editing your config file. If you should have made a mistake and Pyjama does not run properly any more, just delete the file \"~/.pyjama/pyjama.cfg\"\n"
+" Please notice, that some values will only take effect after restarting Pyjama."
+msgstr ""
+
+#: plugins/configtool/__init__.py:355
+msgid "Show Configtool"
+msgstr ""
+
+#: plugins/downloadGUI/__init__.py:130
+msgid "Load Database Dump"
+msgstr ""
+
+#: plugins/downloadGUI/__init__.py:148
+msgid "Parsing Database"
+msgstr ""
+
+#: plugins/imagepack/__init__.py:44
+msgid "Get Imagepack"
+msgstr ""
+
+#: plugins/jam_query/__init__.py:28
+msgid "Jamendo is being queried"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:67 plugins/randomplayback/__init__.py:68
+msgid "Number of songs to add to the playlist"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:82 plugins/randomplayback/__init__.py:103
+msgid "From which list should the songs be taken?."
+msgstr ""
+
+#: plugins/jamlists/__init__.py:91 plugins/randomplayback/__init__.py:112
+msgid "Tag you want to select random songs from."
+msgstr ""
+
+#: plugins/jamlists/__init__.py:109
+msgid "Jamendo Playlists"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:117
+msgid "This weeks top 100 charts"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:124
+msgid "Generate custom charts"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:135
+msgid "Best rated Playlists"
+msgstr ""
+
+#: plugins/jamlists/__init__.py:144
+msgid "Official Jamendo Playlists"
+msgstr ""
+
+#: plugins/jamscrobble/__init__.py:171
+msgid "Scrobble to jamendoscrobble?"
+msgstr ""
+
+#: plugins/jamscrobble/__init__.py:176 plugins/lastfm/__init__.py:176
+#: plugins/librefm/__init__.py:178
+msgid "Login:"
+msgstr ""
+
+#: plugins/jamscrobble/__init__.py:193 plugins/lastfm/__init__.py:193
+#: plugins/librefm/__init__.py:195
+msgid "Password:"
+msgstr ""
+
+#: plugins/lastfm/__init__.py:171
+msgid "Scrobble to last.fm?"
+msgstr ""
+
+#: plugins/librefm/__init__.py:173
+msgid "Scrobble to libre.fm?"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:172
+msgid "Listen statistics"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:180
+msgid "Most listened tracks"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:191
+msgid "Play most listened tracks"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:202
+msgid "Most listened albums"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:212 plugins/listenstats/__init__.py:233
+msgid "Play most listened Albums"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:222
+msgid "Most listened tags"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:243
+msgid "Last listened Tracks"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:548
+msgid "How often must a song have been played to appear in the stats?"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:550
+msgid "Minimum Listens"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:566
+msgid "Number of albums"
+msgstr ""
+
+#: plugins/listenstats/__init__.py:567
+msgid "How many albums should be shown at most in 'Most listened albums'?"
+msgstr ""
+
+#: plugins/lyrics/__init__.py:54 plugins/lyrics/__init__.py:86
+msgid "Show Lyrics"
+msgstr ""
+
+#: plugins/mozplug/__init__.py:34 plugins/mozplug/__init__.py:335
+#: plugins/webkit-plugin/__init__.py:384
+msgid "Integrated Browser"
+msgstr ""
+
+#: plugins/mozplug/__init__.py:378
+msgid "Let Mozplug open Jamendo pages"
+msgstr ""
+
+#: plugins/nowplaying/__init__.py:44
+msgid "Now playing"
+msgstr ""
+
+#: plugins/radios/__init__.py:55
+msgid "Radios"
+msgstr ""
+
+#: plugins/randomplayback/__init__.py:77
+msgid ""
+"From how many songs do you want to pick these random songs?\n"
+"The higher this value is, the more 'random' is the result."
+msgstr ""
+
+#: plugins/randomplayback/__init__.py:150
+msgid "Random Playback"
+msgstr ""
+
+#: plugins/randomplayback/__init__.py:171
+msgid "Auto fill playlist"
+msgstr ""
+
+#: plugins/rating/__init__.py:89
+msgid "<i>Rating:</i>"
+msgstr ""
+
+#: plugins/rating/__init__.py:114 plugins/rating/__init__.py:145
+msgid "Rate track"
+msgstr ""
+
+#: plugins/rating/__init__.py:179
+msgid "Favorite Tracks"
+msgstr ""
+
+#: plugins/rating/__init__.py:246
+msgid "Number of Tracks to show"
+msgstr ""
+
+#: plugins/search/__init__.py:48 plugins/search/__init__.py:65
+msgid "Search"
+msgstr ""
+
+#: plugins/search/__init__.py:107
+msgid ""
+"<span><b>Here you can search for artist, albums and tracks.\n"
+"Enter your search term in the text field\n"
+"\n"
+"At most 100 results will be shown.</b></span>"
+msgstr ""
+
+#: plugins/search/__init__.py:109
+msgid ""
+"<span foreground=\"white\"><b>Here you can search for artist, albums and tracks.\n"
+"Enter your search term in the text field\n"
+"\n"
+"At most 100 results will be shown.</b></span>"
+msgstr ""
+
+#: plugins/search/__init__.py:138
+msgid "Search for artists, albums and tracks"
+msgstr ""
+
+#: plugins/search/__init__.py:142
+msgid "You searched for '%s'"
+msgstr ""
+
+#: plugins/search/__init__.py:212
+msgid ""
+"<u>%i hits</u>\n"
+"\n"
+"%i artists\n"
+"%i albums\n"
+"%i tracks"
+msgstr ""
+
+#: plugins/spread-torrent/__init__.py:328
+msgid "Torrent"
+msgstr ""
+
+#: plugins/spread-torrent/__init__.py:1008
+msgid "Spread Torrents"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:58 plugins/starred_albums/__init__.py:78
+msgid "Stared"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:59
+msgid "Show stared Albums"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:69
+#: plugins/starred_albums/__init__.py:139
+#: plugins/starred_albums/__init__.py:157
+msgid "Star this album"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:81 plugins/starred_albums/__init__.py:91
+msgid "Import Stared Albums"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:92
+msgid ""
+"To import (your) stared albums from jamendo\n"
+"please enter the corresponding jamendo username."
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:93
+msgid "MeAtJamendo"
+msgstr ""
+
+#: plugins/starred_albums/__init__.py:133
+#: plugins/starred_albums/__init__.py:153
+msgid "Un-star this album"
+msgstr ""
+
+#: plugins/starred_albums/clStarLayout.py:107
+msgid "Show %i stared albums in '%s'"
+msgstr ""
+
+#: plugins/starred_albums/clStarLayout.py:111
+msgid "Show %i stared albums tagged '%s' ordered by '%s'"
+msgstr ""
+
+#: plugins/starred_albums/clStarLayout.py:251
+msgid "Export stared Albums to Jamendo"
+msgstr ""
+
+#: plugins/starred_albums/clStarLayout.py:287
+msgid "Enter your Jamendo username"
+msgstr ""
+
+#: plugins/starred_albums/clStarLayout.py:288
+msgid ""
+"Exporting stared albums to jamendo DOES NOT WORK automatically.\n"
+"                 1) Visit jamendo.com and login with your default webbrowser\n"
+"                 2) Enter your username in this box \n"
+"                 Pyjama will now open any album you have stared in pyjama and which is not stared on jamendo.com.\n"
+"                 3) Now you can star each album manually within your browser."
+msgstr ""
+
+#: plugins/webkit-plugin/__init__.py:40
+msgid "Integrated Webkit Browser"
+msgstr ""
+
+#: plugins/webkit-plugin/__init__.py:431
+msgid "Let Webkit-Plugin open Jamendo pages"
+msgstr ""
+
+#: pyjama.py:392
+msgid "Get Jamendo's latest database dump"
+msgstr ""
+
+#: pyjama.py:393
+msgid "Get Jamendo's latest database dump directly from the slow Jamendo server[not recommended]"
+msgstr ""
+
+#: pyjama.py:399
+msgid "Return Pyjama's version"
+msgstr ""
+
+#: pyjama.py:402
+msgid "A gtk theme for pyjama. The theme as to be copied to '~/.pyjama/themes'. Example: pyjama --theme Aero-ion3.1. pyjama -t 1 would run the first theme found in your theme- directory."
+msgstr ""
+
+#: pyjama.py:403
+msgid "List all themes found"
+msgstr ""
+
+#: pyjama.py:404
+msgid "Download Themepack for Pyjama"
+msgstr ""
+
+#: pyjama.py:405
+msgid "Don't do any color- modifications. Pyjama will exactly look like any of your applications"
+msgstr ""
+
+#: pyjama.py:410
+msgid "Print some informations"
+msgstr ""
+
+#: pyjama.py:411
+msgid "Print a lot informations"
+msgstr ""
+
+#: pyjama.py:412
+msgid "Print much to much information"
+msgstr ""
+
+#: pyjama.py:417
+msgid "Play/Pause"
+msgstr ""
+
+#: pyjama.py:418
+msgid "Next"
+msgstr ""
+
+#: pyjama.py:419
+msgid "Previous"
+msgstr ""
+
