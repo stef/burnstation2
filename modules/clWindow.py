@@ -472,7 +472,7 @@ class winGTK(gtk.Window):
 
         ## Frame vor swTVList
         self.TVListFrame = gtk.Frame(_("Tracklist"))
-        self.TVListFrame.set_size_request(-1, 140 ) #stf
+        self.TVListFrame.set_size_request(-1, 130 ) #stf
         self.TVListFrame.add(self.swTVList)
 
         self.vpaned2.pack1(self.TVListFrame, True, True)
@@ -481,6 +481,8 @@ class winGTK(gtk.Window):
         #self.connect("configure-event", self.test2)
 
         self.show_all()
+        self.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.toolbar.lbAppendAlbum.hide()
 
         # Insert a Menu item for showing / hiding vbCover
         #stf

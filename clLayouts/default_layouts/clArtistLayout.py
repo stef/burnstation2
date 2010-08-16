@@ -202,6 +202,8 @@ class ArtistLayout(gtk.Layout):
         self.arrange_artistdetail()
         self.pyjama.Events.raise_event("showing_artist_page", artistinfos)
         self.show()
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.pyjama.window.toolbar.lbAppendAlbum.hide()
 
     def arrange_artistdetail(self):
         if self.albuminfos == {}: return None

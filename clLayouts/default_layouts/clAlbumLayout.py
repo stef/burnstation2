@@ -110,7 +110,7 @@ class AlbumLayout(gtk.Layout):
         self.pyjama.window.LayoutInfo.set_text(txt)
         self.pyjama.window.LayoutInfo.set_image("cd.png")
 
-        self.toolbar = self.pyjama.layouts.toolbars['album']
+        #self.toolbar = self.pyjama.layouts.toolbars['album']
 
         albuminfos = data1
 
@@ -160,7 +160,7 @@ class AlbumLayout(gtk.Layout):
             self.pyjama.window.tvList.add_item(results)
 
 
-        self.toolbar.lbAppendAlbum.tag = tracks #self.tracks = tracks
+        self.pyjama.window.toolbar.lbAppendAlbum.tag = tracks #self.tracks = tracks
 
 
         md5hash = hashlib.md5(img).hexdigest()
@@ -206,8 +206,10 @@ class AlbumLayout(gtk.Layout):
         # HERE, TOO!
         #self.toolbar.sbGotoWeb.tag = url #stf
         
-        self.toolbar.lbMoreAlbumsFromThisArtist2.tag = artist_id
-        self.toolbar.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Showing informations and albums from '%s'") % artist_name)
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.tag = artist_id
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Showing informations and albums from '%s'") % artist_name)
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.show()
+        self.pyjama.window.toolbar.lbAppendAlbum.show()
         #self.toolbar.sbDownloadAlbum.tag = album_id
 
         for albuminfo in self.albuminfos:
@@ -309,16 +311,16 @@ class AlbumLayout(gtk.Layout):
             self.layout = self.pyjama.layouts.layouts['album']
 
             # ADD ALBUM TO PLAYLIST
-            self.lbAppendAlbum = clWidgets.StockButton(gtk.STOCK_ADD, gtk.ICON_SIZE_DND)
-            self.lbAppendAlbum.set_tooltip_text(_("Append this album on playlist"))
-            self.lbAppendAlbum.show()
-            self.pack_start(self.lbAppendAlbum, False, True, 2)
-            self.lbAppendAlbum.connect("clicked", self.on_lbAppendAlbum_clicked)
-            # GET MORE ALBUMS FROM THIS PLAYLIST
-            self.lbMoreAlbumsFromThisArtist2 = clWidgets.ImageButton(os.path.join(functions.install_dir(), "images", "personal.png"), gtk.ICON_SIZE_DND )
-            self.pack_start(self.lbMoreAlbumsFromThisArtist2, False, True, 2)
-            self.lbMoreAlbumsFromThisArtist2.connect("clicked", self.on_lbMoreAlbumsFromThisArtist_clicked)
-            self.lbMoreAlbumsFromThisArtist2.show()
+            #self.lbAppendAlbum = clWidgets.StockButton(gtk.STOCK_ADD, gtk.ICON_SIZE_DND)
+            #self.lbAppendAlbum.set_tooltip_text(_("Append this album on playlist"))
+            #self.lbAppendAlbum.show()
+            #self.pack_start(self.lbAppendAlbum, False, True, 2)
+            #self.lbAppendAlbum.connect("clicked", self.on_lbAppendAlbum_clicked)
+            ## GET MORE ALBUMS FROM THIS PLAYLIST
+            #self.lbMoreAlbumsFromThisArtist2 = clWidgets.ImageButton(os.path.join(functions.install_dir(), "images", "personal.png"), gtk.ICON_SIZE_DND )
+            #self.pack_start(self.lbMoreAlbumsFromThisArtist2, False, True, 2)
+            #self.lbMoreAlbumsFromThisArtist2.connect("clicked", self.on_lbMoreAlbumsFromThisArtist_clicked)
+            #self.lbMoreAlbumsFromThisArtist2.show()
 
 
             # DOWNLOAD ALBUM VIA TORRENT
@@ -370,5 +372,4 @@ class AlbumLayout(gtk.Layout):
         def on_sbDownloadAlbum_clicked(self, ev):
             url = "http://api.jamendo.com/get2/bittorrent/file/redirect/?album_id=%s&type=archive&class=%s" % (self.sbDownloadAlbum.tag, self.pyjama.settings.get_value("JAMENDO", "FORMAT"))
             self.pyjama.Events.raise_event("open_url", url, force_default=True)        
-
 

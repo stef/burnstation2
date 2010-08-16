@@ -19,6 +19,7 @@
 
 import gtk, gtk.glade
 import os
+import time
 
 import functions
 
@@ -82,18 +83,23 @@ class Toolbar(gtk.Toolbar):
         self.Separator1 = gtk.SeparatorToolItem()
         self.insert(self.Separator1, -1)
 
+        # ADD ALBUM TO PLAYLIST
+        self.lbAppendAlbum = gtk.ToolButton(label="Append")
+        self.lbAppendAlbum.set_stock_id(gtk.STOCK_ADD)
+        self.lbAppendAlbum.set_tooltip_text(_("Append this album on playlist"))
+        self.lbAppendAlbum.connect("clicked", self.on_lbAppendAlbum_clicked)
+        self.insert(self.lbAppendAlbum, -1)
+        # GET MORE ALBUMS FROM THIS PLAYLIST
+        self.lbMoreAlbumsFromThisArtist2 = gtk.ToolButton(label="More")
+        self.set_image(self.lbMoreAlbumsFromThisArtist2, os.path.join(functions.install_dir(), "images", "personal.png"))
+        self.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Get more music from this artist"))
+        self.lbMoreAlbumsFromThisArtist2.connect("clicked", self.on_lbMoreAlbumsFromThisArtist_clicked)
+        self.insert(self.lbMoreAlbumsFromThisArtist2, -1)
+
         ## Expander
         self.space_fs = gtk.ToolItem()
         self.space_fs.set_expand(True)
         self.insert(self.space_fs, -1)
-
-        #self.bEqualizer = gtk.ToolButton("Equalizer")
-        #self.set_image(self.bEqualizer, "view-media-equalizer.png")
-        #self.bEqualizer.set_tooltip_text(_("Show Equalizer"))
-        #self.bEqualizer.set_label("Equalizer")
-        #self.bEqualizer.connect("clicked", self.cb_show_equalizer)
-        #self.insert(self.bEqualizer, -1)
-        #self.bEqualizer.show()
 
         self.bPref = gtk.ToolButton("Preferences")
         #self.bPref.set_stock_id(gtk.STOCK_PREFERENCES)
@@ -103,32 +109,15 @@ class Toolbar(gtk.Toolbar):
         #self.bPref.show()
         
 
-#        # Fullscreen
-#        self.bFullScrbeen = gtk.ToolButton("Fullscreen")
-#        self.bFullScreen.set_stock_id(gtk.STOCK_FULLSCREEN)
-#        self.bFullScreen.set_tooltip_text(_("Switch fullscreen/window-mode"))
-#        self.bFullScreen.connect("clicked", self.pyjama.window.menubar.on_bFullScreen_clicked)
-#        self.insert(self.bFullScreen, -1)
-
-        # About
-#        self.bAbout = gtk.ToolButton("About")
-#        self.bAbout.set_stock_id(gtk.STOCK_ABOUT)
-#        self.bAbout.set_tooltip_text(_("Show infos about pyjama"))
-#        self.bAbout.connect("clicked", self.on_bAbout_clicked)
-#        self.insert(self.bAbout, -1)
-
-
         #
         # Accelerators
         #
         self.accel_group = gtk.AccelGroup()
-#        self.bFullScreen.add_accelerator("clicked", self.accel_group, gtk.keysyms.F11, 0, gtk.ACCEL_VISIBLE)
         self.bHistoryBack.add_accelerator("clicked", self.accel_group, 65361, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
         self.bHome.add_accelerator("clicked", self.accel_group, ord("h"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bHistoryForward.add_accelerator("clicked", self.accel_group, 65363, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
         self.bPref.add_accelerator("clicked", self.accel_group, ord("p"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.pyjama.window.add_accel_group(self.accel_group)
-
 
         self.show_all()
 
@@ -191,3 +180,19 @@ class Toolbar(gtk.Toolbar):
     def cb_show_equalizer(self, ev=None):
         eq = EqualizerBox(self.pyjama)
         eq.dialog()
+
+    def on_lbMoreAlbumsFromThisArtist_clicked(self, ev):
+        # query db for artist informations and more albums
+        self.pyjama.start_pulsing(text = _("Requesting local database"))
+        ret = self.pyjama.db.artistinfos(self.lbMoreAlbumsFromThisArtist2.tag, time.time())        
+        self.pyjama.stop_pulsing()
+        self.pyjama.layouts.show_layout("artist", ret, who_called = "on_lbMoreAlbumsFromThisArtist_clicked")
+
+    def on_lbAppendAlbum_clicked(self, ev):
+        tracks = self.lbAppendAlbum.tag
+        for track in tracks: # for track in self.main.tracks:
+            track.uid = "%f%s" % (time.time(), track.id)
+            self.pyjama.add2playlist(track)
+            status = self.pyjama.player.status
+            if status == "Error" or status == "End" or status == None:
+                self.pyjama.window.on_bPlay_clicked(None)
