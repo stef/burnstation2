@@ -57,16 +57,10 @@ class ArtistLayout(gtk.Layout):
         self.ArtistInfos = ['name', 'country', 'albums', 'url']
         self.ArtistCaptions = [_("Name"), _("Country"), _("#Albums"), _("link")]
         for info in xrange(0, len(self.ArtistInfos)):
-            if self.ArtistInfos[info] == "url":
-                self.ArtistLabels[self.ArtistInfos[info]] = clWidgets.MyLinkButton("", _("link")) #str(album['album_name'][:20])
-                self.put(self.ArtistLabels[self.ArtistInfos[info]], xspace, y)
-                self.ArtistLabels[self.ArtistInfos[info]].show()
-                self.ArtistLabels[self.ArtistInfos[info]].connect("clicked", self.on_zumArtist_clicked)
-            else:
-                self.ArtistLabels[self.ArtistInfos[info]] = gtk.Label("")
-                self.ArtistLabels[self.ArtistInfos[info]].set_single_line_mode(True)
-                self.put(self.ArtistLabels[self.ArtistInfos[info]], xspace, y)
-                self.ArtistLabels[self.ArtistInfos[info]].show()
+            self.ArtistLabels[self.ArtistInfos[info]] = gtk.Label("")
+            self.ArtistLabels[self.ArtistInfos[info]].set_single_line_mode(True)
+            self.put(self.ArtistLabels[self.ArtistInfos[info]], xspace, y)
+            self.ArtistLabels[self.ArtistInfos[info]].show()
             y+=yspace
             
         self.image_artist = gtk.Image()
