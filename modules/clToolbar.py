@@ -95,11 +95,11 @@ class Toolbar(gtk.Toolbar):
         #self.insert(self.bEqualizer, -1)
         #self.bEqualizer.show()
 
-        #self.bPref = gtk.ToolButton("Preferences")
+        self.bPref = gtk.ToolButton("Preferences")
         #self.bPref.set_stock_id(gtk.STOCK_PREFERENCES)
         #self.bPref.set_tooltip_text(_("Show Preferences"))
-        #self.bPref.connect("clicked", self.pyjama.show_preferences)
-        #self.insert(self.bPref, -1)
+        self.bPref.connect("clicked", self.pyjama.show_preferences)
+        self.insert(self.bPref, -1)
         #self.bPref.show()
         
 
@@ -126,6 +126,7 @@ class Toolbar(gtk.Toolbar):
         self.bHistoryBack.add_accelerator("clicked", self.accel_group, 65361, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
         self.bHome.add_accelerator("clicked", self.accel_group, ord("h"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bHistoryForward.add_accelerator("clicked", self.accel_group, 65363, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
+        self.bPref.add_accelerator("clicked", self.accel_group, ord("p"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.pyjama.window.add_accel_group(self.accel_group)
 
 
