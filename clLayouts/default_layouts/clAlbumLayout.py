@@ -57,16 +57,10 @@ class AlbumLayout(gtk.Layout):
         self.AlbumInfos = ['name', 'artist_name', 'trackcount', 'lengths', 'genre', 'releasedate', 'review_note', 'url']
         self.AlbumCaptions = [_("Album's title"), _("Artist"), _("#Tracks"), _("Length"), _("Genre"), _("Releasedate"), _('Rating'), _('link')]
         for info in xrange(0, len(self.AlbumInfos)):
-            if self.AlbumInfos[info] == "url":
-                self.AlbumLabels[self.AlbumInfos[info]] = clWidgets.MyLinkButton("", _("link")) #str(album['album_name'][:20])
-                self.put(self.AlbumLabels[self.AlbumInfos[info]], xspace, y)
-                self.AlbumLabels[self.AlbumInfos[info]].connect("clicked", self.on_zumAlbum_clicked)
-                self.AlbumLabels[self.AlbumInfos[info]].show()
-            else:
-                self.AlbumLabels[self.AlbumInfos[info]] = gtk.Label("")
-                self.AlbumLabels[self.AlbumInfos[info]].set_single_line_mode(True)
-                self.put(self.AlbumLabels[self.AlbumInfos[info]], xspace, y)
-                self.AlbumLabels[self.AlbumInfos[info]].show()
+            self.AlbumLabels[self.AlbumInfos[info]] = gtk.Label("")
+            self.AlbumLabels[self.AlbumInfos[info]].set_single_line_mode(True)
+            self.put(self.AlbumLabels[self.AlbumInfos[info]], xspace, y)
+            self.AlbumLabels[self.AlbumInfos[info]].show()
             if self.AlbumInfos[info] == "review_note":
                 # USER WIDGET Rating
                 self.rtRating = clWidgets.Rating()
