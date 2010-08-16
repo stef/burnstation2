@@ -423,7 +423,7 @@ class TreeViewList(gtk.TreeView):
         column = gtk.TreeViewColumn(_("Artist"), renderer, text=self.COLUMN_ARTIST)
         treeview.append_column(column)
         column.set_sort_column_id(0)
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         column.set_resizable(True)
         column.set_fixed_width(250)
 
@@ -436,7 +436,7 @@ class TreeViewList(gtk.TreeView):
         column = gtk.TreeViewColumn(_("Album"), renderer, text=self.COLUMN_ALBUM)
         treeview.append_column(column)
         column.set_sort_column_id(1)
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         column.set_resizable(True)
         column.set_fixed_width(250)
 
@@ -458,7 +458,7 @@ class TreeViewList(gtk.TreeView):
         column = gtk.TreeViewColumn(_("Track"), renderer, text=self.COLUMN_TRACK)
         treeview.append_column(column)
         column.set_sort_column_id(3)
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        column.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         column.set_resizable(True)
         column.set_fixed_width(150)
         
