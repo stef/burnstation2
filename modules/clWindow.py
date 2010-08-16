@@ -394,12 +394,12 @@ class winGTK(gtk.Window):
         self.vbCover.pack_end(sep, False, False, 5)
 
         if True:
-            self.imgCover.set_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+            self.imgCover.set_from_file(os.path.join(functions.install_dir(), "images", "hspbp-burnstation.png"))
         else:
             animation = gtk.gdk.PixbufAnimation(os.path.join(functions.install_dir(), "images", "pyjama_anim.gif"))
             self.imgCover.set_from_animation(animation)
-        self.lbCoverArtist.set_text('Pyjama')
-        self.lbCoverAlbum.set_text('Python Jamendo Audio')
+        self.lbCoverArtist.set_text('Burnstation 2.0')
+        self.lbCoverAlbum.set_text('powered by Python Jamendo Audio')
         
         # ADD SCROLLBAR TO VBOX
         #self.vbSideBar.pack_start(self.hsVolume, False, True)
