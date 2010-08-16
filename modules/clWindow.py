@@ -95,7 +95,7 @@ class winGTK(gtk.Window):
         self.set_title("Pyjama - Python Jamendo Audiocenter")#(self.__class__.__name__)
         self.set_default_size(850, 600)
         self.set_position(gtk.WIN_POS_CENTER)
-        self.set_icon_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+        self.set_icon_from_file(os.path.join(functions.install_dir(), "images", "hspbp-burnstation.png"))
         self.set_skip_taskbar_hint(not self.main.settings.get_value("PYJAMA", "show_window_in_taskbar", False))
 
         self.set_border_width(0)
@@ -140,7 +140,7 @@ class winGTK(gtk.Window):
 #        NEW_TOOLBAR_POSITION = self.main.settings.get_value("PYJAMA", "NEW_TOOLBAR_POSITION", False)
         self.menubar = clMenu.Menu(self)
  #       if NEW_TOOLBAR_POSITION is True:
-        self.vbTop.pack_start(self.menubar, False, False)
+        #self.vbTop.pack_start(self.menubar, False, False)
 #        else:
 #            self.vbMain.pack_start(self.menubar, False, False)
 
@@ -493,16 +493,17 @@ class winGTK(gtk.Window):
         self.show_all()
 
         # Insert a Menu item for showing / hiding vbCover
-        chkCover = gtk.CheckMenuItem(_("Show Cover Image"))
-        chkCover.set_active(self.main.settings.get_value("PYJAMA", "SHOW_COVER", True))
-        view = self.menubar.get_rootmenu("View").get_submenu()
-        view.insert(chkCover, 0)
-        chkCover.connect("activate", self.switch_show_cover)
-        chkCover.show()
-        self.switch_show_cover(chkCover)
-        sep = gtk.SeparatorMenuItem()
-        view.insert(sep, 1)
-        sep.show()
+        #stf
+        #chkCover = gtk.CheckMenuItem(_("Show Cover Image"))
+        #chkCover.set_active(self.main.settings.get_value("PYJAMA", "SHOW_COVER", True))
+        #view = self.menubar.get_rootmenu("View").get_submenu()
+        #view.insert(chkCover, 0)
+        #chkCover.connect("activate", self.switch_show_cover)
+        #chkCover.show()
+        #self.switch_show_cover(chkCover)
+        #sep = gtk.SeparatorMenuItem()
+        #view.insert(sep, 1)
+        #sep.show()
 
 #        chkToolbarPos = gtk.CheckMenuItem(_("new toolbar position"))
 #        chkToolbarPos.set_active(NEW_TOOLBAR_POSITION)
@@ -528,11 +529,11 @@ class winGTK(gtk.Window):
         self.main.layouts.register_layout("artist", clArtistLayout.ArtistLayout(self.main))
 
         # Menu Entry
-        menu = self.menubar
-        entry = menu.append_entry(menu.get_rootmenu("Browse"), _("Albums"), "top")
-        entry.connect("activate", self.cb_show_album_browser)
-        menu.set_item_image(entry, os.path.join(functions.install_dir(), "images", "star.png"))
-        menu.show()
+        #menu = self.menubar
+        #entry = menu.append_entry(menu.get_rootmenu("Browse"), _("Albums"), "top")
+        #entry.connect("activate", self.cb_show_album_browser)
+        #menu.set_item_image(entry, os.path.join(functions.install_dir(), "images", "star.png"))
+        #menu.show()
 
         # Show starting- window
 #        self.main.layouts.show_layout("top", 10, "ratingweek", 1, "all", who_called = "window.__init__") 
