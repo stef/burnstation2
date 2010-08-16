@@ -921,6 +921,7 @@ class AlbumInfo(gtk.Frame):
         self.lbAlbum.connect("clicked", self.__cb_linkbutton_clicked)
 
         self.show_all()
+        self.lbAlbum.hide() #stf
 
         self.widgets_list = []
 
@@ -948,7 +949,7 @@ class AlbumInfo(gtk.Frame):
     def __calculate_size(self, hover_type):
         self.hover_type = hover_type
         if self.hover_type == HOVER_DETAILED:
-            self.height = 150
+            self.height = 130
             self.width = 110
             self.icon_width = self.icon_height = 20
 
@@ -1017,10 +1018,11 @@ class AlbumInfo(gtk.Frame):
         if self.hover_type == HOVER_COMPACT:
             #~ self.image.hide()
             self.lbArtist.show()
-            self.lbAlbum.show()
+            #stf self.lbAlbum.show()
         self.layout.modify_bg(gtk.STATE_NORMAL, color)
 
         for item in self.widgets_list: item.show()
+        self.lbAlbum.hide() #stf
 
     def hide_buttons(self):
         if self.hover_type == HOVER_COMPACT:
@@ -1131,7 +1133,7 @@ class AlbumInfo(gtk.Frame):
             albumdetails = self.pyjama.jamendo.albuminfos(self.album['album_id'])
             if not albumdetails: return
             self.pyjama.layouts.show_layout("album", albumdetails)
-            
+           
     def button_release_cb(self, widget, event):
         self.__cb_image_clicked(None, None, None)
         #~ self.pyjama.ui.show_page("album-details", album=self.album_id)

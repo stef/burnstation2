@@ -77,12 +77,12 @@ class AlbumLayout(gtk.Layout):
         hb = gtk.HBox()
         self.put(hb, 20, 240)
         self.lblSimilar = gtk.Label()
-        self.lblSimilar.set_markup(_("<b>Similar Albums:</b>\n<small>If loading takes to long, set 'similar albums' to 0.</small>"))
+        self.lblSimilar.set_markup(_("<b>Similar Albums:</b>"))
         hb.pack_start(self.lblSimilar, True, True)
-        btn = clWidgets.StockButton(gtk.STOCK_PREFERENCES)
-        btn.connect("pressed", self.pyjama.show_preferences, "Pyjama")
-        btn.set_tooltip_text("Go to preferences page and set 'similar albums'")
-        hb.pack_start(btn, False, True)
+        #btn = clWidgets.StockButton(gtk.STOCK_PREFERENCES)
+        #btn.connect("pressed", self.pyjama.show_preferences, "Pyjama")
+        #btn.set_tooltip_text("Go to preferences page and set 'similar albums'")
+        #hb.pack_start(btn, False, True)
         hb.show_all()
 
         self.image_album = gtk.Image()
@@ -204,11 +204,11 @@ class AlbumLayout(gtk.Layout):
         # NEW ATTRIBUTE 'FLAG' IN STOCKBUTTON
         # NEED TO USE THIS FOR OTHER BUTTONS
         # HERE, TOO!
-        self.toolbar.sbGotoWeb.tag = url
+        #self.toolbar.sbGotoWeb.tag = url #stf
         
         self.toolbar.lbMoreAlbumsFromThisArtist2.tag = artist_id
         self.toolbar.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Showing informations and albums from '%s'") % artist_name)
-        self.toolbar.sbDownloadAlbum.tag = album_id
+        #self.toolbar.sbDownloadAlbum.tag = album_id
 
         for albuminfo in self.albuminfos:
             self.albuminfos[albuminfo].destroy()
@@ -254,7 +254,7 @@ class AlbumLayout(gtk.Layout):
                     self.albuminfos[counter].show()
                     self.put(self.albuminfos[counter], 1, 1)
                     counter += 1
-            self.lblSimilar.set_markup(_("<b>Similar Albums:</b>\n<small>If loading takes to long, set 'similar albums' to 0.</small>"))
+            self.lblSimilar.set_markup(_("<b>Similar Albums:</b>"))
         elif ret == -1:
             print ("Some Problems with Jamendo")
         elif ret == []:
@@ -322,26 +322,26 @@ class AlbumLayout(gtk.Layout):
 
 
             # DOWNLOAD ALBUM VIA TORRENT
-            self.sbDownloadAlbum = clWidgets.StockButton(gtk.STOCK_GOTO_BOTTOM, gtk.ICON_SIZE_LARGE_TOOLBAR)
-            self.sbDownloadAlbum.set_tooltip_text(_("Download Album as Torrent"))
-            self.sbDownloadAlbum.set_size_request(50,50)
-            self.sbDownloadAlbum.show()
-            self.pack_end(self.sbDownloadAlbum, False, True, 2)
-            self.sbDownloadAlbum.connect("clicked", self.on_sbDownloadAlbum_clicked)    
+            #self.sbDownloadAlbum = clWidgets.StockButton(gtk.STOCK_GOTO_BOTTOM, gtk.ICON_SIZE_LARGE_TOOLBAR)
+            #self.sbDownloadAlbum.set_tooltip_text(_("Download Album as Torrent"))
+            #self.sbDownloadAlbum.set_size_request(50,50)
+            #self.sbDownloadAlbum.show()
+            #self.pack_end(self.sbDownloadAlbum, False, True, 2)
+            #self.sbDownloadAlbum.connect("clicked", self.on_sbDownloadAlbum_clicked)    
             # GO TO ALBUM'S PAGE ON JAMENDO
-            self.sbGotoWeb = clWidgets.StockButton(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
-            self.sbGotoWeb.set_tooltip_text(_("Goto to album's page on jamendo"))
-            self.pack_end(self.sbGotoWeb, False, True, 2)
-            self.sbGotoWeb.set_size_request(50,50)
-            self.sbGotoWeb.show()
-            self.sbGotoWeb.connect("clicked", self.on_sbGotoWeb_clicked)        
+            #self.sbGotoWeb = clWidgets.StockButton(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
+            #self.sbGotoWeb.set_tooltip_text(_("Goto to album's page on jamendo"))
+            #self.pack_end(self.sbGotoWeb, False, True, 2)
+            #self.sbGotoWeb.set_size_request(50,50)
+            #self.sbGotoWeb.show()
+            #self.sbGotoWeb.connect("clicked", self.on_sbGotoWeb_clicked)        
             # WRITE A REVIEW
-            self.sbWriteReview = clWidgets.StockButton(gtk.STOCK_EDIT, gtk.ICON_SIZE_LARGE_TOOLBAR)
-            self.sbWriteReview.set_tooltip_text(_("Write a review for this album"))
-            self.sbWriteReview.set_size_request(50,50)
-            self.sbWriteReview.show()
-            self.pack_end(self.sbWriteReview, False, True, 2)
-            self.sbWriteReview.connect("clicked", self.on_sbWriteReview_clicked)    
+            #self.sbWriteReview = clWidgets.StockButton(gtk.STOCK_EDIT, gtk.ICON_SIZE_LARGE_TOOLBAR)
+            #self.sbWriteReview.set_tooltip_text(_("Write a review for this album"))
+            #self.sbWriteReview.set_size_request(50,50)
+            #self.sbWriteReview.show()
+            #self.pack_end(self.sbWriteReview, False, True, 2)
+            #self.sbWriteReview.connect("clicked", self.on_sbWriteReview_clicked)    
 
 
         def on_sbWriteReview_clicked(self, ev):

@@ -130,8 +130,8 @@ class ArtistLayout(gtk.Layout):
                 print ("Could not load image")
                 return None
 
-        self.toolbar.ibDonate.tag = url
-        self.toolbar.sbGotoWebArtist.tag = url
+        #self.toolbar.ibDonate.tag = url #stf
+        #self.toolbar.sbGotoWebArtist.tag = url #stf
 
         self.image_artist.clear()
         if img == "" or img == None:
@@ -240,19 +240,20 @@ class ArtistLayout(gtk.Layout):
             self.pyjama = pyjama
             self.layout = self.pyjama.layouts.layouts['artist']
 
-            self.sbGotoWebArtist = clWidgets.StockButton(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
-            self.sbGotoWebArtist.set_tooltip_text(_("Goto to artist's page on jamendo"))
-            self.sbGotoWebArtist.set_size_request(50,50)
-            self.sbGotoWebArtist.show()
-            self.pack_end(self.sbGotoWebArtist, False, True, 2)
-            self.sbGotoWebArtist.connect("clicked", self.on_sbGotoWebArtist_clicked)        
+            #stf
+            #self.sbGotoWebArtist = clWidgets.StockButton(gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR)
+            #self.sbGotoWebArtist.set_tooltip_text(_("Goto to artist's page on jamendo"))
+            #self.sbGotoWebArtist.set_size_request(50,50)
+            #self.sbGotoWebArtist.show()
+            #self.pack_end(self.sbGotoWebArtist, False, True, 2)
+            #self.sbGotoWebArtist.connect("clicked", self.on_sbGotoWebArtist_clicked)        
 
-            self.ibDonate = clWidgets.ImageButton("%s/images/money.png"  % functions.install_dir(), 26, 26)
-            self.ibDonate.set_size_request(50,50)
-            self.ibDonate.set_tooltip_text(_("Support this artist"))
-            self.ibDonate.show()
-            self.pack_end(self.ibDonate, False, True, 2)
-            self.ibDonate.connect("clicked", self.on_ibDonate_clicked)
+            #self.ibDonate = clWidgets.ImageButton("%s/images/money.png"  % functions.install_dir(), 26, 26)
+            #self.ibDonate.set_size_request(50,50)
+            #self.ibDonate.set_tooltip_text(_("Support this artist"))
+            #self.ibDonate.show()
+            #self.pack_end(self.ibDonate, False, True, 2)
+            #self.ibDonate.connect("clicked", self.on_ibDonate_clicked)
 
         def on_sbGotoWebArtist_clicked(self, ev):
             self.pyjama.Events.raise_event("open_url",  self.sbGotoWebArtist.tag)

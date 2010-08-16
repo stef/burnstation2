@@ -69,6 +69,7 @@ class winGTK(gtk.Window):
     def __init__(self, options, parent=None):
         self.__alldone = False
         self.options = options
+        #gtk.rc_parse('/usr/share/themes/Industrial/gtk0.0/gtkrc') #stf
         
         self.main = clMain.main(self, options)
         self.main.settings.set_value("PYJAMA", "crashed", True)
@@ -375,6 +376,7 @@ class winGTK(gtk.Window):
         SideBarFrame = gtk.Frame(_("Playlist"))
         SideBarFrame.set_shadow_type(gtk.SHADOW_IN)
         SideBarFrame.add(self.vbSideBar)
+        SideBarFrame.set_size_request(430, -1) #stf
         self.hpaned.pack2(SideBarFrame, False, True) #swTreeView
         self.hpaned.set_position(700)
         
@@ -480,6 +482,7 @@ class winGTK(gtk.Window):
 
         ## Frame vor swTVList
         self.TVListFrame = gtk.Frame(_("Tracklist"))
+        self.TVListFrame.set_size_request(-1, 140 ) #stf
         self.TVListFrame.add(self.swTVList)
 
         self.vpaned2.pack1(self.TVListFrame, True, True)

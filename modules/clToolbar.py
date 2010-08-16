@@ -87,20 +87,20 @@ class Toolbar(gtk.Toolbar):
         self.space_fs.set_expand(True)
         self.insert(self.space_fs, -1)
 
-        self.bEqualizer = gtk.ToolButton("Equalizer")
-        self.set_image(self.bEqualizer, "view-media-equalizer.png")
-        self.bEqualizer.set_tooltip_text(_("Show Equalizer"))
-        self.bEqualizer.set_label("Equalizer")
-        self.bEqualizer.connect("clicked", self.cb_show_equalizer)
-        self.insert(self.bEqualizer, -1)
-        self.bEqualizer.show()
+        #self.bEqualizer = gtk.ToolButton("Equalizer")
+        #self.set_image(self.bEqualizer, "view-media-equalizer.png")
+        #self.bEqualizer.set_tooltip_text(_("Show Equalizer"))
+        #self.bEqualizer.set_label("Equalizer")
+        #self.bEqualizer.connect("clicked", self.cb_show_equalizer)
+        #self.insert(self.bEqualizer, -1)
+        #self.bEqualizer.show()
 
-        self.bPref = gtk.ToolButton("Preferences")
-        self.bPref.set_stock_id(gtk.STOCK_PREFERENCES)
-        self.bPref.set_tooltip_text(_("Show Preferences"))
-        self.bPref.connect("clicked", self.pyjama.show_preferences)
-        self.insert(self.bPref, -1)
-        self.bPref.show()
+        #self.bPref = gtk.ToolButton("Preferences")
+        #self.bPref.set_stock_id(gtk.STOCK_PREFERENCES)
+        #self.bPref.set_tooltip_text(_("Show Preferences"))
+        #self.bPref.connect("clicked", self.pyjama.show_preferences)
+        #self.insert(self.bPref, -1)
+        #self.bPref.show()
         
 
 #        # Fullscreen
