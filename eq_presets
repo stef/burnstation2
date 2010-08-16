@@ -1,0 +1,27 @@
+#
+# Equalizer Presets
+#
+# You can enter presets here line by line
+#
+# A preset consists of an id-string and n values
+# for n being the number of bands on the equalizer.
+# 
+# Right now pyjama only comes with a 10 band equalizer.
+#
+# So for now you'll have to enter 10(!) values for the EQ.
+# Any preset with more or less than 10 values will not be 
+# loaded, yet. 
+#
+#
+# Your preset's name may not contain spaces
+# Range: -24.0 to 12.0
+# Bands: 29 59 119 227 474 947 1980 3700 7500 15000 hz
+
+#
+# Default Presets
+#
+Default 0 0 0 0 0 0 0 0 0 0
+Rock 5,7 1,9 -2,5 -4,6 -5,5 -8,8 -4,8 -0,2 4,1 10,4
+Hall -6 -3 0 3 6 6 3 0 -3 -6
+#Test 1 2 3 4 5 6 7 8 9 0
+#Test2 -24 -20 -18 -16 -14 -12 -10 -0 -6 -10 

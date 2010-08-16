@@ -1,0 +1,8 @@
+name = Radios
+description = Jamendo radios
+order = 100
+author = Daniel Nögel
+License = GPLv3
+copyright = 2009 by Daniel Nögel
+haspreferences = False
+homepage = http://xn--ngel-5qa.de

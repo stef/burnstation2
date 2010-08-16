@@ -1,0 +1,8 @@
+Name = Jamlist
+author = Daniel Nögel
+Version = 0.3
+Description=Showing some general jamendo playlists like the "top 100"
+order = 180
+copyright=Copyright 2009 by Daniel Nögel
+homepage= http://launchpad.net/pyjama
+license = GPLv3

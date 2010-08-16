@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Pyjama Music Player
+Comment=Jamendo Music Player
+Exec=pyjama
+Icon=pyjama
+Terminal=false
+Type=Application
+Categories=AudioVideo;Player;
+GenericName[de_DE]=

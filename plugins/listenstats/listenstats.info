@@ -1,0 +1,7 @@
+Name = Listen Statistics
+description = Generates stats about what you listen to
+Version = 0.4
+Order = 200
+Author = Daniel Nögel
+Copyright = Copyright 2009 by Daniel Nögel
+license = GPLv3

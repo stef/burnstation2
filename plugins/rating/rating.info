@@ -1,0 +1,7 @@
+Name = Rating
+Description = Allows you to rate tracks and albums
+Version = 0.2
+Author = Daniel Nögel
+Copyright = Copyright 2009 by Daniel Nögel
+Order = 200
+license = GPLv3

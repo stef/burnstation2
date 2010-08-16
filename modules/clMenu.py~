@@ -1,0 +1,383 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# ----------------------------------------------------------------------------
+# pyjama - python jamendo audioplayer
+# Copyright (c) 2009 Daniel Nögel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
+import gtk
+
+import os
+
+import functions
+
+## @package clMenu
+# Holds the Pyjama MenuBar Class
+
+## a gtk.MenuBar with some additional functions
+# for creating menus
+class Menu(gtk.MenuBar):
+    ## The Constructor
+    # @param self Object Pointer
+    # @param window Reference to pyjama's window class
+    def __init__(self, window):
+        ## Pyjama reference
+        self.pyjama = window.main
+
+        ## Fullscreen indicator
+        self.bolFullScreen = False
+
+        gtk.MenuBar.__init__(self)
+
+        fake_array_for_translations = [
+            _("File"), _("View"), _("Browse"), _("Extras"), _("Help"),          # Root menus
+            _("Save"), _("Quit"),                                  # Sub File
+            _("About"), _("Help"), _("Developer Information"), _("Report a Bug"),     # Sub Help
+            _("Plugins"), _("Preferences"),                                  # Sub Extras
+            _("Full Reload"), _("Fast Reload"), _("Fullscreen")    # Sub View
+        ]
+
+        menus = ["File", "View", "Browse", "Extras", "Help"]  
+
+        ## Dictionary holding all root menus
+        self.rootmenus = {}
+        ## Dictionary holding all Menuitems
+        self.submenus = {}
+        
+        for menu in menus:
+            self.append_root(_(menu), menu)
+
+        sub1 = ["Quit"]  
+        self.create_submenu(rootmenu=self.get_rootmenu("File"), submenu=sub1)
+
+        sub2 = ["Plugins", "---"]
+        self.create_submenu(rootmenu=self.get_rootmenu("Extras"), submenu=sub2)
+
+        sub3 = ["Help", "---", "Developer Information", "Report a Bug", "Translation", "---", "About"]  
+        hlp = self.get_rootmenu("Help")
+        if self.pyjama.settings.get_value("appearance", "justify_rightHelp", False):
+            hlp.set_right_justified(True)
+        self.create_submenu(rootmenu=hlp, submenu=sub3)
+
+        sub4 = ["Full Reload", "Fast Reload", "---", "Fullscreen"]
+        view = self.create_submenu(rootmenu=self.get_rootmenu("View"), submenu=sub4)
+
+        sub5 = []  
+        browse = self.create_submenu(rootmenu=self.get_rootmenu("Browse"), submenu=sub5)
+
+        # 
+        # Connect
+        #
+        about = self.get_submenu("About")
+        self.set_item_image(about, gtk.STOCK_ABOUT)
+        about.connect("activate", self.pyjama.window.show_about)
+
+        help = self.get_submenu("Help")
+        self.set_item_image(help, gtk.STOCK_HELP)
+        help.connect("activate", self.ev_help)
+
+        report = self.get_submenu("Report a Bug")
+        self.set_item_image(report, "green_beetle.png")
+        report.connect("activate", self.cb_report)
+
+        developer = self.get_submenu("Developer Information")
+        self.set_item_image(developer, gtk.STOCK_HELP)
+        developer.connect("activate", self.cb_developer)
+
+        trans = self.get_submenu("Translation")
+        self.set_item_image(trans, "clip_note_1.png")
+        trans.connect("activate", self.cb_trans)
+
+        quit = self.get_submenu("Quit")
+        self.set_item_image(quit, gtk.STOCK_QUIT)
+        quit.connect("activate", self.pyjama.window.really_quit)
+
+        reload = self.get_submenu("Full Reload")
+        self.set_item_image(reload, gtk.STOCK_REFRESH)
+        reload.connect("activate", self.pyjama.reload_current_page, True)
+
+        reload_cached = self.get_submenu("Fast Reload")
+        self.set_item_image(reload_cached, gtk.STOCK_REFRESH)
+        reload_cached.connect("activate", self.pyjama.reload_current_page, False)
+
+        fullscreen = self.get_submenu("Fullscreen")
+        self.set_item_image(fullscreen, gtk.STOCK_FULLSCREEN)
+        fullscreen.connect("activate", self.on_bFullScreen_clicked)
+
+        plugins = self.get_submenu("Plugins")
+        self.set_item_image(plugins, gtk.STOCK_ABOUT)
+        plugins.connect("activate", self.pyjama.show_plugins)
+
+
+        # Preferences menu is added
+        # in clWindows.py at the end of
+        # __init__()
+
+
+        #
+        # Accelerators
+        #
+        self.__accel_group = gtk.AccelGroup()
+        quit.add_accelerator("activate", self.__accel_group, ord("q"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+        help.add_accelerator("activate", self.__accel_group, gtk.keysyms.F1, 0, gtk.ACCEL_VISIBLE)
+        reload.add_accelerator("activate", self.__accel_group, ord("r"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+        reload_cached.add_accelerator("activate", self.__accel_group, gtk.keysyms.F5, 0, gtk.ACCEL_VISIBLE)
+        fullscreen.add_accelerator("activate", self.__accel_group, gtk.keysyms.F11, 0, gtk.ACCEL_VISIBLE)
+        self.pyjama.window.add_accel_group(self.__accel_group)
+#        self.pyjama.window.add_accel_group(self.__accel_group)
+        
+
+        self.show()
+
+    ## Find a Rootmenu
+    # @param self Object Pointer
+    # @param name Root menu's name
+    # @return gtk.MenuItem
+    def get_rootmenu(self, name):
+#        for menu in self.rootmenus:
+#            if menu.id == name:
+#                return menu
+#        return None
+        return self.rootmenus[name.lower()]
+
+    ## Find a Menuitem
+    # @param self Object Pointer
+    # @param name Submenu's name
+    # @return gtk.ImageMenuItem
+    def get_submenu(self, name):
+#        for menu in self.submenus:
+#            if menu.id == name:
+#                return menu
+#        return None
+        return self.submenus[name.lower()]
+
+    #
+    # Root Menu Placing
+    #
+    ## Add a menu to the end of the menubar
+    # @param self Object Pointer
+    # @param name Name of the menu to create
+    # @param id Identifier of the menu to create
+    # @return A gtk.MenuItem
+    def append_root(self, name, id):
+        id = id.lower()
+        mnu = gtk.MenuItem(name)
+        mnu.id = id
+        mnu.position = len(self.rootmenus)
+        self.append(mnu)
+        mnu.show()
+#        self.rootmenus.append(mnu)
+        self.rootmenus[id] = mnu
+        return mnu
+
+    ## Add a menu to the start of the menubar
+    # @param self Object Pointer
+    # @param name Name of the menu to create
+    # @param id Identifier of the menu to create
+    # @return A gtk.MenuItem
+    def prepend_root(self, name, id):
+        id = id.lower()
+        mnu = gtk.MenuItem(name)
+        mnu.id = id
+        mnu.position = len(self.rootmenus)
+        self.prepend(mnu)
+        mnu.show()
+#        self.rootmenus.insert(0, mnu)
+        self.rootmenus[id] = mnu
+        return mnu
+
+    ## Inserts a Menu at a particular position
+    # @param self Object Pointer
+    # @param pos Position of the menu to create
+    # @param name Name of the menu to create
+    # @param id Identifier of the menu to create
+    # @return A gtk.MenuItem
+    def insert_root_pos(self, pos, name, id):
+        id = id.lower()
+        mnu = gtk.MenuItem(name)
+        mnu.id = id
+        mnu.position = pos
+        self.insert(mnu, pos)
+        mnu.show()
+#        self.rootmenus.insert(pos, mnu)
+        self.rootmenus[id] = mnu
+        return mnu
+
+    ## Inserts a Menu after another rootmenu
+    # @param self Object Pointer
+    # @param after Name of a rootmenu
+    # @param name Name of the menu to create
+    # @param id Identifier of the menu to create
+    # @return A gtk.MenuItem
+    def insert_root_after(self, after, name, id):
+        after = self.get_rootmenu(after)
+        if after != None:
+            return self.insert_root_pos(after.position + 1, name, id)
+        return None
+
+    ## Inserts a Menu before another rootmenu
+    # @param self Object Pointer
+    # @param before Name of a rootmenu
+    # @param name Name of the menu to create
+    # @param id Identifier of the menu to create
+    # @return A gtk.MenuItem
+    def insert_root_before(self, before, name, id):
+        before = self.get_rootmenu(before)
+        if before != None:
+            if before.position != 0:
+                return self.insert_root_pos(before.position , name, id)
+            else:
+                return self.prepend_root(name, id)
+        return None
+    
+    #
+    # Submenu
+    #
+    ## Sets an image for a gtk.ImageMenuItem.
+    # Strings and gtk.STOCK_ICONs allowed for image. 
+    # @param self Object Pointer
+    # @param submenu A gtk.MenuItem
+    # @param image A gtk.STOCK_IMAGE or an URI for a local file
+    # @param size A gtk.STOCK_SIZE
+    # @return None
+    ## \todo Allowing size also being a 2-tuple containing width and height
+    def set_item_image(self, menuitem, image, size=gtk.ICON_SIZE_MENU):
+        if image in gtk.stock_list_ids():
+            # StockIcon
+            img = gtk.Image()
+            img.set_from_stock(image, gtk.ICON_SIZE_MENU)
+            menuitem.set_image(img)
+        else:
+            # from file
+            w, h = gtk.icon_size_lookup(size)
+            img = gtk.Image()
+            if not os.path.exists(image):
+                image = os.path.join(functions.install_dir(), "images", image)
+                if not os.path.exists(image):
+                    print ("Image not found")
+                    return -1
+            pix = gtk.gdk.pixbuf_new_from_file_at_size(image, w, h)
+            img.set_from_pixbuf(pix)
+            menuitem.set_image(img)
+    
+    ## Creates and populates a submenu from a list of items.
+    # @param self Object Pointer
+    # @param rootmenu The menu which gets the submenu
+    # @param submenu A list with Strings.
+    # For "---" strings a gtkSeperatorMenuItem will be created
+    # @return A gtk.Menu
+    def create_submenu(self, rootmenu, submenu):
+        mnu = gtk.Menu()
+        for sub in submenu:
+            if sub != "---":
+                tmp = gtk.ImageMenuItem(_(sub.replace("_", "__")))
+                tmp.id = sub.lower()
+            else:
+                tmp = gtk.SeparatorMenuItem()
+                tmp.id = None
+            mnu.append(tmp)
+            tmp.show()
+#            self.submenus.append(tmp)
+            self.submenus[tmp.id] = tmp
+#        tmp.set_property("use-underline", False)
+        mnu.show()
+        rootmenu.set_submenu(mnu)
+        return mnu
+
+    ## Appends an gtk.ImageMenuItem to a Menu.
+    # @param self Object Pointer
+    # @param rootmenu The rootmenu which submenu is going to be extended
+    # @param name The name of the appended item.
+    # If the name is "---" a gtkSeperatorMenuItem will be created
+    # @param id Identifier of the appended item
+    # @return a gtk.ImageMenuItem
+    def append_entry(self, rootmenu, name, id):
+        id = id.lower()
+        if name != "---":
+            mnu = gtk.ImageMenuItem(name.replace("_", "__"), False)
+            mnu.id = id
+        else:
+            mnu = gtk.SeparatorMenuItem()
+            mnu.id = id
+        sub = rootmenu.get_submenu()
+        sub.append(mnu)
+        self.submenus[id] = mnu
+        mnu.show()
+        return mnu
+
+    ## Inserts an gtk.ImageMenuItem into a Menu.
+    # @param self Object Pointer
+    # @param pos Position
+    # @param rootmenu The rootmenu which submenu is going to be extended
+    # @param name The name of the inserted item.
+    # If the name is "---" a gtkSeperatorMenuItem will be created
+    # @param id Identifier of the appended item
+    # @return a gtk.ImageMenuItem
+    def insert_entry(self, pos, rootmenu, name, id):
+        id = id.lower()
+        if name != "---":
+            mnu = gtk.ImageMenuItem(name.replace("_", "__"), False)
+            mnu.id = id
+        else:
+            mnu = gtk.SeparatorMenuItem()
+            mnu.id = id
+        sub = rootmenu.get_submenu()
+        sub.insert(pos, mnu)
+        self.submenus[id] = mnu
+        mnu.show()
+        return mnu
+
+    #
+    # Callbacks
+    # 
+    ## Called when the developer MenuItem was clicked
+    # @param Object Pointer
+    # @param widget The MenuItem clicked
+    def cb_developer(self, widget):
+        self.pyjama.Events.raise_event("open_url", "http://xn--ngel-5qa.de/pyjama/html", force_default=True)
+
+    ## Called when the translation MenuItem was clicked
+    # @param Object Pointer
+    # @param widget The MenuItem clicked
+    def cb_trans(self, widget):
+        self.pyjama.Events.raise_event("open_url", "http://translations.launchpad.net/pyjama", force_default=True)
+
+    ## Called when the report-a-bug MenuItem was clicked
+    # @param Object Pointer
+    # @param widget The MenuItem clicked
+    def cb_report(self, widget):
+        self.pyjama.Events.raise_event("open_url", "https://bugs.launchpad.net/pyjama", force_default=True)
+
+    ## Called when the help MenuItem was clicked
+    # @param Object Pointer
+    # @param widget The MenuItem clicked
+    def ev_help(self, widget):
+        self.pyjama.Events.raise_event("open_url", "https://answers.launchpad.net/pyjama", force_default=True)
+
+    ## Called when the Fullscreen MenuItem was clicked.
+    # If you want to switch to Fullscreen, this methode
+    # might help.
+    # @param self Object Pointer
+    # @param widget The MenuItem clicked
+    def on_bFullScreen_clicked(self, widget=None):
+        if not self.bolFullScreen:
+#            self.pyjama.window.toolbar.bFullScreen.set_stock_id(gtk.STOCK_LEAVE_FULLSCREEN)
+            self.bolFullScreen = True
+            self.pyjama.window.fullscreen()
+        else:
+#            self.pyjama.window.toolbar.bFullScreen.set_stock_id(gtk.STOCK_FULLSCREEN)
+            self.bolFullScreen = False
+            self.pyjama.window.unfullscreen()

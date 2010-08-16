@@ -1,0 +1,9 @@
+Name=Configtool
+Version=0.3.3
+Order=32000
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+copyright = Copyright (c) 2009 Daniel Nögel
+license = GPLv3
+description = Generic config parser - only for advanced users. 
+Please use pyjama's preferences-dialog instead.

@@ -1,0 +1,358 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# ----------------------------------------------------------------------------
+# pyjama - python jamendo audioplayer
+# Copyright (c) 2009 Daniel Nögel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
+import gtk, glib
+from time import sleep
+import hashlib
+
+from modules import clThreadedDownload
+from modules import functions
+import os
+from modules import clWidgets
+
+class ArtistBrowser(gtk.VBox):
+    def __init__(self, pyjama):
+        self.__pyjama = pyjama
+        self.__home = functions.preparedirs()
+
+        gtk.VBox.__init__(self)
+#        self.set_size(700,400)
+
+#        self.__pyjama.Events.connect_event("scrolled_window_resized", self.ev_scrolled_window_resized)
+
+        # might be obsolet
+#        self.__pyjama.window.setcolor(self)
+
+        self.all_artistsinfos = []
+        self.widgets = {}
+
+        self.cur_page = 1
+        self.cur_firstletter = "0-9"
+        self.resultsperpage = 10
+
+    ## Asking jamendo for a list of artists
+    # @param self Object Pointer
+    # @param resultsperpage Number of artists to be fetched
+    # @param page Page to be fetched
+    # @param firstletter First letter of artists to be fetched
+    # @result See clJamendo.Jamendo.query()
+    def jamendo_artists(self, resultsperpage, page, firstletter):
+        if self.__pyjama.verbose:
+            print ("Getting %i artists beginning with letter(s) %s") % (resultsperpage, firstletter)
+        ret = self.__pyjama.jamendo.query("id+genre+genre/artist/json?order=alpha_asc&firstletter=%s&hasalbums=1&n=%i&pn=%i" % (firstletter, resultsperpage, page), self.__pyjama.settings.get_value("JAMENDO", "CACHING_TIME_SHORT"))
+        return ret
+
+    def draw(self, resultsperpage, page, firstletter, data4=None):
+#        markup = self.__pyjama.window.markuplbCaption.replace("TEXT", _("Showing %i artists beginning with '%s' - Page %i") % (resultsperpage, firstletter, page))
+        txt = _("Showing %i artists beginning with '%s' - Page %i") % (resultsperpage, firstletter, page)
+#        self.__pyjama.window.lbCaption.set_markup(markup)
+        self.__pyjama.window.LayoutInfo.set_text(txt)
+
+        self.__pyjama.layouts.toolbars['artistbrowser'].lblPage.set_text(_("Page %i") % page)
+
+        self.cur_page = page
+        self.cur_firstletter = firstletter
+        self.resultsperpage = resultsperpage
+
+        #
+        # Destroy old widgets and dicts
+        #
+        for counter in self.widgets:
+            for item in self.widgets[counter]:
+                self.widgets[counter][item].destroy()
+        self.widgets = {}
+        self.all_artistsinfos = []
+
+        # Get List of Artists
+        artists =  self.jamendo_artists(resultsperpage, page, firstletter)
+        if artists == -1: return None
+        if artists is None: return None
+
+        txt = " This is the new artist overview. Each row shows an artist and all his albums.\n"
+        txt += " Right now this page looks quite ugly, doesn't it? If you have any ideas how to "
+        txt += "improve this page - contact me"
+        lbl = gtk.Label(txt)
+        lbl.set_alignment(0, 0)
+        lbl.show()
+        self.pack_start(lbl, False, False, 10)
+
+        #
+        # Create list of images
+        # and download them threaded
+        #
+        counter = 0
+        images = []
+        for artist in artists:
+            artist_id = artist['id']
+            artistinfos = self.__pyjama.db.artistinfos(artist_id)
+            if artistinfos != {}:
+                self.all_artistsinfos.append(artistinfos)
+                self.all_artistsinfos[counter][0]['genre'] = artist['genre']
+                image = artistinfos[0]['artist_image']
+                images.append(image)
+
+                for album in artistinfos:
+#                    image_name = "http://api.jamendo.com/get2/image/album/redirect/?id=%s&imagesize=100" % artistinfos[album]['album_id']
+#                    image_url = "http://imgjam.com/albums/%i/covers/1.100.jpg" % artistinfos[album]['album_id']
+#                    images.append((image_name, image_url))
+                    images.append((artistinfos[album]['album_id'], ))
+                counter += 1
+
+        x = clThreadedDownload.Download_Images(self.__pyjama, images)
+        print x.start()
+
+        #
+        # Create the Layout
+        #
+        counter = 0
+        for artist in self.all_artistsinfos:
+            self.widgets[counter] = {}
+            name = artist[0]['artist_name']
+            artist_id = artist[0]['artist_id']
+            url = artist[0]['artist_url']
+            image = artist[0]['artist_image']
+            genre = artist[0]['genre']
+            albums = artist[0]['artist_albumcount']
+
+            par_hbox = gtk.HBox()
+            curframe = gtk.Frame()
+            curframe.set_shadow_type(gtk.SHADOW_ETCHED_IN)
+#            curframe.set_border_width(55)
+            par_hbox.pack_start(curframe, True, True, 10)
+            hbox = gtk.HBox()
+            curframe.add(hbox)
+            
+            lbl = clWidgets.MyLinkButton(artist_id, name)
+            lbl.set_tooltip_text(_("Show artist's page"))
+            lbl.connect("clicked", self.ev_artist_lbl_clicked)
+            lbl.show()
+            curframe.set_label_widget(lbl)
+
+            img = self.url2uri(image)
+            self.widgets[counter]['artist'] = gtk.Image()
+            no_image = True
+            if img is not None:
+                try:    
+                    pb = gtk.gdk.pixbuf_new_from_file_at_size(img, 75, 75)
+                    self.widgets[counter]['artist'].set_from_pixbuf(pb)
+                    no_image = False
+                except:
+                    print "Image error"
+            if no_image:
+                try:
+                    pb = gtk.gdk.pixbuf_new_from_file_at_size(os.path.join(functions.install_dir(), "images", "personal.png"), 75, 75)
+                    self.widgets[counter]['artist'].set_from_pixbuf(pb)
+                except:
+                    self.widgets[counter]['artist'].set_from_stock(gtk.STOCK_MISSING_IMAGE, gtk.ICON_SIZE_BUTTON)
+            self.widgets[counter]['artist'].show()
+            hbox.pack_start(self.widgets[counter]['artist'], False, True, 50)
+
+            sep = gtk.VSeparator()
+            sep.show()
+            hbox.pack_start(sep, False, True, 10)
+
+            for album in artist:
+                albuminfos = artist[album]
+                album_id = albuminfos['album_id']
+                album_name = albuminfos['album_name']
+                album_image = "http://api.jamendo.com/get2/image/album/redirect/?id=%s&imagesize=100" % album_id
+                albuminfos['album_image'] = album_image
+
+                img = self.url2uri(album_image)
+                self.widgets[counter][album_id] = clWidgets.AlbumInfo(self.__pyjama, albuminfos, small=False) #gtk.Image()
+#                if img is not None:
+#                    try:
+#                        pb = gtk.gdk.pixbuf_new_from_file_at_size(img, 50, 50)
+#                        self.widgets[counter][album_id].set_from_pixbuf(pb)
+#                    except glib.GError:
+#                        print "File format unknow"
+#                        self.widgets[counter][album_id].set_from_stock(gtk.STOCK_MISSING_IMAGE, gtk.ICON_SIZE_BUTTON)
+#                else:
+#                    self.widgets[counter][album_id].set_from_stock(gtk.STOCK_MISSING_IMAGE, gtk.ICON_SIZE_BUTTON)
+                self.widgets[counter][album_id].show()
+                hbox.pack_start(self.widgets[counter][album_id], False, True, 10)
+            hbox.show()
+            curframe.show()
+            par_hbox.show()
+            self.pack_start(par_hbox, False, True, 10)
+#            self.pack_start(hbox, True, True, 10)
+#            sep = gtk.HSeparator()
+#            sep.show()
+#            self.pack_start(sep, False, True, 10)
+            counter += 1
+        print "all done"
+        self.show()
+#        self.arrange_artists()
+        
+#    def arrange_artists(self):
+#        if self.widgets == {}: return None
+##        width = self.__pyjama.window.scrolledwindow_width
+#        hspace = 20
+#        vspacer = 50
+#        
+#        imgwidth = 50
+#        imgheight = 50
+#        
+#        starty = 0
+#        starty_album = 50
+#        startx = 200
+#        
+#        y = 0
+#        x = 0
+
+#        max_x = 0
+#        for counter in self.widgets:
+#            x = 0
+#            #self.move(self.widgets[counter]['artist'], (imgwidth * x) + hspace*(x+1), (vspacer*(y+1) + (y * imgheight))+starty)
+#            for item in self.widgets[counter]:  
+#                if item == 'artist':
+#                    self.move(self.widgets[counter]['artist'], 50, (vspacer*(y+1) + (y * imgheight))+starty)
+#                else:
+#                    pos_x = imgwidth*(x) + hspace*(x+1) + startx
+#                    self.move(self.widgets[counter][item], pos_x, (vspacer*(y+1) + (y * imgheight))+starty_album)
+#                    if pos_x > max_x: max_x = pos_x
+#                    x += 1
+#            y+=1
+#        height = (y+1) * (imgheight + vspacer) +starty_album
+#        width = max_x + imgwidth
+#        self.set_size(width,height)
+
+    def url2uri(self, url):
+        md5hash = hashlib.md5(url).hexdigest()
+        fl =  os.path.join(self.__home, "images", md5hash)
+        if not os.path.exists(fl):
+            return None
+        else:
+            return fl
+
+
+    def ev_scrolled_window_resized(self):
+        self.rearrange_artist_layout()
+
+    def rearrange_artist_layout(self):
+        pass
+
+    def ev_artist_lbl_clicked(self, widget):
+        artistdetails = self.__pyjama.db.artistinfos(widget.uri)
+        self.__pyjama.layouts.show_layout("artist", artistdetails)
+
+    class ToolBar(gtk.Toolbar):
+        def __init__(self, pyjama):
+            self.__pyjama = pyjama
+            self.__layout = self.__pyjama.layouts.layouts['artistbrowser']
+
+            gtk.Toolbar.__init__(self)
+            self.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)
+            self.set_style(gtk.TOOLBAR_ICONS)
+
+            # Combo for First letter
+            combo_letter= ComboToolItem()
+            combo_letter.combobox.append_text("0-9")
+            for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                combo_letter.combobox.append_text(letter)
+            combo_letter.combobox.set_active(0)
+            combo_letter.combobox.set_wrap_width(10)
+            combo_letter.combobox.set_tooltip_text(_("Select first letter of artists to show"))
+            combo_letter.set_size_request(60, 10)
+            combo_letter.show()
+            combo_letter.combobox.connect("changed", self.cb_combo_changed, "letter")
+            self.insert(combo_letter, -1)
+
+            # Combo for Results Per Page
+            combo_results= ComboToolItem()
+            item = 10
+            while item <= 50:
+                combo_results.combobox.append_text(str(item))
+                item += 10
+            combo_results.combobox.set_active(0)
+            combo_results.combobox.set_wrap_width(1)
+            combo_results.combobox.set_tooltip_text(_("How many results should be shown?"))
+            combo_results.set_size_request(60, 10)
+            combo_results.show()
+            combo_results.combobox.connect("changed", self.cb_combo_changed, "results")
+            self.insert(combo_results, -1)
+
+            space_fs = gtk.ToolItem()
+            space_fs.set_expand(True)
+            space_fs.show()
+            self.insert(space_fs, -1)
+
+            # Button PREV
+            button = gtk.ToolButton()
+            button.set_stock_id(gtk.STOCK_GO_BACK)
+            button.connect("clicked", self.cb_button_clicked, "prev")
+            button.show()
+            self.insert(button, -1)
+
+            # Label
+            self.lblPage = LabelToolItem()
+            self.lblPage.set_text(_("Page %i" % 1))
+            self.lblPage.show()
+            self.insert(self.lblPage, -1)
+
+            # Button NEXT
+            btnNEXT = gtk.ToolButton()
+            btnNEXT.set_stock_id(gtk.STOCK_GO_FORWARD)
+            btnNEXT.connect("clicked", self.cb_button_clicked, "next")
+            btnNEXT.show()
+            self.insert(btnNEXT, -1)
+
+
+
+
+        def cb_button_clicked(self, widget, action):
+            layout = self.__pyjama.layouts.layouts['artistbrowser']
+            if action == "next":
+                self.__pyjama.layouts.show_layout("artistbrowser", layout.resultsperpage, layout.cur_page+1, layout.cur_firstletter, who_called = "clArtistBrowser.__init__")
+            else:
+                self.__pyjama.layouts.show_layout("artistbrowser", layout.resultsperpage, layout.cur_page-1, layout.cur_firstletter, who_called = "clArtistBrowser.__init__")
+
+        def cb_combo_changed(self, widget, action):
+            layout = self.__pyjama.layouts.layouts['artistbrowser']
+            if action == "letter":
+                letter = widget.get_active_text()
+                self.__pyjama.layouts.show_layout("artistbrowser", layout.resultsperpage, 1, letter, who_called = "clArtistBrowser.__init__")
+            elif action == "results":
+                results = int(widget.get_active_text())
+                self.__pyjama.layouts.show_layout("artistbrowser", results, 1, layout.cur_firstletter, who_called = "clArtistBrowser.__init__")
+
+class ComboToolItem(gtk.ToolItem):
+    __gtype_name__ = "ComboToolItem"
+    def __init__(self):
+        gtk.ToolItem.__init__(self)
+
+        self.combobox = gtk.combo_box_new_text()
+        self.combobox.show()
+        self.add(self.combobox)
+
+class LabelToolItem(gtk.ToolItem):
+    __gtype_name__ = "LabelToolItem"
+    def __init__(self):
+        gtk.ToolItem.__init__(self)
+
+        self.label = gtk.Label()
+        self.label.show()
+        self.add(self.label)
+
+    def set_text(self, text):
+        self.label.set_text(text)
+
+    def set_markup(self, text):
+        self.label.set_markup(text)

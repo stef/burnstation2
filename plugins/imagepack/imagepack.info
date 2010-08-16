@@ -1,0 +1,8 @@
+Name = Imagepack
+Description = Make browsing jamendo faster by getting an imagepack
+Author = Daniel Nögel
+Version = 0.1
+Order = 9000
+homepage = http://launchpad.net/pyjama
+copyright = (c) 2009 by Daniel Nögel 
+license = GPLv3

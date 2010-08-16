@@ -1,0 +1,9 @@
+Name = Artist Browser
+Author = Daniel Nögel
+Homepage = http://launchpad.net/pyjama
+Version = 0.1
+Order = 108
+haspreferences=False
+description = Browsing artists on jamendo
+copyright = Copyright (c) 2009 by Daniel Nögel
+license = GPLv3

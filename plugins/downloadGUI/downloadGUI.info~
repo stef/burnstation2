@@ -1,0 +1,9 @@
+name=Dowload GUI
+version=0.2
+order=8000
+homepage=http://launchpad.net/pyjama
+author=Daniel Nögel
+haspreferences=False
+description = A simple GUI downloader for jamendo database dumps
+copyright = Copyright (c) 2009 Daniel 
+license = GPLv3

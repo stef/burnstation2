@@ -1,0 +1,8 @@
+Name=Plugin Example
+Version=0.1
+Order=100
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+description = Just a pyjama plugin example
+copyright = Copyright (c) 2009 Daniel Nögel
+license = GPLv3

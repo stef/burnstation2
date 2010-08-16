@@ -1,0 +1,222 @@
+#!/usr/bin/env python
+import logging, os, urllib2, urllib
+from time import time
+logging.basicConfig(level=logging.DEBUG)
+
+try:
+    import scrobbler
+except:
+    logging.error('scrobbler not found')
+    raise
+
+try:
+    import gtk
+except:
+    #print "Error: Gtk not found"
+    logging.error('gtk not found')
+    raise
+
+try:
+    # for python 2.6
+    from hashlib import md5
+except ImportError:
+    from md5 import md5
+
+class main():
+    ## The Constructor
+    # @param self Object pointer
+    # @param pyjama Reference to the pyjama object
+    def __init__(self, pyjama):
+    	self.pyjama = pyjama
+        self.Events = self.pyjama.Events
+        self.login=self.pyjama.settings.get_value('LASTFM','LOGIN')
+        self.password=self.pyjama.settings.get_value('LASTFM','PASS')
+        #self.call_time=int(time())
+        self.Events.connect_event("nowplaying", self.ev_nowplaying)
+        self.Events.connect_event('scrobble_to_lastfm', self.ev_scrobble)
+
+        #self.get_session()
+        # login to last.fm
+        try:
+            # pyjama has own last.fm clien id 'pyj'
+            scrobbler.login(self.login, self.password, client=('pyj','0.3'))
+        except Exception, e:
+            logging.error(e)
+            raise
+        logging.debug('last.fm plugin loaded')
+
+    """def get_session(self):
+        #function for getting session id from last.fm
+        #for submit nowplaying info and scrobbling
+        #if (int(time())-self.call_time)>60:
+        #    timestamp = self.call_time = int(time())
+        #else:
+        #    logging.info('you must wait 60s for the next query to last.fm')
+        
+        timestamp=int(time())
+        auth=md5(md5(self.password).hexdigest()+str(timestamp)).hexdigest()
+        dict = {'hs':'true',
+                    'p': '1.2.1',
+                    'c': 'tst', # client id
+                    'v': '0.1', # cient version
+                    'u': self.login, # login
+                    't': timestamp,
+                    'a': auth # auth code
+            }
+        logging.debug('data for getting session id: %s' % urllib.urlencode(dict))
+    
+        self.lfm=urllib2.urlopen('http://post.audioscrobbler.com', urllib.urlencode(dict)).read().split("\n")
+        logging.debug('response from last.fm: %s' % self.lfm)
+        
+        """
+    
+    def ev_nowplaying(self,track):
+        """ for sending now playing notification to last.fm """
+        logging.debug('nowplaying: %s' % track)
+
+        if self.pyjama.settings.get_value('LASTFM','SCROBBLING'):
+            if not scrobbler.now_playing(track['artist_name'], track['name'], album=track['album_name'], length=track['duration']):
+                logging.warn('cat\' send nowplaying info to last.fm')
+            else:
+                logging.info('nowplaying %s - %s send to last.fm' % (track['artist_name'], track['name']))
+            #dict = {'s':self.lfm[1],
+            #        'a':track['artist_name'],
+            #        't':track['name'],
+            #        'b':track['album_name'],
+            #        'l':track['duration']
+            #}
+    
+            #logging.debug('data for nowplaying: %s' % urllib.urlencode(dict))
+            #response=urllib2.urlopen(self.lfm[2], urllib.urlencode(dict)).read()
+            #logging.debug('response for nowplaying: %s' % response)
+    
+            #if response.split("\n")[0]!='OK':
+                # only BADSESSION error is posible
+                #logging.warn('last.fm plugin: bad session id')
+
+             #   self.get_session()
+            #else:
+                #logging.info('nowplaying %s - %s send to last.fm' % (track['artist_name'], track['name']))
+            
+        else:
+            logging.debug('nowplaying info doesn\'t send - scrobbling is off')
+
+    def ev_scrobble(self,track):
+        """ for scrobbling to last.fm """
+        logging.debug('track: %s' % track)
+
+        #print scrobbler.flush()
+        
+        if self.pyjama.settings.get_value('LASTFM','SCROBBLING'):
+            try:
+                scrobbler.submit(track['artist_name'],track['name'],int(time()),length=track['duration'])
+            except Exception, e:
+                logging.error(e)
+                raise
+
+            if not scrobbler.flush():
+                logging.warn('last.fm plugin: can\'t scrobble song')
+            else:
+                logging.info('song %s - %s send to last.fm' % (track['artist_name'], track['name']))
+            
+            """dict = {'s':self.lfm[1],
+                    'a[0]':unicode(track['artist_name']).encode('utf-8'),
+                    't[0]':unicode(track['name']).encode('utf-8'),
+                    'b[0]':unicode(track['album_name']).encode('utf-8'),
+                    'l[0]':track['duration'],
+                    'i[0]':int(time()),
+                    'o[0]':'U',
+                    'n[0]':'',
+                    'mbid[0]':'',
+                    'r[0]':'',
+            }"""
+
+            #logging.debug('data for scrobble: %s' % urllib.urlencode(dict))
+            #req = urllib2.Request(self.lfm[3],urllib.urlencode(dict))
+            #response=urllib2.urlopen(req).read()
+            """
+            if response.split("\n")[0]!='OK':
+                logging.warn('last.fm plugin: can\'t scrobble song: %s' % response.split("\n")[0])
+            else:
+                logging.info('song %s - %s send to last.fm' % (track['artist_name'], track['name']))
+            """
+            
+            
+        else:
+            logging.debug('song doesn\' scrobbled - scrobbling is off')
+        
+
+
+
+    class Preferences():
+        ## Preferences Constructor
+        # @param self Object Pointer
+        # @param pyjama Again we have a pyjama object reference passed to our class
+        def __init__(self, pyjama):
+            # get settings
+            login_value=pyjama.settings.get_value('LASTFM','LOGIN','login')
+            pass_value=pyjama.settings.get_value('LASTFM','PASS', 'password')
+            scrobble_value=pyjama.settings.get_value('LASTFM','SCROBBLING',False)
+
+            logging.debug('settings on start: %s:%s %s' % (login_value,pass_value,str(scrobble_value)))
+            
+            dialog = gtk.Dialog(buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                      gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+            dialog.set_title(_("last.fm Plugin Preferences"))
+            dialog.set_default_size(100,100)
+            #label = gtk.Label()
+            #label.set_markup(_("<b>last.fm Plugin Preferences</b>"))
+            #label.set_line_wrap(True)
+            #label.set_single_line_mode(False)
+            #dialog.vbox.pack_start(label, False, True)
+
+            hbox = gtk.HBox()
+            dialog.vbox.pack_start(hbox, False, True)
+            hbox.show()
+
+            hbox2 = gtk.HBox()
+            dialog.vbox.pack_start(hbox2, False, True)
+            hbox2.show()
+
+
+            # scrobble check button
+            check = gtk.CheckButton(_("Scrobble to last.fm?"))
+            check.set_active(scrobble_value)
+            dialog.vbox.pack_start(check, False, True)
+
+            # login field
+            llabel=gtk.Label(_('Login:'))
+            hbox.pack_start(llabel, False, True)
+
+            login = gtk.Entry(max=0)
+            login.set_text(login_value)
+            #dialog.vbox.pack_start(login, True, True)
+            hbox.pack_end(login, False, True)
+
+            # password field
+            plabel=gtk.Label(_('Password:'))
+            hbox2.pack_start(plabel, False, True)
+
+            password = gtk.Entry(max=0)
+            password.set_text(pass_value)
+            password.set_visibility(False)            
+            #dialog.vbox.pack_start(password, False, True)
+            hbox2.pack_end(password, False, True)
+
+            #dialog.add_button(gtk.STOCK_CANCEL, -1)
+            #dialog.add_button(gtk.STOCK_OK, 1)
+            dialog.show_all()
+            result = dialog.run()
+            dialog.destroy()
+            # set new settings
+            if result == 1:
+                pyjama.settings.set_value('LASTFM','LOGIN', str(login.get_text()))
+                logging.debug('new login: %s' % login.get_text())
+
+                pyjama.settings.set_value('LASTFM','PASS',str(password.get_text()))
+                logging.debug('new pass: %s' % password.get_text())
+
+                pyjama.settings.set_value('LASTFM','SCROBBLING',str(check.get_active()))
+                logging.debug('new scrobble vaule: %s' % check.get_active())
+
+

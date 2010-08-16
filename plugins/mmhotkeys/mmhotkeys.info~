@@ -1,0 +1,9 @@
+Version=0.1.1
+Order=30
+Name=Multimedia Hotkeys
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+description = Binds pyjama to your keyboard's multimedia key
+copyright = Copyright (c) 2009 Daniel Nögel
+haspreferences = False
+license = GPLv3

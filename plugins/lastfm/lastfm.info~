@@ -1,0 +1,9 @@
+Name=last.fm plugin
+Version=0.1
+Order=100
+Author=Sebastian "prmtl" Kalinowski
+Homepage = http://launchpad.net/pyjama
+Description = Simple plugin for scrobbling music from Jamendo to last.fm
+Copyright = Copyright (c) 2009 Sebastian Kalinowski 
+License = GPLv3
+haspreferences = True

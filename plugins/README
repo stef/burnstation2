@@ -1,0 +1,58 @@
+ A short guide to plugins for pyjama
++-----------------------------------+
+
+Pyjama uses a new plugin system since version 0.1.29.
+This is a short guide how to do plugins for pyjama now.
+
+ Requirements
++------------+
+    1) plugins have to be stored in pyjama's plugin folder
+    2) every plugin has its own folder there
+    3) each plugin needs a .info file in its folder
+    4) each plugin needs a file called "__init__.py" in its folder
+
+ .info file
++----------+
+    1) this file has to have the same name as its folder
+    2) it holds:
+        - "name" to store the plugin's full name
+        - "version" to store the plugin's current version
+        - "order" to influence in which order the plugins are loaded
+          the higher this value is the later pyjama will load the plugin
+        - "author" to store the author's name
+        - "description" for a short description of the plugin
+        - "copyright" for a short copyright line
+        - "license" the plugin's license
+    	- "homepage" 
+
+    A proper .info file might look like this:
+
+    Name = Example Plugin 123
+    Order = 500
+    Version = 0.17
+    Author = Me
+    Description = Just testing
+    Copyright = By me 2009-FFFFFF
+    License = GPLv3
+    homepage = http://www.xn--ngel-5qa.de
+
+ __init__.py
++-----------+
+    * this file is needed to treat the while directory as a module
+    * it needs to have a class called "main"
+    * pyjama will pass a object holding all pyjama objects to this class 
+
+ Example
++-------+
+    the directory scheme should be something like this:
+
+    pyjama/
+        plugins/
+            my_plugin/
+                __init__.py
+                my_plugin.info
+            anotherplugin/
+                __init__.py
+                anotherplugin.info
+
+!! Please have a look at pyjama's example plugin - it is quite simple !!

@@ -1,0 +1,7 @@
+Name = Jamendo Query Indicator
+Author = Daniel Nögel
+Copyright = Copyright (c) 2009 by Daniel Nögel
+Description = Shows a dialog while jamendo is being queried
+haspreferences=False
+Order = 200
+license = GPLv3

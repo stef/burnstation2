@@ -1,0 +1,8 @@
+Name=Now playing notification
+Version=0.1
+Order=100
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+description = Show notifications when a new song is being played and execute a script. 
+copyright = Copyright (c) 2009 Daniel Nögel
+license = GPLv3

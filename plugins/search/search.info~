@@ -1,0 +1,9 @@
+Name=Database Search
+Version=0.3.1
+Order=50
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+description = search the databse for artists, albums and tracks
+copyright = Copyright (c) 2009 Daniel Nögel
+haspreferences = False
+license = GPLv3

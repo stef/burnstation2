@@ -1,0 +1,8 @@
+name = Pyjama Torrent Peer
+order = 100
+version = 0.1
+copyright = Copyright 2009 by Daniel Nögel
+haspreferences = False
+description = A torrent peer for spreading jamendo's albums
+author = Daniel Nögel
+license = GPLv3

@@ -1,0 +1,9 @@
+Name=Spread Torrent (Potato)
+Version=0.1
+Order=9010
+author= Daniel Nögel
+homepage = http://launchpad.net/pyjama
+description = Loads and spreads torrents from jamendo which needs seeding.
+copyright = Copyright (c) 2009 Daniel Nögel
+license = GPLv3
+autoload = false

@@ -1,0 +1,52 @@
+— starhscale.py 2006-07-25 18:40:54.000000000 -0700
++++ starhscale-treitter.py 2006-08-19 14:15:07.000000000 -0700
+@@ -142,7 +142,7 @@
+
+def __init__(self, max_stars=5, stars=0):
+- ”"Initialization, numstars is the total number
++ ”"Initialization, max_stars is the total number
+of stars that may be visible, and stars is the current
+number of stars to draw”"”
+
+@@ -170,7 +170,7 @@
+# and button click and button press events
+
+self.window = gtk.gdk.Window(
+- self.get_parent_window(),
++ parent=self.get_parent_window(),
+width=self.allocation.width,
+height=self.allocation.height,
+window_type=gdk.WINDOW_CHILD,
+@@ -252,7 +252,6 @@
+y = event.y
+state = event.state
+
+- new_stars = 0
+if (state & gtk.gdk.BUTTON1_MASK):
+# loop through the sizes and see if the
+# number of stars should change
+@@ -268,7 +267,7 @@
+return True
+
+def check_for_new_stars(self, xPos):
+- ”"This function will determin how many stars
++ ”"This function will determine how many stars
+will be show based on an x coordinate. If the
+number of stars changes the widget will be invalidated
+and the new number drawn”"”
+@@ -308,13 +307,13 @@
+”"set the maximum number of stars”"”
+
+if (self.max_stars != max_value):
+- ”"Save the old max incase it is less then the
++ ”"Save the old max incase it is less than the
+current number of stars, in which case we will
+have to redraw”"”
+
+if (max_value > 0):
+self.max_stars = max_value
+- #reinit the sizes list (should really be a sperate function
++ #reinit the sizes list (should really be a separate function)
+self.sizes = []
+for count in range(0,self.max_stars):
+self.sizes.append((count * PIXMAP_SIZE) + BORDER_WIDTH)

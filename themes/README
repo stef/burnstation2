@@ -1,0 +1,10 @@
+This folder is preserved for the standard-theme, which
+is delivered with pyjama. It is going to be copied to
+/usr/share/apps/pyjama during installation. Copying
+other themes - which are not set to be standard-theme
+in constants.py - will have NO EFFECT.
+Themes you want to install HAVE to be placed into the
+folder
+ ~/.pyjama/themes.
+
+

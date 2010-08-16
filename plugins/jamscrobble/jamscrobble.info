@@ -1,0 +1,9 @@
+Name=Jamendo Scrobble Plugin
+Version=0.1
+Order=100
+Author=Sebastian "prmtl" Kalinowski, Daniel Nögel (porting last.fm plugin)
+Homepage = http://launchpad.net/pyjama
+Copyright = Copyright (c) 2009 Sebastian Kalinowski 
+License = GPLv3
+autoload = false
+Description = Simple plugin for scrobbling music to jamendo.com: Right now jamendo does not support the current audioscrobbler protocol so this plugin cannot be used right now. 

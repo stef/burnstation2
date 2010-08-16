@@ -1,0 +1,31 @@
+32,33c32,33
+<         self.login=self.pyjama.settings.get_value('LASTFM','LOGIN')
+<         self.password=self.pyjama.settings.get_value('LASTFM','PASS')
+---
+>         self.login=self.pyjama.settings.get_value('LASTFM','LOGIN', None)
+>         self.password=self.pyjama.settings.get_value('LASTFM','PASS', None)
+37a38,40
+>         if self.login is None or self.password is None:
+>             return
+> 
+45c48
+<             raise
+---
+>             #raise
+201d203
+<             password.set_text(pass_value)
+202a205
+>             password.set_text(pass_value)
+212c215
+<             if result == 1:
+---
+>             if result == -3:#gtk.RESPONSE_OK:
+221a225,232
+>                 if check.get_active():
+>                     try:
+>                         # pyjama has own last.fm clien id 'pyj'
+>                         scrobbler.login(str(login.get_text()), str(password.get_text()), client=('pyj','0.3'))
+>                     except Exception, e:
+>                         logging.error(e)
+>                         #raise
+> 

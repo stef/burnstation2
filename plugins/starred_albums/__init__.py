@@ -1,0 +1,184 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# ----------------------------------------------------------------------------
+# pyjama - python jamendo audioplayer
+# Copyright (c) 2009 Daniel Nögel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
+import os, gtk
+
+from modules import functions
+from modules.clWidgets import ImageButton, StockButton, MyDialog
+import clStarLayout
+
+from modules import clEntry
+
+class main():
+    def __init__(self, pyjama):
+        self.pyjama = pyjama
+        
+        # Connect to AlbumInfo Widget creation
+        self.pyjama.Events.connect_event("albuminfo_created", self.ev_albuminfo_created)
+        self.pyjama.Events.connect_event("show_controls", self.ev_show_controls)
+        self.pyjama.Events.connect_event("hide_controls", self.ev_hide_controls)
+        
+        self.pyjama.Events.connect_event("showing_album_page", self.ev_showing_album_page)
+        self.pyjama.Events.connect_event("alldone", self.ev_alldone)
+
+
+    ######################################################################
+    #                                                                    #
+    #                                Events                              #
+    #                                                                    #
+    ######################################################################
+
+    def ev_show_controls(self, albuminfo):
+        albuminfo.star.show()
+        
+    def ev_hide_controls(self, albuminfo):
+        albuminfo.star.hide()
+
+        
+    # Called when album-view was created
+    def ev_alldone(self):
+        # add star buttont to main toolbar
+        self.bStar = gtk.ToolButton()
+        self.bStar.set_label(_("Stared"))
+        self.bStar.set_tooltip_text(_("Show stared Albums"))
+#        pos = self.pyjama.window.toolbar.get_item_index(self.pyjama.window.toolbar.bFullScreen)
+        self.pyjama.window.toolbar.insert(self.bStar, -1)
+        self.pyjama.window.toolbar.set_image(self.bStar, os.path.join(functions.install_dir(), "images", "star.png"))
+        self.bStar.connect("clicked", self.ev_show_star_layout)
+        self.bStar.show()
+
+        # add star button to album view
+        self.ibStarAlbum = ImageButton(os.path.join(functions.install_dir(), "images", "star.png"), 26, 26)#StockButton(gtk.STOCK_STAR, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        self.pyjama.layouts.toolbars['album'].pack_start(self.ibStarAlbum, False, True, 2)
+        self.ibStarAlbum.set_tooltip_text(_("Star this album"))
+        self.ibStarAlbum.set_size_request(40,40)
+        self.ibStarAlbum.show()
+        self.ibStarAlbum.connect("clicked", self.on_StarAlbum, "tag")
+
+        self.pyjama.layouts.register_layout("star", clStarLayout.StarLayout(self.pyjama))
+
+        # Append menu entry
+        menu = self.pyjama.window.menubar
+        entry = menu.append_entry(menu.get_rootmenu("Browse"), _("Stared"), "Star")
+        entry.connect("activate", self.ev_show_star_layout)
+        menu.set_item_image(entry, os.path.join(functions.install_dir(), "images", "star.png"))
+        import_star = menu.append_entry(menu.get_rootmenu("Extras"), _("Import Stared Albums"), "ImportStar")
+        import_star.connect("activate", self.ev_import_stared_albums)
+        menu.set_item_image(import_star, gtk.STOCK_NETWORK) 
+
+        self.accel_group = gtk.AccelGroup()
+        entry.add_accelerator("activate", self.accel_group, gtk.keysyms.F7, 0, gtk.ACCEL_VISIBLE)
+        self.pyjama.window.add_accel_group(self.accel_group)
+
+    def ev_import_stared_albums(self, widget):
+        # username
+        result = clEntry.input_box(title=_('Import Stared Albums'),
+            message=_('To import (your) stared albums from jamendo\nplease enter the corresponding jamendo username.'),
+            default_text=_("MeAtJamendo"))
+        if result is None:
+            return
+        name = str(result).replace(" ", "+")
+
+        albums = self.import_stared_albums(name)
+        if albums == []:
+            self.pyjama.Events.raise_event("error", None, "No albums found for this user")
+        else:
+            stared = self.pyjama.settings.get_value("STAR PLUGIN", "STARED ALBUMS", "")
+            for album in albums:
+                album = str(album)
+                if not album in stared:
+                    # add album to stared
+                    stared = "%s+%s" % (stared, album)
+            self.pyjama.settings.set_value("STAR PLUGIN", "STARED ALBUMS", stared)
+            self.pyjama.reload_current_page()
+
+            dia = MyDialog(_('Imported albums from user %s' % name),
+                              self.pyjama.window.get_toplevel(),
+                              gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, 
+                                (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT), gtk.STOCK_DIALOG_INFO, _("Succesfully imported %i albums from '%s'." % (len(albums), name)))
+            dia.run()
+            dia.destroy()
+
+    def import_stared_albums(self, username):
+        ret = self.pyjama.jamendo.query("id/album/json/album_user_starred?user_idstr=%s" % (username), self.pyjama.settings.get_value("JAMENDO", "CACHING_TIME_SHORT"))
+        return ret
+
+
+    def ev_show_star_layout(self, widget):
+        self.pyjama.layouts.show_layout("star", 10, "date", 1, "all")
+
+
+    def ev_albuminfo_created(self, albuminfo):
+        albumid = str(albuminfo.album['album_id'])
+        stared = self.pyjama.settings.get_value("STAR PLUGIN", "STARED ALBUMS", "")
+        if albumid in stared:
+            # add remove button to albuminfo
+            bControlStar = StockButton(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+            bControlStar.set_tooltip_text(_("Un-star this album"))
+            #~ albuminfo.vbControl.pack_start(bControlStar, False, True, 10)
+            bControlStar.connect("clicked", self.on_StarAlbum, albumid)
+        else:
+            # Add Star to albuminfo
+            bControlStar = ImageButton(os.path.join(functions.install_dir(), "images", "star.png"), 16, 16)
+            bControlStar.set_tooltip_text(_("Star this album"))
+            #~ albuminfo.vbControl.pack_start(bControlStar, False, True, 10)
+            bControlStar.connect("clicked", self.on_StarAlbum , albumid)
+        albuminfo.layout.put(bControlStar, 0,0)
+        albuminfo.widgets_list.append(bControlStar)
+        #~ bControlStar.show()
+        albuminfo.star = bControlStar
+        
+
+    def ev_showing_album_page(self, albuminfos):
+        albumid = str(albuminfos['id'])
+        stared = self.pyjama.settings.get_value("STAR PLUGIN", "STARED ALBUMS", "")
+        if albumid in stared:
+            # show remove button
+            self.ibStarAlbum.set_tooltip_text(_("Un-star this album"))
+            self.ibStarAlbum.setstock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_LARGE_TOOLBAR)
+        else:
+            # show add button
+            self.ibStarAlbum.set_tooltip_text(_("Star this album"))
+            self.ibStarAlbum.setimage(os.path.join(functions.install_dir(), "images", "star.png"), 26, 26)
+        # Set id as tag to read out later
+        self.ibStarAlbum.tag = albumid
+
+    # Add Star to Contextmenu
+
+#    def on_ibStarAlbum_clicked(self, widget, albumid):
+#        print albumid
+
+
+    def on_StarAlbum(self, widget, albumid=None):
+        if albumid == "tag":
+            albumid = self.ibStarAlbum.tag
+        stared = self.pyjama.settings.get_value("STAR PLUGIN", "STARED ALBUMS", "")
+        if not str(albumid) in stared:
+            # add album to stares
+            stared = "%s+%s" % (stared, albumid)
+            self.pyjama.settings.set_value("STAR PLUGIN", "STARED ALBUMS", stared)
+        else:
+            # remove album
+            stared = stared.replace("+%s" % str(albumid), "")
+            self.pyjama.settings.set_value("STAR PLUGIN", "STARED ALBUMS", stared)
+        self.pyjama.reload_current_page()
+
+
+
+

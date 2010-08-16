@@ -1,0 +1,8 @@
+Name=Lyrics
+Description=Show a track's lyrics
+Author=Daniel Nögel
+Copyright=Copyright (c) 2009 by Daniel Nögel
+Homepage=http://www.launchpad.net/pyjama
+Version=0.1
+Order=600
+license = GPLv3

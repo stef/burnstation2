@@ -1,0 +1,9 @@
+Name = Pyjama Version Control
+Version = 0.1
+Order = 100
+Author = Daniel Nögel
+Copyright = Copyright 2009 by Daniel Nögel
+homepage = http://launchpad.net/pyjama
+Description = Checks for new pyjama versions and installs them
+haspreferences = False
+license = GPLv3

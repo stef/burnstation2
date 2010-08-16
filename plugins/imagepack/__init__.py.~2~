@@ -1,0 +1,306 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# ----------------------------------------------------------------------------
+# pyjama - python jamendo audioplayer
+# Copyright (c) 2008 Daniel Nögel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
+import gtk, gtk.glade
+import gobject
+import os
+import sys
+from urllib import urlopen
+import time
+import tarfile
+from threading import Thread
+
+from modules import functions
+def threaded(f):
+    def wrapper(*args, **kwargs):
+        t = Thread(target=f, args=args, kwargs=kwargs)
+        t.start()
+    return wrapper
+
+@threaded
+class main():
+    def __init__(self, pyjama):
+        self.pyjama = pyjama
+        self.pyjama.Events.connect_event("alldone", self.ev_alldone)
+
+    def ev_alldone(self):
+        menu = self.pyjama.window.menubar
+        entry = menu.append_entry(menu.get_rootmenu("Extras"), _("Get Imagepack"), "imagepack")
+        entry.connect("activate", self.start_download)
+        menu.set_item_image(entry, os.path.join(functions.install_dir(), "plugins", "imagepack", "package.png"))
+
+        gobject.timeout_add(2000, self.check_download_neccessary)
+#        thr = Thread(target = self.check_download_neccessary, args = ())
+#        thr.start()
+
+
+    def check_download_neccessary(self):
+        while self.pyjama.need_attention:
+            sys.stdout.write(".")
+            sys.stdout.flush()
+            return True
+
+#        start = time.time()
+#        end = start+2
+#        while time.time() < end:
+#            ##gtk.gdk.threads_enter()##
+#            gtk.main_iteration()
+#            ##gtk.gdk.threads_leave()##
+#            pass
+        self.pyjama.need_attention = True
+        fl = os.path.join(self.pyjama.home, "images", "imagepack")
+        if not os.path.exists(fl):
+#            thr = Thread(target = self.start_download, args = ())
+#            thr.start()
+            self.start_download()
+        else:
+            pass
+        self.pyjama.need_attention = False
+        return False
+#            fh = open(fh, "r")
+#            if fh:
+#                content = fh.read()
+#                fh.close()
+#                
+#                self.start_download()
+
+
+    def create_download_dialog(self):
+        ##gtk.gdk.threads_enter()##
+        gladefile = os.path.join(functions.install_dir(), "plugins", "imagepack", "imagepack.glade")
+        try:
+            self.wTree = gtk.glade.XML(gladefile)  
+        except RuntimeError:
+            self.pyjama.Events.raise_event("error", None, "Could not load necessary glade file: %s" % gladefile)
+            ##gtk.gdk.threads_leave()##
+            return
+
+        self.dialog = self.wTree.get_widget("dialog1")
+        self.dialog.set_size_request(300,200)
+        self.bCancel = self.wTree.get_widget("bClose")
+        self.bOK = self.wTree.get_widget("bOK")
+        self.label = self.wTree.get_widget("label1")
+        self.progressbar = self.wTree.get_widget("progressbar1")
+
+        self.dialog.connect('delete_event', self.cb_quit)
+        self.bCancel.connect('clicked', self.cb_button_clicked)
+        self.bOK.connect('clicked', self.cb_button_clicked)
+
+        self.bOK.set_sensitive(True)
+        self.dialog.set_title("Downloading Imagepack")
+        self.dialog.set_icon_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+        ##gtk.gdk.threads_leave()##
+
+    def cb_button_clicked(self, widget):
+        if widget == self.bCancel:
+            self.abort_download()
+#            ##gtk.gdk.threads_enter()##
+            self.dialog.destroy()
+        elif widget == self.bOK:
+#            ##gtk.gdk.threads_enter()##
+            self.dialog.destroy()
+#            ##gtk.gdk.threads_leave()##
+
+
+    def cb_quit(self, widget, event):
+        return True
+
+    def extract(self, archive, dest):
+        th = tarfile.open(name=archive, mode='r:*')
+        try:
+            th.extractall(dest)
+        except Exception, inst:
+            ##gtk.gdk.threads_enter()##
+            self.pyjama.Events.raise_event("error", inst, "Error extracting the archive")
+            ##gtk.gdk.threads_leave()##
+            return -1
+        return None
+
+    def download_completed(self, file_uri):
+        # extract files and so one
+        self.set_bar(1.0, "Extracting...")
+        ##gtk.gdk.threads_enter()##
+        #self.pyjama.window.do_events()
+        ##gtk.gdk.threads_leave()##
+        self.extract(file_uri, self.pyjama.home)
+        ##gtk.gdk.threads_enter()##
+        self.set_bar(1.0, "Done")
+        ##gtk.gdk.threads_leave()##        
+        try:
+            os.remove(file_uri)
+        except ValueError:
+            print ("Could not remove %s" % file_uri)
+
+        try:
+            fl = os.path.join(self.pyjama.home, "images", "imagepack")
+            fh = open(fl, "w")
+            if fh:
+                fh.write(file_uri)
+                fh.close()
+            else:
+                print "????"
+            print fl
+        except:
+            print "Error"
+        ##gtk.gdk.threads_enter()##
+        self.bOK.set_sensitive(True)
+        self.bCancel.set_sensitive(False)
+        
+        gtk.gdk.threads_leave()##
+
+
+
+    def set_bar(self, fraction=None, text=""):
+        ##gtk.gdk.threads_enter()##
+        if fraction:
+            self.progressbar.set_fraction(fraction)
+        else:
+            pass
+#            self.progressbar.pulse()
+        self.progressbar.set_text(text)
+#        self.pyjama.window.do_events()
+        ##gtk.gdk.threads_leave()##
+        return True
+
+    def start_download(self, widget=None):
+        self.pyjama.need_attention = True
+        ##gtk.gdk.threads_enter()##
+        dia = gtk.Dialog()
+        dia.set_icon_from_file(os.path.join(functions.install_dir(), "images", "pyjama.png"))
+        dia.set_title("Download an imagepack?")
+        hbox = gtk.HBox()
+        dia.vbox.pack_start(hbox, True, True, 10)
+
+        img = gtk.Image()
+        img.set_from_stock(gtk.STOCK_DIALOG_QUESTION, gtk.ICON_SIZE_DIALOG)
+        hbox.pack_start(img, False, False)
+
+        lbl = gtk.Label()
+        lbl.set_markup("Usually pyjama downloads any images one by one from jamendo when it's needed. This makes browsing very slow if many images weren't cached before.\nDo you want do download an imagepack which makes browsing faster for you?\n\n\n<b>Smart = 600 frequently used images- 1 MB in size</b>.\nLarge = 20.000 images - 70 MB to download, 100 MB on disc.")
+        lbl.set_single_line_mode(False)
+        lbl.set_line_wrap(True)
+        hbox.pack_start(lbl, False, True, 10)
+
+        dia.add_button(gtk.STOCK_CANCEL, -3)
+        dia.add_button("Large", -2)
+        dia.add_button("Smart [recommended]", -1)
+
+        dia.show_all()
+        dia.present()
+        ret = dia.run()
+        gtk.gdk.threads_leave()##
+        dia.destroy()
+
+        if ret == -1:
+            imagepack = "smart"
+        elif ret == -2:
+            imagepack = "large"
+        elif ret <= -3:
+            return
+
+#        thr = Thread(target = self.__start_download, args = (imagepack,))
+#        thr.start()
+        self.__start_download(imagepack)
+
+    def __start_download(self, imagepack="large"):
+        self.create_download_dialog()
+        ##gtk.gdk.threads_enter()##
+        self.bOK.set_sensitive(False)
+        self.bCancel.set_sensitive(True)
+        self.dialog.show()
+
+        if imagepack=="large":
+            self.label.set_markup("Now downloading the complete imagepack.\n\n<i>Pyjama should still be useable!</i>")
+            ##gtk.gdk.threads_leave()##
+            self.download("http://xn--ngel-5qa.de/pyjama/release/imagepack.tar.gz", "imagepack.tar.gz")
+        else:
+            self.label.set_markup("Now downloading the smart imagepack.\n\n<i>Pyjama should still be useable!</i>")
+            ##gtk.gdk.threads_leave()##
+            self.download("http://xn--ngel-5qa.de/pyjama/release/smart-imagepack.tar.gz", "smart-imagepack.tar.gz")
+
+
+    def abort_download(self):
+        self.continue_download = False
+
+    def download(self, url, local_filename):
+        self.continue_download = True
+        prevbyte = 0
+        try:
+            file_uri = os.path.join(self.pyjama.home, local_filename)
+            local_file = open(file_uri, "wb")
+
+            stream, length = self.create_download(url, None)
+
+            if not length:
+                length = "unknown"
+            else:
+                length = int(length)
+#            print "Lade %s (%s bytes).." % (url, length)
+            curbyte = 0.0
+
+            content = stream.read(1024)
+            local_file.write(content)
+            curbyte += len(content)
+
+            milli= time.time()*1000
+
+            while content and self.continue_download:
+                content = stream.read(1024)
+                curbyte += len(content)
+
+                ##gtk.gdk.threads_enter()##
+                self.pyjama.window.do_events()
+                ##gtk.gdk.threads_leave()##
+
+                if length != "unknown":
+                    if time.time()*1000 > milli + 500: 
+                        persecond = ((curbyte - prevbyte)/1024)*2
+                        prevbyte = curbyte
+                        milli = time.time() *1000
+                        self.progress = 100*curbyte/length
+                        self.set_bar(self.progress/100, "%d%% (%d kB/%d kB @%d kB/s)"% (self.progress, curbyte/1024.0, length//1024, persecond))
+                local_file.write(content)
+                
+            stream.close()
+            local_file.close()
+            self.set_bar(1.0, "Done")
+        except Exception, inst:
+            self.dialog.destroy()
+            print "Fehler beim Laden von %s: %s" % (url, inst)
+            ##gtk.gdk.threads_enter()##
+            self.pyjama.Events.raise_event("error", inst, "Fehler beim Laden von %s" % url)
+            ##gtk.gdk.threads_leave()##
+            self.continue_download = False
+        if not self.continue_download:
+            try:
+                os.remove(file_uri)
+            except:
+                print ("Could not remove %s" % file_uri)
+        else:
+            self.download_completed(file_uri)
+
+    def create_download(self, url, proxy=None):
+        stream = urlopen(url, None, proxy)
+
+        length=stream.info().getheader("Content-Length")
+        if not length:
+            length = None
+
+        return (stream, length)
+

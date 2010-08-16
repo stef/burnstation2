@@ -1,0 +1,153 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# ----------------------------------------------------------------------------
+# pyjama - python jamendo audioplayer
+# Copyright (c) 2008 Daniel Nögel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
+import urllib
+import hashlib
+import os
+
+import threading
+import gtk
+
+import clSettings
+import functions
+from clWidgets import ProcessDialog
+
+from time import sleep, time
+
+# Gettext - Übersetzung
+functions.translation_gettext()
+#def _(string):
+#    return string
+
+settings = clSettings.settings()
+
+class Download_Images():
+    def __init__(self, pyjama, imglist):
+        self.__pyjama = pyjama
+        self.__imglist = imglist
+
+        self.threads = []
+
+
+    def start(self):
+        max_time_for_downloading = 10 + len(self.__imglist) * 0.1
+        start_time = time()
+
+        self.dia = ProcessDialog(self.__pyjama, _("Downloading %i images" % len(self.__imglist)))
+        self.dia.set_description(_("Need to download %i images in order to display this page" % len(self.__imglist)))
+        self.dia.show()
+
+        self.__pyjama.window.do_events()
+
+        counter = 0
+        for image in self.__imglist:
+            self.threads.append(Download(self.__pyjama, image, counter))
+            self.threads[counter].start()
+            counter += 1
+        print "Downloading %i images" % counter
+
+        threads_alive = self.count_threads()
+        while threads_alive > 0:
+            if start_time + max_time_for_downloading <= time():
+                print "Aborting image download"
+                self.dia.destroy()
+                return threads_alive
+            percentage = 100.0  / len(self.__imglist) *  (len(self.__imglist) - threads_alive)
+            self.dia.set_status(percentage, _("%i images remaining" % threads_alive))
+            self.__pyjama.window.do_events()
+            print "%i threads pending, will abort in %i seconds" % (threads_alive, max_time_for_downloading + start_time - time())
+            sleep(self.__pyjama.settings.get_value("PERFORMANCE", "THREAD_WAIT"))
+            threads_alive = self.count_threads() 
+
+        self.dia.destroy()
+
+    def count_threads(self):
+        counter = 0
+        for thread in self.threads:
+            if thread.isAlive():
+                counter += 1
+        return counter
+
+    def threads_alive(self):
+        alive = []
+        for thread in self.threads:
+            if thread.isAlive():
+                alive.append(thread)
+        return alive
+
+class Download( threading.Thread ):
+    def __init__( self, parent, url, num):
+        if type(url) == type(()):
+            if url[0] == "album":
+                self.saveas = "http://api.jamendo.com/get2/image/album/redirect/?id=%s&imagesize=100" % url[1]
+                self.url = "http://imgjam.com/albums/s%s/%s/covers/1.100.jpg"  % (str(url[1])[0:2], url[1])
+        else:
+            self.saveas = url
+            self.url = url
+        self.parent = parent
+        self.num = num
+        threading.Thread.__init__(self)
+  
+    ###################################################################
+    #
+    # get a album's cover
+    # RETURNS: None = error
+    #
+    def run( self ):
+        md5hash = hashlib.md5(self.saveas).hexdigest()
+        imagepath = os.path.join(self.parent.home, "images", md5hash)
+        if not os.path.exists(imagepath) and self.url != "":
+            if self.parent.debug_extreme:
+                print ("[%i] Trying to burst-download cover for '%s'[...]") % (self.num, self.url)
+            try:
+                urllib.urlretrieve(self.url, imagepath)
+                if self.parent.debug_extreme:
+                    print ("[%i] Burst-downloaded Cover from Jamendo") % self.num
+                return "0"
+            except IOError:
+                print ("[%i] Could not get album cover from jamendo:") % self.num
+                print "'%s'" % self.url
+                return "1"
+        elif self.url == "":
+            return "2"
+        else:
+            return "0"
+            if self.parent.debug_extreme:
+                print ("[%i] Not Burst-Downloading: Cover on HD") % self.num
+
+###################################################################
+#
+# test if to much threads a running at the same time
+# RETURNS: True = to much threads, False = less than MAX_THREADS
+#
+def threadLimiter(threads):
+    counter = 0
+    for thread in threads:
+        if threads[thread].isAlive():
+            counter += 1
+        if counter > settings.get_value("PERFORMANCE", "MAX_THREADS"):
+            return True
+    return False
+
+def threadCounter(threads):
+    counter = 0
+    for thread in threads:
+        if threads[thread].isAlive():
+            counter += 1
+    return counter
