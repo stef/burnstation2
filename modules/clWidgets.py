@@ -425,7 +425,7 @@ class TreeViewList(gtk.TreeView):
         column.set_sort_column_id(0)
         column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
         column.set_resizable(True)
-        column.set_fixed_width(150)
+        column.set_fixed_width(250)
 
 
 
@@ -438,7 +438,7 @@ class TreeViewList(gtk.TreeView):
         column.set_sort_column_id(1)
         column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
         column.set_resizable(True)
-        column.set_fixed_width(150)
+        column.set_fixed_width(250)
 
         # tracknum column
         renderer = gtk.CellRendererText()
@@ -485,6 +485,12 @@ class TreeViewList(gtk.TreeView):
         column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
         column.set_resizable(True)
         column.set_fixed_width(100)
+
+        column = gtk.TreeViewColumn(_(" "))
+        treeview.append_column(column)
+        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        column.set_resizable(True)
+        column.set_fixed_width(1)
 
     def make_pb(self, tvcolumn, cell, model, iter):
         url = model.get_value(iter, self.COLUMN_LICENSEURL)
