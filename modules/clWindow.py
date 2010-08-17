@@ -55,7 +55,7 @@ import clEntry
 import clMenu, clToolbar
 import functions
 import clLayouts
-from clLayouts.default_layouts import clAlbumBrowser, clAlbumLayout, clArtistLayout
+from clLayouts.default_layouts import clAlbumBrowser, clAlbumLayout, clArtistLayout, clBurnLayout
 
 #~ from threading import Thread
 #~ def threaded(f):
@@ -519,6 +519,7 @@ class winGTK(gtk.Window):
         self.main.layouts.register_layout("top", clAlbumBrowser.AlbumBrowser(self.main))
         self.main.layouts.register_layout("album", clAlbumLayout.AlbumLayout(self.main))
         self.main.layouts.register_layout("artist", clArtistLayout.ArtistLayout(self.main))
+        self.main.layouts.register_layout("burn", clBurnLayout.BurnLayout(self.main))
 
         # Menu Entry
         #menu = self.menubar

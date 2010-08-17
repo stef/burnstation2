@@ -184,8 +184,7 @@ class Toolbar(gtk.Toolbar):
         
     def on_bBurn_clicked(self, ev):
         print '***** potato debug *******'
-        print self.pyjama.window
-        print dir(self.pyjama.window)
+        self.pyjama.layouts.show_layout("burn")
 
     def on_bAbout_clicked(self, ev):
         self.pyjama.window.show_about()
