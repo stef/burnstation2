@@ -79,6 +79,14 @@ class Toolbar(gtk.Toolbar):
         self.bHistoryForward.connect("clicked", self.on_bHistoryForward_clicked)
         self.insert(self.bHistoryForward, -1)
 
+        ## Burn Button
+        self.bBurn = gtk.ToolButton("Burn")
+        self.bBurn.set_stock_id(gtk.STOCK_CDROM)
+        self.bBurn.set_label(_("Burn"))
+        self.bBurn.set_tooltip_text(_("Burn selected playlist"))
+        self.bBurn.connect("clicked", self.on_bBurn_clicked)
+        self.insert(self.bBurn, -1)
+
         ## Seperator
         self.Separator1 = gtk.SeparatorToolItem()
         self.insert(self.Separator1, -1)
@@ -116,6 +124,7 @@ class Toolbar(gtk.Toolbar):
         self.bHistoryBack.add_accelerator("clicked", self.accel_group, 65361, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
         self.bHome.add_accelerator("clicked", self.accel_group, ord("h"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bHistoryForward.add_accelerator("clicked", self.accel_group, 65363, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
+        self.bBurn.add_accelerator("clicked", self.accel_group, ord("b"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bPref.add_accelerator("clicked", self.accel_group, ord("p"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.pyjama.window.add_accel_group(self.accel_group)
 
@@ -173,6 +182,9 @@ class Toolbar(gtk.Toolbar):
             data4 = ret['data4']
             self.pyjama.layouts.show_layout(layout, data1, data2, data3, data4, fromhistory=True, who_called = "on_bHistoryBack_clicked")
         
+    def on_bBurn_clicked(self, ev):
+        print '***** potato debug *******'
+        self.pyjama.layouts.show_layout("burn")
 
     def on_bAbout_clicked(self, ev):
         self.pyjama.window.show_about()
