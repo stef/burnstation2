@@ -105,7 +105,7 @@ class Toolbar(gtk.Toolbar):
         #self.bPref.set_stock_id(gtk.STOCK_PREFERENCES)
         #self.bPref.set_tooltip_text(_("Show Preferences"))
         self.bPref.connect("clicked", self.pyjama.show_preferences)
-        self.insert(self.bPref, -1)
+        #self.insert(self.bPref, -1)
         #self.bPref.show()
         
 
