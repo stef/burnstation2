@@ -124,6 +124,7 @@ class Toolbar(gtk.Toolbar):
         self.bHistoryBack.add_accelerator("clicked", self.accel_group, 65361, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
         self.bHome.add_accelerator("clicked", self.accel_group, ord("h"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bHistoryForward.add_accelerator("clicked", self.accel_group, 65363, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
+        self.bBurn.add_accelerator("clicked", self.accel_group, ord("b"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.bPref.add_accelerator("clicked", self.accel_group, ord("p"), gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
         self.pyjama.window.add_accel_group(self.accel_group)
 
@@ -182,7 +183,9 @@ class Toolbar(gtk.Toolbar):
             self.pyjama.layouts.show_layout(layout, data1, data2, data3, data4, fromhistory=True, who_called = "on_bHistoryBack_clicked")
         
     def on_bBurn_clicked(self, ev):
-        pass
+        print '***** potato debug *******'
+        print self.pyjama.window
+        print dir(self.pyjama.window)
 
     def on_bAbout_clicked(self, ev):
         self.pyjama.window.show_about()
