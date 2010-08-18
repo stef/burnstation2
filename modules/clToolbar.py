@@ -183,7 +183,6 @@ class Toolbar(gtk.Toolbar):
             self.pyjama.layouts.show_layout(layout, data1, data2, data3, data4, fromhistory=True, who_called = "on_bHistoryBack_clicked")
         
     def on_bBurn_clicked(self, ev):
-        print '***** potato debug *******'
         self.pyjama.layouts.show_layout("burn")
 
     def on_bAbout_clicked(self, ev):
