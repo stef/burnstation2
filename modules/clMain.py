@@ -76,6 +76,7 @@ import clBrowserInterface
 import download_db
 import clLayouts
 import clPreferences
+import clDownloader
 from extended_modules import clPlaylists
 from extended_modules import clBookmarks
 try:
@@ -176,6 +177,10 @@ class main():
         self.layouts = clLayouts.Layouts(self)
         ## Preferences
         self.preferences = clPreferences.Preferences(self)
+
+        ## Downloader
+        self.downloader = clDownloader.Downloader(self)
+        self.downloader.start()
 
         if XMLRPC_AVAILABLE:
             self.xmlrpc = clXMLRPC.XMLRPC(self)
@@ -426,6 +431,8 @@ class main():
 
         print ("... shutting down XMLRPC Server.")
         self.xmlrpc.quit()
+        print ("... shutting down the download thread.")
+        self.downloader.quit()
         print ("Done.")
 
     ## Reloads the current layout page

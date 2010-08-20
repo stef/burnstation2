@@ -56,7 +56,7 @@ class Toolbar(gtk.Toolbar):
         # ToolButtons
         #
         ## Back Button
-        self.bHistoryBack = gtk.ToolButton("Back")
+        self.bHistoryBack = gtk.ToolButton(_("Back"))
         self.bHistoryBack.set_stock_id(gtk.STOCK_GO_BACK)
         self.bHistoryBack.set_sensitive(False)
         self.bHistoryBack.set_tooltip_text(_("Show previous page in history"))
@@ -64,7 +64,7 @@ class Toolbar(gtk.Toolbar):
         self.insert(self.bHistoryBack, -1)
 
         ## Home Button
-        self.bHome = gtk.ToolButton("Home")
+        self.bHome = gtk.ToolButton(_("Home"))
         self.bHome.set_stock_id(gtk.STOCK_HOME)
         self.bHome.set_label(_("Home"))
         self.bHome.set_tooltip_text(_("Show start-page"))
@@ -72,7 +72,7 @@ class Toolbar(gtk.Toolbar):
         self.insert(self.bHome, -1)
 
         ## Forward Button
-        self.bHistoryForward = gtk.ToolButton("Forward")
+        self.bHistoryForward = gtk.ToolButton(_("Forward"))
         self.bHistoryForward.set_stock_id(gtk.STOCK_GO_FORWARD)
         self.bHistoryForward.set_sensitive(False)
         self.bHistoryForward.set_tooltip_text(_("Show next page in history"))
@@ -80,7 +80,7 @@ class Toolbar(gtk.Toolbar):
         self.insert(self.bHistoryForward, -1)
 
         ## Burn Button
-        self.bBurn = gtk.ToolButton("Burn")
+        self.bBurn = gtk.ToolButton(_("Burn"))
         self.bBurn.set_stock_id(gtk.STOCK_CDROM)
         self.bBurn.set_label(_("Burn"))
         self.bBurn.set_tooltip_text(_("Burn selected playlist"))
@@ -183,6 +183,8 @@ class Toolbar(gtk.Toolbar):
             self.pyjama.layouts.show_layout(layout, data1, data2, data3, data4, fromhistory=True, who_called = "on_bHistoryBack_clicked")
         
     def on_bBurn_clicked(self, ev):
+        for track in self.pyjama.player.playlist:
+            print track.stream
         self.pyjama.layouts.show_layout("burn")
 
     def on_bAbout_clicked(self, ev):
