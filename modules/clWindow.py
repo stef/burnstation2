@@ -92,7 +92,7 @@ class winGTK(gtk.Window):
 #            self.connect('delete', self.quit)
 
         self.event_delete = self.connect('delete_event', self.quit)
-        self.set_title("Pyjama - Python Jamendo Audiocenter")#(self.__class__.__name__)
+        self.set_title("Burnstation 2.0 - powered by Python Jamendo Audiocenter")
         self.set_default_size(850, 600)
         self.set_position(gtk.WIN_POS_CENTER)
         self.set_icon_from_file(os.path.join(functions.install_dir(), "images", "hspbp-burnstation.png"))
