@@ -324,7 +324,7 @@ def translation_gettext():
     try:
         trans = gettext.translation('pyjama', path)
     except IOError:
-        trans = gettext.translation('pyjama', path, ["en_GB"])
+        trans = gettext.translation('pyjama', path, ["hu"])
         print "No language file for you found - using english language file"
     trans.install()
 
