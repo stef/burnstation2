@@ -40,7 +40,7 @@ class Downloader(threading.Thread):
 
     ## TODO #################
     # def pirorize_burn:
-    # set current playlist tracks priority in queue to highest
+    # set current playlist track's priority in queue to highest
     #
 
     def priorize_burn(self, tracks):
