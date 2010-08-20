@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2010-08-17 00:37+CEST\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2010-08-20 17:25+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,46 +23,46 @@ msgstr ""
 #: plugins/starred_albums/clStarLayout.py:93
 #: plugins/starred_albums/clStarLayout.py:351
 msgid "--all--"
-msgstr ""
+msgstr "Mind"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:90
 msgid "Showing top %i albums in '%s'"
-msgstr ""
+msgstr "A %i legjobb '%s' album"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:91
 #: plugins/starred_albums/clStarLayout.py:108
 msgid "Page %i of %i"
-msgstr ""
+msgstr "%i/%i oldal"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:94
 msgid "Showing %i albums tagged '%s' ordered by '%s'"
-msgstr ""
+msgstr "%i album a '%s' cimkével, '%s' szerint rendezve"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:95
 #: plugins/artist_browser/clArtistBrowser.py:67 plugins/radios/__init__.py:192
 #: plugins/starred_albums/clStarLayout.py:112
 msgid "Page %i"
-msgstr ""
+msgstr "%i oldal"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:245
 #: plugins/radios/__init__.py:320 plugins/starred_albums/clStarLayout.py:258
 msgid "Next page"
-msgstr ""
+msgstr "KövetkezQ oldal"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:253
 #: plugins/radios/__init__.py:330 plugins/starred_albums/clStarLayout.py:268
 msgid "Previous page"
-msgstr ""
+msgstr "ElQzQ oldal"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:259
 #: plugins/radios/__init__.py:337 plugins/starred_albums/clStarLayout.py:275
 msgid "Jump to page..."
-msgstr ""
+msgstr "Ugrás oldalra"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:321
 #: plugins/radios/__init__.py:354 plugins/starred_albums/clStarLayout.py:366
 msgid "Jump to page"
-msgstr ""
+msgstr "Ugrás oldalra"
 
 #: clLayouts/default_layouts/clAlbumBrowser.py:322
 #: plugins/radios/__init__.py:355 plugins/starred_albums/clStarLayout.py:367
@@ -81,27 +81,27 @@ msgstr ""
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "#Tracks"
-msgstr ""
+msgstr "Tételek száma"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "Album's title"
-msgstr ""
+msgstr "Album címe"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "Genre"
-msgstr ""
+msgstr "Mqfaj"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "Length"
-msgstr ""
+msgstr "Hossz"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "Rating"
-msgstr ""
+msgstr "Értékelés"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 msgid "Releasedate"
-msgstr ""
+msgstr "Megjelenés dátuma"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58
 #: clLayouts/default_layouts/clAlbumLayout.py:61
@@ -112,22 +112,22 @@ msgstr ""
 
 #: clLayouts/default_layouts/clAlbumLayout.py:58 modules/clWidgets.py:423
 msgid "Artist"
-msgstr ""
+msgstr "ElQadó"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:80
 #: clLayouts/default_layouts/clAlbumLayout.py:259
 msgid "<b>Similar Albums:</b>"
-msgstr ""
+msgstr "<b>Hasonló albumok:</b>"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:108
 msgid "Showing album infos for '%s'"
-msgstr ""
+msgstr "Részletes információk az '%s' albumról"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:123 modules/clWidgets.py:1105
 #: modules/clWidgets.py:1121 modules/clWidgets.py:1359
 #: modules/clWidgets.py:1375
 msgid "Album non existant."
-msgstr ""
+msgstr "Nem-létezQ album"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:124 modules/clWidgets.py:1108
 #: modules/clWidgets.py:1124 modules/clWidgets.py:1362
@@ -136,46 +136,46 @@ msgid ""
 "This album is not in the database.\n"
 "Perhaps Jamendo did not unloack that album, yet\n"
 " or you are using a old local database."
-msgstr ""
+msgstr "Ez az album nincs az adatbázisban. Lehetséges, hogy a Jamendo még nem publikálta az, vagy régi a burnstation adatbázisa."
 
 #: clLayouts/default_layouts/clAlbumLayout.py:210
 msgid "Showing informations and albums from '%s'"
-msgstr ""
+msgstr "'%s' albumai és részletes információk az elQadóról"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:263
 msgid "<b>No similar albums found</b>"
-msgstr ""
+msgstr "<b>Nincs hasonló album</b>"
 
 #: clLayouts/default_layouts/clAlbumLayout.py:354 modules/clToolbar.py:186
 msgid "Requesting local database"
-msgstr ""
+msgstr "Helyi adatbázis lekérdezése"
 
 #: clLayouts/default_layouts/clArtistLayout.py:58
 msgid "#Albums"
-msgstr ""
+msgstr "Albumok száma"
 
 #: clLayouts/default_layouts/clArtistLayout.py:58
 msgid "Country"
-msgstr ""
+msgstr "Ország"
 
 #: clLayouts/default_layouts/clArtistLayout.py:58
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: clLayouts/default_layouts/clArtistLayout.py:94
 msgid "Showing infos and albums concerning '%s'"
-msgstr ""
+msgstr "'%s' kapcsolódó információi és albumai"
 
 #: clLayouts/default_layouts/clArtistLayout.py:97
 msgid "Artist non existant."
-msgstr ""
+msgstr "Nem-létezQ elQadó"
 
 #: clLayouts/default_layouts/clArtistLayout.py:100
 msgid ""
 "This artist is not in the database.\n"
 "Perhaps you are using a old local database\n"
 "or Jamendo did not update their dump, yet"
-msgstr ""
+msgstr "Ez az elQadó nincs az adatbázisban. Lehetséges, hogy elavult a helyi adatbázis, vagy a Jamendo még nem frissítette a központit."
 
 #: extended_modules/clBookmarkDialog.py:28 extended_modules/clBookmarks.py:216
 msgid "Bookmarks"
@@ -259,7 +259,7 @@ msgstr ""
 
 #: extended_modules/clPlaylists.py:134 modules/clWindow.py:366
 msgid "Playlist"
-msgstr ""
+msgstr "Lejátszási lista"
 
 #: extended_modules/clPlaylists.py:135
 msgid ""
@@ -297,15 +297,15 @@ msgstr ""
 
 #: modules/clJamendo.py:262
 msgid "From Cache. Reload in %iD, %i:%i:%i"
-msgstr ""
+msgstr "Gyorsítótárból. Frissítés %iD nap múlva, %i:%i:%i"
 
 #: modules/clJamendo.py:266
 msgid "Refreshing Cache"
-msgstr ""
+msgstr "Gyorsítótár újratöltése"
 
 #: modules/clJamendo.py:269
 msgid "Cached from Jamendo"
-msgstr ""
+msgstr "Jamendo cache-lve"
 
 #: modules/clMain.py:358
 msgid ""
@@ -314,20 +314,20 @@ msgid ""
 "For more information please run Pyjama from console.\n"
 "\n"
 "This might take up to a minute"
-msgstr ""
+msgstr "A Jamendo adatbázis letöltése folyamatban, kérjük legyen türelemmel."
 
 #: modules/clMain.py:376 modules/clWindow.py:425
 #: plugins/downloadGUI/__init__.py:165
 msgid "Artists: %i, Albums: %i, Tracks: %i"
-msgstr ""
+msgstr "%i ElQadó, %i Album, %i Tétel"
 
 #: modules/clMain.py:747 modules/clMain.py:753
 msgid "paused"
-msgstr ""
+msgstr "Szünet"
 
 #: modules/clMenu.py:45
 msgid "Browse"
-msgstr ""
+msgstr "Böngészés"
 
 #: modules/clMenu.py:45
 msgid "Extras"
@@ -427,89 +427,89 @@ msgstr ""
 
 #: modules/clToolbar.py:62
 msgid "Show previous page in history"
-msgstr ""
+msgstr "ElQzQ oldalhoz visszatérés"
 
 #: modules/clToolbar.py:69
 msgid "Home"
-msgstr ""
+msgstr "FQoldal"
 
 #: modules/clToolbar.py:70
 msgid "Show start-page"
-msgstr ""
+msgstr "FQoldalra ugrás"
 
 #: modules/clToolbar.py:78
 msgid "Show next page in history"
-msgstr ""
+msgstr "Korábbi elQzmények"
 
 #: modules/clToolbar.py:89 modules/clWidgets.py:1267
 msgid "Append this album on playlist"
-msgstr ""
+msgstr "Albumok hozzáadása a lejátszási listához"
 
 #: modules/clToolbar.py:95
 msgid "Get more music from this artist"
-msgstr ""
+msgstr "Az elQadó további munkái"
 
 #: modules/clWidgets.py:55
 msgid "to fast"
-msgstr ""
+msgstr "Túl sok kérés rövid idQn belül"
 
 #: modules/clWidgets.py:58
 msgid ""
 "Some requests may only be send once a second\n"
 "in order not to slow down jamendo's database"
-msgstr ""
+msgstr "Néhány kérést csak másodpercenként egyszer lehet elküldeni a Jamendo adatbázisának kímélése okán."
 
 #: modules/clWidgets.py:209 plugins/artist_browser/clArtistBrowser.py:142
 msgid "Show artist's page"
-msgstr ""
+msgstr "ElQadó oldala mutatása"
 
 #: modules/clWidgets.py:219
 msgid "Show album's page"
-msgstr ""
+msgstr "Album oldalának mutatása"
 
 #: modules/clWidgets.py:241
 msgid "Remove from Playlist"
-msgstr ""
+msgstr "Lejátszási listáról eltávolítás"
 
 #: modules/clWidgets.py:436
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: modules/clWidgets.py:458
 msgid "Track"
-msgstr ""
+msgstr "Tétel"
 
 #: modules/clWidgets.py:481
 msgid "Licence"
-msgstr ""
+msgstr "Licenc"
 
 #: modules/clWidgets.py:489
 msgid " "
-msgstr ""
+msgstr " "
 
 #: modules/clWidgets.py:596 plugins/artist_browser/clArtistBrowser.py:285
 msgid "How many results should be shown?"
-msgstr ""
+msgstr "Megjelenített találatok száma"
 
 #: modules/clWidgets.py:624
 msgid "Select how to order results"
-msgstr ""
+msgstr "Rendezési szempont"
 
 #: modules/clWidgets.py:650
 msgid "Select tags to show"
-msgstr ""
+msgstr "Cimkék alapján szqrés"
 
 #: modules/clWidgets.py:1009
 msgid "<b>Artist</b>: %s"
-msgstr ""
+msgstr "<b>ElQadó</b>: %s"
 
 #: modules/clWidgets.py:1012
 msgid "<b>Album</b>: %s"
-msgstr ""
+msgstr "<b>Album</b>: %s"
 
 #: modules/clWidgets.py:1263
 msgid "Append this album on playlist and play it"
-msgstr ""
+msgstr "Album lejátszási listához fqzése és automatikus lejátszása"
 
 #: modules/clWidgets.py:1429
 msgid "Select a preset"
@@ -517,31 +517,31 @@ msgstr ""
 
 #: modules/clWindow.py:308
 msgid "Play previous"
-msgstr ""
+msgstr "ElQzQ lejátszása"
 
 #: modules/clWindow.py:325
 msgid "Play/pause"
-msgstr ""
+msgstr "Lejátszás/szünet"
 
 #: modules/clWindow.py:325
 msgid "Right click for stop"
-msgstr ""
+msgstr "Leállítás: jobb-klikk"
 
 #: modules/clWindow.py:338
 msgid "Play next"
-msgstr ""
+msgstr "KövetkezQ lejátszása"
 
 #: modules/clWindow.py:352
 msgid "Remove selected song from playlist"
-msgstr ""
+msgstr "Kiválasztott tétel törlése a lejátszási listából"
 
 #: modules/clWindow.py:357
 msgid "Clear playlist"
-msgstr ""
+msgstr "Lejátszási lista törlése"
 
 #: modules/clWindow.py:474
 msgid "Tracklist"
-msgstr ""
+msgstr "Tételek listája"
 
 #: modules/functions.py:220 modules/functions.py:227
 msgid "No theme for entry '%s'"
@@ -557,15 +557,15 @@ msgstr ""
 
 #: plugins/artist_browser/__init__.py:36
 msgid "Artists"
-msgstr ""
+msgstr "ElQadók"
 
 #: plugins/artist_browser/clArtistBrowser.py:63
 msgid "Showing %i artists beginning with '%s' - Page %i"
-msgstr ""
+msgstr "%i ElQadó '%s'-vel kezdQdQen - %i oldal"
 
 #: plugins/artist_browser/clArtistBrowser.py:271
 msgid "Select first letter of artists to show"
-msgstr ""
+msgstr "Válassza ki az elQadó kezdQbetqjét"
 
 #: plugins/configtool/__init__.py:224
 msgid ""
@@ -591,7 +591,7 @@ msgstr ""
 
 #: plugins/jam_query/__init__.py:28
 msgid "Jamendo is being queried"
-msgstr ""
+msgstr "Jamendo lekérdezése folyamatban"
 
 #: plugins/jamlists/__init__.py:67 plugins/randomplayback/__init__.py:68
 msgid "Number of songs to add to the playlist"
@@ -706,7 +706,7 @@ msgstr ""
 
 #: plugins/nowplaying/__init__.py:44
 msgid "Now playing"
-msgstr ""
+msgstr "Jelenleg szól"
 
 #: plugins/radios/__init__.py:55
 msgid "Radios"
@@ -728,7 +728,7 @@ msgstr ""
 
 #: plugins/rating/__init__.py:89
 msgid "<i>Rating:</i>"
-msgstr ""
+msgstr "<i>Értékelés:</i>"
 
 #: plugins/rating/__init__.py:114 plugins/rating/__init__.py:145
 msgid "Rate track"
@@ -744,7 +744,7 @@ msgstr ""
 
 #: plugins/search/__init__.py:48 plugins/search/__init__.py:65
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 #: plugins/search/__init__.py:107
 msgid ""
@@ -752,7 +752,7 @@ msgid ""
 "Enter your search term in the text field\n"
 "\n"
 "At most 100 results will be shown.</b></span>"
-msgstr ""
+msgstr "<span><b>Itt elQadókra, albumokra és tételekre kereshet. Legfeljebb 100 találat kerül megjelenítésre.</b></span>"
 
 #: plugins/search/__init__.py:109
 msgid ""
@@ -760,15 +760,15 @@ msgid ""
 "Enter your search term in the text field\n"
 "\n"
 "At most 100 results will be shown.</b></span>"
-msgstr ""
+msgstr "<span foreground=\"white\"><b>Itt elQadókra, albumokra és tételekre kereshet. Legfeljebb 100 találat kerül megjelenítésre.</b></span>"
 
 #: plugins/search/__init__.py:138
 msgid "Search for artists, albums and tracks"
-msgstr ""
+msgstr "ElQadók, albumok és tételek keresése"
 
 #: plugins/search/__init__.py:142
 msgid "You searched for '%s'"
-msgstr ""
+msgstr "Keresési kifejezés: '%s'"
 
 #: plugins/search/__init__.py:212
 msgid ""
@@ -777,7 +777,7 @@ msgid ""
 "%i artists\n"
 "%i albums\n"
 "%i tracks"
-msgstr ""
+msgstr "<u>%i találat</u>\\n\\n%i ElQadó\\n%i Album\\n%i Tétel"
 
 #: plugins/spread-torrent/__init__.py:328
 msgid "Torrent"
@@ -895,13 +895,13 @@ msgstr ""
 
 #: pyjama.py:417
 msgid "Play/Pause"
-msgstr ""
+msgstr "Lejátszás/szünet"
 
 #: pyjama.py:418
 msgid "Next"
-msgstr ""
+msgstr "KövetkezQ"
 
 #: pyjama.py:419
 msgid "Previous"
-msgstr ""
+msgstr "ElQzQ"
 
