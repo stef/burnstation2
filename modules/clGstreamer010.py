@@ -637,14 +637,6 @@ class Player:
 
     ###################################################################
     #
-    # check wether a track is cached localy, or need fetch
-    # RETURNS: True/False
-    #
-    def is_cached(self, track):
-       return os.path.isfile(os.path.realpath(os.path.join('cache', str(track.artist_id), str(track.album_id), str(track.id) + '.ogg')))
-
-    ###################################################################
-    #
     # stop playing
     # RETURNS: n/A
     #        
