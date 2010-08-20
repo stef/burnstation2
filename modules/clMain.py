@@ -179,6 +179,7 @@ class main():
         self.preferences = clPreferences.Preferences(self)
 
         ## Downloader
+        print "Starting Downloader thread..."
         self.downloader = clDownloader.Downloader(self)
         self.downloader.start()
 
