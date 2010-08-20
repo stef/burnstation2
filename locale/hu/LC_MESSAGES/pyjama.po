@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2010-08-17 00:37+CEST\n"
-"PO-Revision-Date: 2010-08-20 18:51+0200\n"
+"PO-Revision-Date: 2010-08-20 19:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -425,6 +425,10 @@ msgstr ""
 msgid "Pyjama's Documentation"
 msgstr ""
 
+#: modules/clToolbar.py:59
+msgid "Back"
+msgstr "Vissza"
+
 #: modules/clToolbar.py:62
 msgid "Show previous page in history"
 msgstr "Előző oldalhoz visszatérés"
@@ -437,11 +441,27 @@ msgstr "Főoldal"
 msgid "Show start-page"
 msgstr "Főoldalra ugrás"
 
+#: modules/clToolbar.py:75
+msgid "Forward"
+msgstr "Előre"
+
 #: modules/clToolbar.py:78
 msgid "Show next page in history"
 msgstr "Korábbi előzmények"
 
+#: modules/clToolbar.py:83 modules/clToolbar.py:85
+msgid "Burn"
+msgstr "Másolás"
+
+#: modules/clToolbar.py:86
+msgid "Burn selected playlist"
+msgstr "Kiválasztott tételek másolása cdromra vagy USB tárolóra."
+
 #: modules/clToolbar.py:89 modules/clWidgets.py:1267
+msgid "Append"
+msgstr "Hozzáfűzés"
+
+#: modules/clToolbar.py:99 modules/clWidgets.py:1267
 msgid "Append this album on playlist"
 msgstr "Albumok hozzáadása a lejátszási listához"
 
@@ -777,7 +797,7 @@ msgid ""
 "%i artists\n"
 "%i albums\n"
 "%i tracks"
-msgstr "<u>%i találat</u>\\n\\n%i Előadó\\n%i Album\\n%i Tétel"
+msgstr "<u>%i találat</u>\n\n%i Előadó\n%i Album\n%i Tétel"
 
 #: plugins/spread-torrent/__init__.py:328
 msgid "Torrent"

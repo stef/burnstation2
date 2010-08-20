@@ -43,7 +43,8 @@ class main():
         #
         # add button to toolbar
         toolbar = self.pyjama.window.toolbar
-        self.bSearch = gtk.ToolButton("Search")
+        self.bSearch = gtk.ToolButton(_("Search"))
+        self.bSearch.set_label(_("Search"))
         self.bSearch.set_stock_id(gtk.STOCK_FIND)
         self.bSearch.set_tooltip_text(_("Search"))
         self.bSearch.connect("clicked", self.on_bSearch_clicked)
