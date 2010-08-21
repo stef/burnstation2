@@ -616,7 +616,7 @@ class DB():
 #        return tracks
 
     def check_cache(self, tr):
-        tmp = os.path.join(os.path.realpath('cache'), str(tr[5]), str(tr[4]), str(tr[10]) + '.mp3')
+        tmp = os.path.join(os.path.realpath('cache'), str(tr.artist_id), str(tr.album_id), str(tr.id) + '.mp3')
         if os.path.isfile(tmp):
             tr.local = 'file://' + tmp
 
