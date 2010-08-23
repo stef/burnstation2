@@ -520,6 +520,7 @@ class winGTK(gtk.Window):
         self.main.layouts.register_layout("album", clAlbumLayout.AlbumLayout(self.main))
         self.main.layouts.register_layout("artist", clArtistLayout.ArtistLayout(self.main))
         self.main.layouts.register_layout("burn", clBurnLayout.BurnLayout(self.main))
+        self.main.layouts.register_layout("burn_cd", clBurnLayout.BurnCDLayout(self.main))
 
         # Menu Entry
         #menu = self.menubar

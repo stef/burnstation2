@@ -619,6 +619,8 @@ class DB():
         tmp = os.path.join(os.path.realpath('cache'), str(tr.artist_id), str(tr.album_id), str(tr.id) + '.mp3')
         if os.path.isfile(tmp):
             tr.local = 'file://' + tmp
+        else:
+            tr.local = None
 
     ## Get trackinfos for a list of tracks
     # @return dictionary
