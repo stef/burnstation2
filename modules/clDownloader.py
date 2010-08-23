@@ -42,10 +42,11 @@ class Downloader(threading.Thread):
     def priorize_burn(self, tracks):
         pl = []
         for track in tracks:
-            if track in self.queue:
-                del self.queue[self.queue.index(track)]
-            pl.append(track)
-        self.queue = self.queue + pl
+            if track.local != None:
+                if track in self.queue:
+                    del self.queue[self.queue.index(track)]
+                pl.append(track)
+        self.queue = pl + self.queue
 
     def download(self, track):
         uri = track.stream.replace('mp31', 'mp32')
