@@ -615,6 +615,11 @@ class DB():
 #            counter += 1
 #        return tracks
 
+    def check_cache(self, tr):
+        tmp = os.path.join(os.path.realpath('cache'), str(tr.artist_id), str(tr.album_id), str(tr.id) + '.mp3')
+        if os.path.isfile(tmp):
+            tr.local = 'file://' + tmp
+
     ## Get trackinfos for a list of tracks
     # @return dictionary
     # @param self The Object pointer
@@ -650,6 +655,7 @@ class DB():
             tr.id3genre = track[9]
             tr.id = track[10]
             tr.stream = "http://api.jamendo.com/get2/stream/track/redirect/?id=%i&streamencoding=%s" % (track[10], self.parent.settings.get_value("JAMENDO", "format_stream", "mp31"))
+            self.check_cache(tr)
             tracks.append(tr)
         return tracks
 
@@ -683,6 +689,7 @@ class DB():
         tr.id3genre = ret[9]
         tr.id = ret[10]
         tr.stream = "http://api.jamendo.com/get2/stream/track/redirect/?id=%i&streamencoding=%s" % (ret[10], self.parent.settings.get_value("JAMENDO", "format_stream", "mp31"))
+        self.check_cache(tr)
 #        tracks.append(tr)
         return tr
 
@@ -719,6 +726,7 @@ class DB():
             tr.id3genre = track[9]
             tr.id = track[10]
             tr.stream = "http://api.jamendo.com/get2/stream/track/redirect/?id=%i&streamencoding=%s" % (track[10], self.parent.settings.get_value("JAMENDO", "format_stream", "mp31"))
+            self.check_cache(tr)
             tracks.append(tr)
         return tracks
 
@@ -751,6 +759,7 @@ class DB():
             tr.id3genre = track[9]
             tr.id = track[10]
             tr.stream = "http://api.jamendo.com/get2/stream/track/redirect/?id=%i&streamencoding=%s" % (track[10], self.parent.settings.get_value("JAMENDO", "format_stream", "mp31"))
+            self.check_cache(tr)
             tracks.append(tr)
         return tracks
 
@@ -810,6 +819,7 @@ class DB():
             tr.artist_name = track[9]
             tr.uid = track[10]
             tr.stream = "http://api.jamendo.com/get2/stream/track/redirect/?id=%i&streamencoding=%s" % (track[3], self.parent.settings.get_value("JAMENDO", "format_stream", "mp31"))
+            self.check_cache(tr)
             tracks.append(tr)
         return tracks
 

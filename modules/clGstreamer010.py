@@ -45,6 +45,8 @@ from time import strftime, gmtime, time
 
 import functions
 
+from modules import clDownloader
+
 ## Converts a given time from seconds to a more readable string
 # @param seconds as int
 # @return string
@@ -73,6 +75,7 @@ class Track:
         self.artist_id = None
 
         self.stream = None
+        self.local = None
         self.uid = None
 
         self.position_in_playlist = None
@@ -609,7 +612,11 @@ class Player:
             self.stop()
 
         try:
-            self.set_location(track.stream)
+            if track.local != None:
+                self.set_location(track.local)
+            else:
+                self.pyjama.downloader.queue_push(track)
+                self.set_location(track.stream)
         except Exception, inst:
             print ("error: %s" % inst)
         gst.info("playing player")
@@ -627,7 +634,6 @@ class Player:
 
         if activate_item > -1:
             self.pyjama.setplaylist(activate_item)
-
 
     ###################################################################
     #
