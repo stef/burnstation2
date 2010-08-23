@@ -6,6 +6,7 @@ import functions
 import time
 import os
 import threading
+import copy
 
 class Downloader(threading.Thread):
     def __init__(self, pyjama):
@@ -38,13 +39,13 @@ class Downloader(threading.Thread):
     def queue_push(self, track):
         self.queue.append(track)
 
-    ## TODO #################
-    # def pirorize_burn:
-    # set current playlist track's priority in queue to highest
-    #
-
     def priorize_burn(self, tracks):
-        pass
+        pl = []
+        for track in tracks:
+            if track in self.queue:
+                del self.queue[self.queue.index(track)]
+            pl.append(track)
+        self.queue = self.queue + pl
 
     def download(self, track):
         uri = track.stream.replace('mp31', 'mp32')
