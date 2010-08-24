@@ -7,15 +7,30 @@
 
 import gtk
 import os
+import threading
 
-from modules import clWidgets, clThreadedDownload, clEntry, functions
+from modules import clWidgets, clThreadedDownload, clEntry, functions, burn
+
+class BgJob(threading.Thread):
+    def __init__(self,widget,fn):
+        threading.Thread.__init__(self)
+        self.widget = widget
+        self.fn     = fn
+        self.result = None
+
+    def run(self):
+        gtk.gdk.threads_enter()
+        self.result=self.fn()
+        self.widget.response(0)
+        gtk.gdk.threads_leave()
 
 class BurnLayout(gtk.Layout):
     def __init__(self, pyjama):
         self.pyjama = pyjama
-        
+        self.burner = burn.Burner()
+
         gtk.Layout.__init__(self)
-        self.set_size(700,300)                
+        self.set_size(700,300)
 
         # might be obsolet
         self.pyjama.window.setcolor(self)
@@ -29,7 +44,7 @@ class BurnLayout(gtk.Layout):
         self.table.set_spacing(100)
 
         self.put(self.table, 0, 0)
-        
+
         self.target_usb = gtk.Button()
         self.img_usb = gtk.Image()
         self.target_cd  = gtk.Button()
@@ -56,7 +71,53 @@ class BurnLayout(gtk.Layout):
     def cb_target_usb_clicked(self, ev):
         pass
 
+    def bgJob(self,msg,fn):
+        dialog = gtk.Dialog(msg,
+                            self.pyjama.window,
+                            gtk.DIALOG_MODAL)
+        dialog.set_has_separator(False)
+        message = gtk.Label(msg)
+        dialog.vbox.pack_start(message, False, False)
+        message.show()
+        # start job in bg thread
+        job=BgJob(dialog, fn)
+        job.start()
+        dialog.run()
+        res=job.result
+        dialog.destroy()
+        return res
+
+    def cdStatus(self):
+        return self.bgJob(_("Checking disc status"),self.burner.cdIsWritable)
+
+    def blankCD(self):
+        return self.bgJob(_("Blanking disc"),self.burner.BlankCD)
+
     def cb_target_cd_clicked(self, ev):
+        (isWritable,msg)=self.cdStatus()
+        while not isWritable:
+            buttons=None
+            if msg == "** closed ** CD-RW":
+                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                         _("Blank CD"), gtk.RESPONSE_APPLY,
+                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+            else:
+                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+            dialog = gtk.Dialog(_("Please insert a writable CD/DVD!"),
+                                self.pyjama.window,
+                                gtk.DIALOG_MODAL,
+                                buttons)
+            message = gtk.Label("Please insert a writable CD/DVD!\n%s" % msg)
+            dialog.vbox.pack_start(message, False, True)
+            message.show()
+            response=dialog.run() # gtk.RESPONSE_NONE,
+            dialog.destroy()
+            if response in [-2,-4]:
+                return
+            if response == -10:
+                self.blankCD()
+            (isWritable,msg)=self.cdStatus()
         self.pyjama.layouts.show_layout("burn_cd", 0, 0)
 
     class ToolBar(gtk.HBox):
@@ -68,18 +129,26 @@ class BurnLayout(gtk.Layout):
 class BurnCDLayout(gtk.Layout):
     def __init__(self, pyjama):
         self.pyjama = pyjama
-        
+
         gtk.Layout.__init__(self)
-        self.set_size(700,300)                
+        self.set_size(700,300)
 
         # might be obsolet
         self.pyjama.window.setcolor(self)
 
     def draw(self, a, b, c, d):
         # draw the burn-cd dialog
-        label = gtk.Label("hello")
-        self.put(label, 50, 50)
+        self.mVbox = gtk.VBox(True)
+        self.title = gtk.Label(_("Burning Music"))
+        self.mVbox.pack_start(self.title)
+        self.put(self.mVbox, 0, 0)
         self.show_all()
+
+        # Todo
+        # get size and length of playlist
+        # if length < 80/74 - audio cd
+        # if size > size of medium: abort
+        # data cd
 
     class ToolBar(gtk.HBox):
         def __init__(self, pyjama):
