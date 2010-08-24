@@ -18,8 +18,8 @@ class BgJob(threading.Thread):
         self.result = None
 
     def run(self):
-        gtk.gdk.threads_enter()
         self.result=self.fn()
+        gtk.gdk.threads_enter()
         self.widget.response(0)
         gtk.gdk.threads_leave()
 
@@ -137,16 +137,18 @@ class BurnCDLayout(gtk.Layout):
         self.pyjama.window.setcolor(self)
 
     def draw(self, a, b, c, d):
-        tracks=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
+        files=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
                 '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
         size=0
         length=0
-        for track in tracks:
+        tracks=[]
+        for track in files:
             size+=os.path.getsize(track)
             file = open(track, "rb")
             mpeg3info = mp3info.MP3Info(file)
             file.close()
             length+= mpeg3info.mpeg.length
+            tracks.append((track,length,size))
         mediaLength = (self.pyjama.mediaSize*2352*8) / 1411200 # bit/s
         print mediaLength
         if length<mediaLength:
