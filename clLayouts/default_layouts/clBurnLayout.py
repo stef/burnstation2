@@ -8,8 +8,7 @@
 import gtk
 import os
 import threading
-
-from modules import clWidgets, clThreadedDownload, clEntry, functions, burn
+from modules import clWidgets, clThreadedDownload, clEntry, functions, burn, mp3info
 
 class BgJob(threading.Thread):
     def __init__(self,widget,fn):
@@ -118,6 +117,7 @@ class BurnLayout(gtk.Layout):
             if response == -10:
                 self.blankCD()
             (isWritable,msg)=self.cdStatus()
+        self.pyjama.mediaSize=msg
         self.pyjama.layouts.show_layout("burn_cd", 0, 0)
 
     class ToolBar(gtk.HBox):
@@ -137,18 +137,33 @@ class BurnCDLayout(gtk.Layout):
         self.pyjama.window.setcolor(self)
 
     def draw(self, a, b, c, d):
-        # draw the burn-cd dialog
+        tracks=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
+                '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
+        size=0
+        length=0
+        for track in tracks:
+            size+=os.path.getsize(track)
+            file = open(track, "rb")
+            mpeg3info = mp3info.MP3Info(file)
+            file.close()
+            length+= mpeg3info.mpeg.length
+        mediaLength = (self.pyjama.mediaSize*2352*8) / 1411200 # bit/s
+        print mediaLength
+        if length<mediaLength:
+            print "can write as AUDIO"
+        if size<=self.pyjama.mediaSize*2048:
+            # write data
+            print "can write as DATA"
+        else:
+            # remove items from list in order to proceed.
+            # and press the refresh button
+            print "music overload"
+
         self.mVbox = gtk.VBox(True)
         self.title = gtk.Label(_("Burning Music"))
         self.mVbox.pack_start(self.title)
         self.put(self.mVbox, 0, 0)
         self.show_all()
-
-        # Todo
-        # get size and length of playlist
-        # if length < 80/74 - audio cd
-        # if size > size of medium: abort
-        # data cd
 
     class ToolBar(gtk.HBox):
         def __init__(self, pyjama):

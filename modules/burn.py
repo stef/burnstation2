@@ -197,7 +197,7 @@ class Burner():
         log.close()
         os.unlink(self.burnlog)
         try:
-            return (True,"%d MBytes free" % ((int(lines[0].strip())*2048)/(1024*1024)))
+            return (True,int(lines[0].strip())) # *2048)/(1024*1024)
         except Exception, e:
             pass
         for line in lines:
