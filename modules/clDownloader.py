@@ -62,4 +62,13 @@ class Downloader(threading.Thread):
         target = os.path.join(tmp, str(track.id)) + '.mp3'
         os.system('wget -O ' + target + ' -q ' + uri)
         track.local = 'file://' + target
+
+    def get_status(self):
+        tmp = []
+        for track in self.pyjama.player.playlist:
+            if track in self.queue:
+                tmp.append((track, 'Q'))
+            else:
+                tmp.append((track, 'D'))
+        return tmp
          
