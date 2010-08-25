@@ -229,11 +229,11 @@ class BurnUSBLayout(gtk.Layout):
 
     def draw(self, a, b, c, d):
         # draw the burn-cd dialog
-        combo = gtk.ComboBox()
-        for usb in functions.list_usb():
-            combo.append_text(usb)
 
-        self.put(combo, 0, 0)
+        if(!check_usb()):
+            pass
+        else:
+
                
         self.show_all()
 
