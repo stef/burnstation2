@@ -22,6 +22,8 @@ class Logger:
         print 'error-',msg
     def info(self,msg):
         print 'info-',msg
+    def warn(self,msg):
+        print 'warn-',msg
 logger=Logger()
 
 def cmdexec(cmd):
@@ -120,29 +122,32 @@ class Burner():
     #--------------------------------------------------------------------
     def GetStatus(self):
         if not self.decoding and not self.burning: return
-        if self.decoding: self.GetDecodingStatus()
-        elif self.burning: self.GetBurningStatus()
+        if self.decoding: return self.GetDecodingStatus()
+        elif self.burning: return self.GetBurningStatus()
 
     #--------------------------------------------------------------------
     def GetDecodingStatus(self):
-        try:
-            log = open(self.decodelog)
-            #logger.debug5("GetDecodingStatus() opened decode log: %s" % log)
-            lines = log.readlines()
-            lines_count = len(lines)
-            try:
-                line = lines[lines_count-1].strip()
-                line_length = len(line)
-                status = line
-                if status == 'Decoding finished':
-                    self.decoding = False
-                    self.burning = True
-                    os.unlink(self.decodelog)
-            except Exception, e:
-                logger.warn("Impossible to read lines from decode log: %s" % str(e))
-            log.close()
-        except Exception, e:
-            logger.warn("Decode log file not accessible: %s" % str(e))
+        # TODO fix this - if necessary
+        return _("Decoding to wav")
+        #try:
+        #    log = open(self.decodelog)
+        #    #logger.debug5("GetDecodingStatus() opened decode log: %s" % log)
+        #    lines = log.readlines()
+        #    lines_count = len(lines)
+        #    try:
+        #        line = lines[lines_count-1].strip()
+        #        line_length = len(line)
+        #        status = line
+        #        if status == 'Decoding finished':
+        #            self.decoding = False
+        #            self.burning = True
+        #            os.unlink(self.decodelog)
+        #    except Exception, e:
+        #        logger.warn("Impossible to read lines from decode log: %s" % str(e))
+        #    log.close()
+        #    return status
+        #except Exception, e:
+        #    logger.warn("Decode log file not accessible: %s" % str(e))
 
     #--------------------------------------------------------------------
     def GetBurningStatus(self):
@@ -151,6 +156,7 @@ class Burner():
         lines = log.readlines()
         lines_count = len(lines)
         amount = 64
+        status=""
         try:
             line = lines[lines_count-1].strip()
             line_length = len(line)
@@ -163,14 +169,15 @@ class Burner():
             if self.Finished:
                 self.Cleanup()
                 os.unlink(self.burnlog)
-        except:
-            logger.warn("burning log file not accessible")
+        except Exception, e:
+            logger.warn("burning log file not accessible: %s" % str(e))
         """
         for line in lines:
             line_length = len(line)
             print line[line_length-amount:line_length][lines_count-10]
         """
         log.close()
+        return status
 
     #--------------------------------------------------------------------
     def BurnCD(self, tracks, mode='DATA'):
@@ -182,9 +189,10 @@ class Burner():
         if mode == 'AUDIO':
             self.decoding = True
             t=Decoder().convert2wav(tracks,tmpPath)
+            self.decoding = False
         elif mode == 'DATA' :
-            self.burning = True
             t=tracks
+        self.burning = True
         self.burnCD(t,mode)
         #self.Cleanup()
 
@@ -262,10 +270,12 @@ if __name__ == "__main__":
     a=Burner()
     #(isWritable,msg)=a.cdIsWritable()
     #print msg
-    a.BlankCD()
+    #a.BlankCD()
     #(isWritable,msg)=a.cdIsWritable()
     #print msg
-    if True:
-        tracks=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
-                '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
-        a.BurnCD(tracks, 'AUDIO')
+    #if True:
+    #    tracks=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
+    #            '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
+    #    a.BurnCD(tracks, 'AUDIO')
+    a.GetStatus()
+    a.GetStatus()
