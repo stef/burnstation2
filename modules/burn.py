@@ -94,7 +94,7 @@ class Decoder:
                 command = "(%s --stereo -w \"%s\" \"%s\") 2>&1" % (mpg123_command, escapedfilename(target), escapedfilename(filename))
             (result, (stdout_output, stderr_output)) = cmdexec(command)
             #logger.info("res: %s, output\n%s\n%s" % (result, "\n".join(stdout_output), "\n".join(stderr_output)))
-            logger.info("res: %s" % (result))
+            logger.debug("res: %s" % (result))
 
             if (result != 0):
                 return False
@@ -138,7 +138,6 @@ class Burner():
                     self.decoding = False
                     self.burning = True
                     os.unlink(self.decodelog)
-                self.ShowBurning(status)
             except Exception, e:
                 logger.warn("Impossible to read lines from decode log: %s" % str(e))
             log.close()
@@ -161,7 +160,6 @@ class Burner():
                 self.burning = False
                 status = 'Finished burning! Please, take your CD.'
                 self.Finished = True
-            self.ShowBurning(status)
             if self.Finished:
                 self.Cleanup()
                 os.unlink(self.burnlog)
@@ -199,7 +197,7 @@ class Burner():
         log.close()
         os.unlink(self.burnlog)
         try:
-            return (True,"%d MBytes free" % ((int(lines[0].strip())*2048)/(1024*1024)))
+            return (True,int(lines[0].strip())) # *2048)/(1024*1024)
         except Exception, e:
             pass
         for line in lines:

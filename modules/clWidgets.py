@@ -883,9 +883,9 @@ class AlbumInfo(gtk.Frame):
 
         self.eventbox = gtk.EventBox()
         self.eventbox.set_above_child(False)
-        self.eventbox.add_events(gtk.gdk.ENTER_NOTIFY and gtk.gdk.LEAVE_NOTIFY)
-        self.eventbox.connect("enter-notify-event", self.enter_notify_cb)
-        self.eventbox.connect("leave-notify-event", self.leave_notify_cb)
+        #stf self.eventbox.add_events(gtk.gdk.ENTER_NOTIFY and gtk.gdk.LEAVE_NOTIFY)
+        #stf self.eventbox.connect("enter-notify-event", self.enter_notify_cb)
+        #stf self.eventbox.connect("leave-notify-event", self.leave_notify_cb)
         self.eventbox.connect("realize", self.eventbox_realize_cb)
         self.eventbox.connect("button_release_event", self.button_release_cb)
 
@@ -1016,30 +1016,30 @@ class AlbumInfo(gtk.Frame):
             self.lbAlbum.hide()
         
        
-    def show_buttons(self):
-        color = gtk.gdk.color_parse("orange")
+    #stf def show_buttons(self):
+    #stf     color = gtk.gdk.color_parse("orange")
 
-        self.set_image_alpha(self.image, 75)
+    #stf     self.set_image_alpha(self.image, 75)
 
-        if self.hover_type == HOVER_COMPACT:
-            #~ self.image.hide()
-            self.lbArtist.show()
-            #stf self.lbAlbum.show()
-        self.layout.modify_bg(gtk.STATE_NORMAL, color)
+    #stf     if self.hover_type == HOVER_COMPACT:
+    #stf         #~ self.image.hide()
+    #stf         self.lbArtist.show()
+    #stf         #stf self.lbAlbum.show()
+    #stf     self.layout.modify_bg(gtk.STATE_NORMAL, color)
 
-        for item in self.widgets_list: item.show()
-        self.lbAlbum.hide() #stf
+    #stf     for item in self.widgets_list: item.show()
+    #stf     self.lbAlbum.hide() #stf
 
-    def hide_buttons(self):
-        if self.hover_type == HOVER_COMPACT:
-            #~ self.image.show()
-            self.lbArtist.hide()
-            self.lbAlbum.hide()
-        self.layout.modify_style(exmaple_layout.get_modifier_style())
+    #stf def hide_buttons(self):
+    #stf     if self.hover_type == HOVER_COMPACT:
+    #stf         #~ self.image.show()
+    #stf         self.lbArtist.hide()
+    #stf         self.lbAlbum.hide()
+    #stf     self.layout.modify_style(exmaple_layout.get_modifier_style())
 
-        self.set_image_alpha(self.image, 255)
+    #stf     self.set_image_alpha(self.image, 255)
             
-        for item in self.widgets_list: item.hide()
+    #stf     for item in self.widgets_list: item.hide()
 
     def set_image_alpha(self, image, alpha):
         try:
@@ -1156,12 +1156,12 @@ class AlbumInfo(gtk.Frame):
             os.system("totem --next")
             print("Append")
 
-    def enter_notify_cb(self, widget, event):
-        self.show_buttons()
+    #stf def enter_notify_cb(self, widget, event):
+    #stf     self.show_buttons()
 
 
-    def leave_notify_cb(self, widget, event):
-        self.hide_buttons()
+    #stf def leave_notify_cb(self, widget, event):
+    #stf     self.hide_buttons()
 
     def image_download_cb(self, query):
         if not query.error:
@@ -1215,8 +1215,8 @@ class AlbumInfo_old(gtk.Frame):
         self.eventbox.set_above_child(False) # ???
         self.eventbox.add_events (gtk.gdk.ENTER_NOTIFY_MASK)
         self.eventbox.add_events (gtk.gdk.LEAVE_NOTIFY_MASK)
-        self.eventbox.connect("enter-notify-event", self.__cb_enter_box)
-        self.eventbox.connect("leave-notify-event", self.__cb_leave_box)
+        #self.eventbox.connect("enter-notify-event", self.__cb_enter_box)
+        #self.eventbox.connect("leave-notify-event", self.__cb_leave_box)
         self.eventbox.connect("button-press-event", self.__cb_image_clicked, album)
         self.add(self.eventbox)
 

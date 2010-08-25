@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# 
+#
 # Copyright (c) 2002 Vivake Gupta (vivakeATomniscia.org).  All rights reserved.
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation; either version 2 of the
@@ -167,7 +167,7 @@ class ID3v1:
             self.tags['TCO'] = _genres[ord(data[127])]
         except IndexError:
             self.tags['TCO'] = "(%i)" % ord(data[127])
-        
+
 
 class ID3v2:
     def __init__(self, file):
@@ -197,7 +197,7 @@ class ID3v2:
 
         self.frames = []
         self.tags = {}
-        
+
         file.seek(0, 0)
         if file.read(3) != "ID3":
             return
@@ -245,8 +245,8 @@ _samplerates = [
     [  None,  None,  None, None], # reserved
     [ 22050, 24000, 16000, None], # MPEG-2
     [ 44100, 48000, 32000, None], # MPEG-1
-]                                                                                                               
-                                                                                                                  
+]
+
 _modes = [ "stereo", "joint stereo", "dual channel", "mono" ]
 
 _mode_extensions = [
@@ -291,48 +291,48 @@ class MPEG:
             return
 
         self._parse_xing(file)
-        
 
-    def _find_header(self, file):                                                                                 
-        file.seek(0, 0)                                                                                           
-        amount_read = 0                                                                                           
-                                                                                                                  
-        # see if we get lucky with the first four bytes                                                           
-        amt = 4                                                                                                   
-                                                                                                                  
-        while amount_read < _MP3_HEADER_SEEK_LIMIT:                                                               
-            header = file.read(amt)                                                                               
-            if len(header) < amt:                                                                                 
-                # awfully short file. just give up.                                                               
-                return -1, None                                                                                   
-                                                                                                                  
-            amount_read = amount_read + len(header)                                                               
-                                                                                                                  
-            # on the next read, grab a lot more                                                                   
-            amt = 500                                                                                             
-                                                                                                                  
-            # look for the sync byte                                                                              
-            offset = string.find(header, chr(255))                                                                
-            if offset == -1:                                                                                      
-                continue                                                                                          
-            ### maybe verify more sync bits in next byte?                                                         
-                                                                                                                  
-            if offset + 4 > len(header):                                                                          
-                more = file.read(4)                                                                               
-                if len(more) < 4:                                                                                 
-                    # end of file. can't find a header                                                                          
-                    return -1, None                                                                                             
-                amount_read = amount_read + 4                                                                                   
-                header = header + more                                                                                          
-            return amount_read - len(header) + offset, header[offset:offset+4]                                                  
-                                                                                                                                
-        # couldn't find the header                                                                                    
+
+    def _find_header(self, file):
+        file.seek(0, 0)
+        amount_read = 0
+
+        # see if we get lucky with the first four bytes
+        amt = 4
+
+        while amount_read < _MP3_HEADER_SEEK_LIMIT:
+            header = file.read(amt)
+            if len(header) < amt:
+                # awfully short file. just give up.
+                return -1, None
+
+            amount_read = amount_read + len(header)
+
+            # on the next read, grab a lot more
+            amt = 500
+
+            # look for the sync byte
+            offset = string.find(header, chr(255))
+            if offset == -1:
+                continue
+            ### maybe verify more sync bits in next byte?
+
+            if offset + 4 > len(header):
+                more = file.read(4)
+                if len(more) < 4:
+                    # end of file. can't find a header
+                    return -1, None
+                amount_read = amount_read + 4
+                header = header + more
+            return amount_read - len(header) + offset, header[offset:offset+4]
+
+        # couldn't find the header
         return -1, None
 
     def _parse_header(self, header):
         # AAAAAAAA AAABBCCD EEEEFFGH IIJJKLMM
         (bytes,) = struct.unpack('>i', header)
-        mpeg_version =    (bytes >> 19) & 3  # BB   00 = MPEG2.5, 01 = res, 10 = MPEG2, 11 = MPEG1  
+        mpeg_version =    (bytes >> 19) & 3  # BB   00 = MPEG2.5, 01 = res, 10 = MPEG2, 11 = MPEG1
         layer =           (bytes >> 17) & 3  # CC   00 = res, 01 = Layer 3, 10 = Layer 2, 11 = Layer 1
         protection_bit =  (bytes >> 16) & 1  # D    0 = protected, 1 = not protected
         bitrate =         (bytes >> 12) & 15 # EEEE 0000 = free, 1111 = bad
@@ -341,9 +341,9 @@ class MPEG:
         private_bit =     (bytes >> 8)  & 1  # H
         mode =            (bytes >> 6)  & 3  # II   00 = stereo, 01 = joint stereo, 10 = dual channel, 11 = mono
         mode_extension =  (bytes >> 4)  & 3  # JJ
-        copyright =       (bytes >> 3)  & 1  # K    00 = not copyrighted, 01 = copyrighted                            
-        original =        (bytes >> 2)  & 1  # L    00 = copy, 01 = original                                          
-        emphasis =        (bytes >> 0)  & 3  # MM   00 = none, 01 = 50/15 ms, 10 = res, 11 = CCIT J.17                
+        copyright =       (bytes >> 3)  & 1  # K    00 = not copyrighted, 01 = copyrighted
+        original =        (bytes >> 2)  & 1  # L    00 = copy, 01 = original
+        emphasis =        (bytes >> 0)  & 3  # MM   00 = none, 01 = 50/15 ms, 10 = res, 11 = CCIT J.17
 
         if mpeg_version == 0:
             self.version = 2.5
@@ -363,7 +363,7 @@ class MPEG:
 
         self.bitrate = _bitrates[mpeg_version & 1][self.layer - 1][bitrate]
         self.samplerate = _samplerates[mpeg_version][samplerate]
-        
+
         if self.bitrate is None or self.samplerate is None:
             return
 
