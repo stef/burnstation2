@@ -5,9 +5,7 @@
 # Burn Layout - CD/USB burning layout
 #
 
-import gtk
-import os
-import threading
+import gtk, os, threading, time
 from modules import clWidgets, clThreadedDownload, clEntry, functions, burn, mp3info
 
 class BgJob(threading.Thread):
@@ -19,9 +17,10 @@ class BgJob(threading.Thread):
 
     def run(self):
         self.result=self.fn()
-        gtk.gdk.threads_enter()
-        self.widget.response(0)
-        gtk.gdk.threads_leave()
+        if self.widget:
+            gtk.gdk.threads_enter()
+            self.widget.response(0)
+            gtk.gdk.threads_leave()
 
 class BurnLayout(gtk.Layout):
     def __init__(self, pyjama):
@@ -72,13 +71,13 @@ class BurnLayout(gtk.Layout):
         pass
 
     def bgJob(self,msg,fn):
-        dialog = gtk.Dialog(msg,
-                            self.pyjama.window,
-                            gtk.DIALOG_MODAL)
-        dialog.set_has_separator(False)
-        message = gtk.Label(msg)
-        dialog.vbox.pack_start(message, False, False)
-        message.show()
+        dialog = clWidgets.MyDialog(msg,
+                                    self.pyjama.window,
+                                    gtk.DIALOG_MODAL,
+                                    None,
+                                    gtk.STOCK_DIALOG_WARNING,
+                                    msg,
+                                    sep=False)
         # start job in bg thread
         job=BgJob(dialog, fn)
         job.start()
@@ -104,13 +103,13 @@ class BurnLayout(gtk.Layout):
             else:
                 buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
                          gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
-            dialog = gtk.Dialog(_("Please insert a writable CD/DVD!"),
-                                self.pyjama.window,
-                                gtk.DIALOG_MODAL,
-                                buttons)
-            message = gtk.Label("Please insert a writable CD/DVD!\n%s" % msg)
-            dialog.vbox.pack_start(message, False, True)
-            message.show()
+            msg=_("Please insert a writable CD/DVD!")
+            dialog = clWidgets.MyDialog(msg,
+                                        self.pyjama.window,
+                                        gtk.DIALOG_MODAL,
+                                        buttons,
+                                        gtk.STOCK_DIALOG_WARNING,
+                                        msg)
             response=dialog.run() # gtk.RESPONSE_NONE,
             dialog.destroy()
             if response in [-2,-4]:
@@ -147,40 +146,89 @@ class BurnCDLayout(gtk.Layout):
                 '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
         size=0
         length=0
-        tracks=[]
+        self.tracks=[]
         for track in files:
             size+=os.path.getsize(track)
             file = open(track, "rb")
             mpeg3info = mp3info.MP3Info(file)
             file.close()
             length+= mpeg3info.mpeg.length
-            tracks.append((track,length,size))
+            self.tracks.append((track,length,size))
         mediaLength = (self.pyjama.mediaSize*2352*8) / 1411200 # bit/s
-        print mediaLength, length
-        print self.pyjama.mediaSize*2048, size
+        #print mediaLength, length
+        #print self.pyjama.mediaSize*2048, size
         if length<mediaLength:
-            print "can write as AUDIO"
+            #print "can write as AUDIO"
             self.bAudio.set_sensitive(True)
             self.lWarning.hide()
         else:
             self.bAudio.set_sensitive(False)
         if size<=self.pyjama.mediaSize*2048:
             # write data
-            print "can write as DATA"
+            #print "can write as DATA"
             self.bData.set_sensitive(True)
             self.lWarning.hide()
         else:
             self.bData.set_sensitive(False)
             # remove items from list in order to proceed.
             # and press the refresh button
-            print "music overload"
+            #print "music overload"
             self.lWarning.show()
 
+    def updateStatus(self):
+        while not self.burner.Finished:
+            status=self.burner.GetStatus()
+            if status:
+                gtk.gdk.threads_enter()
+                self.status.set_label(status)
+                gtk.gdk.threads_leave()
+            time.sleep(0.2)
+
+    def burn(self):
+        self.burner.BurnCD([x[0] for x in self.tracks], self.format)
+
+    def burnCd(self):
+        self.burner = burn.Burner()
+        title=("Burning %s disc" % self.format)
+        dialog = gtk.Dialog(title,
+                            self.pyjama.window,
+                            gtk.DIALOG_MODAL)
+        dialog.set_has_separator(False)
+        title = gtk.Label(title)
+        dialog.vbox.pack_start(title, False, False)
+        title.show()
+        self.status = gtk.Label("")
+        dialog.vbox.pack_start(self.status, False, False)
+        self.status.show()
+        # start job in bg thread
+        job=BgJob(dialog, self.burn)
+        job.start()
+        progress=BgJob(None, self.updateStatus)
+        progress.start()
+        dialog.run()
+        res=job.result
+        dialog.destroy()
+
+        msg=_("Thank you!\n\nIf you like this music, please consider\ngoing to jamendo.com and donating to\nthe Artist, so that you can enjoy their\nmusic also in the future.")
+        dialog = clWidgets.MyDialog(msg,
+                                    self.pyjama.window,
+                                    gtk.DIALOG_MODAL,
+                                    (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT),
+                                    gtk.STOCK_DIALOG_WARNING,
+                                    msg)
+        dialog.run() # gtk.RESPONSE_NONE,
+        dialog.destroy()
+        self.pyjama.layouts.show_layout("burn", 0, 0)
+
     def on_bData_activated(self, ev):
-        print "Burning data CD"
+        #print "Burning data CD"
+        self.format='DATA'
+        self.burnCd()
 
     def on_bAudio_activated(self, ev):
-        print "Burning audio CD"
+        #print "Burning audio CD"
+        self.format='AUDIO'
+        self.burnCd()
 
     def draw(self, a, b, c, d):
         self.mVbox = gtk.VBox(True)
