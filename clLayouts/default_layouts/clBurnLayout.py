@@ -37,6 +37,7 @@ class BurnLayout(gtk.Layout):
         self.pyjama.downloader.priorize_burn(self.pyjama.player.playlist)
 
     def draw(self, a, b, c, d):
+        self.pyjama.window.tvList.clear()
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
         self.table.set_border_width(50)
@@ -136,7 +137,12 @@ class BurnCDLayout(gtk.Layout):
         # might be obsolet
         self.pyjama.window.setcolor(self)
 
-    def draw(self, a, b, c, d):
+        self.pyjama.window.liststore.connect('row-changed', self.cb_playlist_changed)
+        self.pyjama.window.liststore.connect('row-deleted', self.cb_playlist_changed)
+        self.pyjama.window.liststore.connect('row-inserted', self.cb_playlist_changed)
+
+    def cb_playlist_changed(self, _tm, _iter, _x=None):
+        if not 'mediaSize' in dir(self.pyjama): return
         files=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
                 '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
         size=0
@@ -150,22 +156,60 @@ class BurnCDLayout(gtk.Layout):
             length+= mpeg3info.mpeg.length
             tracks.append((track,length,size))
         mediaLength = (self.pyjama.mediaSize*2352*8) / 1411200 # bit/s
-        print mediaLength
+        print mediaLength, length
+        print self.pyjama.mediaSize*2048, size
         if length<mediaLength:
             print "can write as AUDIO"
+            self.bAudio.set_sensitive(True)
+            self.lWarning.hide()
+        else:
+            self.bAudio.set_sensitive(False)
         if size<=self.pyjama.mediaSize*2048:
             # write data
             print "can write as DATA"
+            self.bData.set_sensitive(True)
+            self.lWarning.hide()
         else:
+            self.bData.set_sensitive(False)
             # remove items from list in order to proceed.
             # and press the refresh button
             print "music overload"
+            self.lWarning.show()
 
+    def on_bData_activated(self, ev):
+        print "Burning data CD"
+
+    def on_bAudio_activated(self, ev):
+        print "Burning audio CD"
+
+    def draw(self, a, b, c, d):
         self.mVbox = gtk.VBox(True)
         self.title = gtk.Label(_("Burning Music"))
-        self.mVbox.pack_start(self.title)
+        self.mVbox.pack_start(self.title, True, True, 0)
+
+        self.lWarning = gtk.Label()
+        self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
+        self.mVbox.pack_end(self.lWarning, True, True, 0)
+
+        self.mHbox = gtk.HBox(True)
+        self.mVbox.pack_start(self.mHbox)
+
+        self.bData = gtk.Button(label="",stock=gtk.STOCK_FILE)
+        self.bData.set_tooltip_text(_("Burn as Data - MP3"))
+        self.bData.connect("clicked", self.on_bData_activated)
+        self.bData.connect("button_press_event", self.on_bData_activated)
+        self.mHbox.pack_start(self.bData, True, True, 0)
+
+        self.bAudio = gtk.Button(label="",stock=gtk.STOCK_CDROM)
+        self.bAudio.set_tooltip_text(_("Burn as Audio"))
+        self.bAudio.connect("clicked", self.on_bAudio_activated)
+        self.bAudio.connect("button_press_event", self.on_bAudio_activated)
+        self.mHbox.pack_start(self.bAudio, True, True, 0)
+
         self.put(self.mVbox, 0, 0)
         self.show_all()
+
+        self.cb_playlist_changed(0,0,0)
 
     class ToolBar(gtk.HBox):
         def __init__(self, pyjama):
