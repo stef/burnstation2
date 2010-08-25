@@ -68,7 +68,7 @@ class BurnLayout(gtk.Layout):
         self.show_all()
 
     def cb_target_usb_clicked(self, ev):
-        pass
+        self.pyjama.layouts.show_layout("burn_usb", 0, 0)
 
     def bgJob(self,msg,fn):
         dialog = clWidgets.MyDialog(msg,
@@ -258,6 +258,32 @@ class BurnCDLayout(gtk.Layout):
         self.show_all()
 
         self.cb_playlist_changed(0,0,0)
+
+    class ToolBar(gtk.HBox):
+        def __init__(self, pyjama):
+            gtk.HBox.__init__(self)
+            self.pyjama = pyjama
+            self.layout = self.pyjama.layouts.layouts['top']
+
+class BurnUSBLayout(gtk.Layout):
+    def __init__(self, pyjama):
+        self.pyjama = pyjama
+        
+        gtk.Layout.__init__(self)
+        self.set_size(700,300)                
+
+        # might be obsolet
+        self.pyjama.window.setcolor(self)
+
+    def draw(self, a, b, c, d):
+        # draw the burn-cd dialog
+        combo = gtk.ComboBox()
+        for usb in functions.list_usb():
+            combo.append_text(usb)
+
+        self.put(combo, 0, 0)
+               
+        self.show_all()
 
     class ToolBar(gtk.HBox):
         def __init__(self, pyjama):

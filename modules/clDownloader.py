@@ -42,10 +42,11 @@ class Downloader(threading.Thread):
     def priorize_burn(self, tracks):
         pl = []
         for track in tracks:
-            if track in self.queue:
-                del self.queue[self.queue.index(track)]
-            pl.append(track)
-        self.queue = self.queue + pl
+            if track.local != None:
+                if track in self.queue:
+                    del self.queue[self.queue.index(track)]
+                pl.append(track)
+        self.queue = pl + self.queue
 
     def download(self, track):
         uri = track.stream.replace('mp31', 'mp32')
@@ -61,4 +62,13 @@ class Downloader(threading.Thread):
         target = os.path.join(tmp, str(track.id)) + '.mp3'
         os.system('wget -O ' + target + ' -q ' + uri)
         track.local = 'file://' + target
+
+    def get_status(self):
+        tmp = []
+        for track in self.pyjama.player.playlist:
+            if track in self.queue:
+                tmp.append((track, 'Q'))
+            else:
+                tmp.append((track, 'D'))
+        return tmp
          
