@@ -37,6 +37,8 @@ class BurnLayout(gtk.Layout):
 
     def draw(self, a, b, c, d):
         self.pyjama.window.tvList.clear()
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.pyjama.window.toolbar.lbAppendAlbum.hide()
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
         self.table.set_border_width(50)
@@ -133,17 +135,64 @@ class BurnCDLayout(gtk.Layout):
         gtk.Layout.__init__(self)
         self.set_size(700,300)
 
-        # might be obsolet
+        # might be obsolete
         self.pyjama.window.setcolor(self)
 
         self.pyjama.window.liststore.connect('row-changed', self.cb_playlist_changed)
         self.pyjama.window.liststore.connect('row-deleted', self.cb_playlist_changed)
         self.pyjama.window.liststore.connect('row-inserted', self.cb_playlist_changed)
 
+    def getDlStatus(self):
+        ready=False
+        while not ready:
+            dl=self.pyjama.downloader.get_status()
+            files=[t[0].local for t in dl if t[0].local]
+            if len(files) == len(dl):
+                ready=True
+            else:
+                gtk.gdk.threads_enter()
+                self.dlStatus.set_label(_("Downloading %i of %i ..." % (len(dl)-len(files), len(dl))))
+                gtk.gdk.threads_leave()
+            time.sleep(0.4)
+
+    def waitForDl(self):
+        title=(_("Waiting for download to complete"))
+        dialog = gtk.Dialog(title,
+                            self.pyjama.window,
+                            gtk.DIALOG_MODAL)
+        dialog.set_has_separator(False)
+        img = gtk.Image()
+        img.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
+        img.set_size_request(64, 64)
+        hbox = gtk.HBox()
+        dialog.vbox.pack_start(hbox)
+        hbox.pack_start(img,False,False)
+        vbox = gtk.VBox(True)
+        vbox.set_border_width(8)
+        vbox.set_spacing(8)
+        hbox.pack_end(vbox)
+        vtitle = gtk.Label(title)
+        vtitle.set_markup(_("<b>%s</b>" % title))
+        vbox.pack_start(vtitle)
+        self.dlStatus = gtk.Label("")
+        vbox.pack_end(self.dlStatus)
+        dialog.show_all()
+        # start job in bg thread
+        progress=BgJob(dialog, self.getDlStatus)
+        progress.start()
+        dialog.run()
+        dialog.destroy()
+
     def cb_playlist_changed(self, _tm, _iter, _x=None):
+        for track in self.pyjama.player.playlist:
+            self.pyjama.downloader.queue_push(track)
         if not 'mediaSize' in dir(self.pyjama): return
-        files=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
-                '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
+        dl=self.pyjama.downloader.get_status()
+        files=[t[0].local[7:] for t in dl if t[0].local]
+        if not len(files) == len(dl):
+            # pop up dialog displaying how many are missing
+            # wait until complete, continue
+            self.waitForDl()
         size=0
         length=0
         self.tracks=[]
@@ -173,6 +222,8 @@ class BurnCDLayout(gtk.Layout):
             # remove items from list in order to proceed.
             # and press the refresh button
             #print "music overload"
+            self.bAudio.hide(True)
+            self.bData.hide(True)
             self.lWarning.show()
 
     def updateStatus(self):
@@ -182,31 +233,41 @@ class BurnCDLayout(gtk.Layout):
                 gtk.gdk.threads_enter()
                 self.status.set_label(status)
                 gtk.gdk.threads_leave()
-            time.sleep(0.2)
+            time.sleep(0.4)
 
     def burn(self):
         self.burner.BurnCD([x[0] for x in self.tracks], self.format)
 
     def burnCd(self):
         self.burner = burn.Burner()
-        title=("Burning %s disc" % self.format)
+        title=(_("Burning %s disc") % self.format)
         dialog = gtk.Dialog(title,
                             self.pyjama.window,
                             gtk.DIALOG_MODAL)
         dialog.set_has_separator(False)
-        title = gtk.Label(title)
-        dialog.vbox.pack_start(title, False, False)
-        title.show()
+        dialog.set_size_request(600, 60)
+        img = gtk.Image()
+        img.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_DIALOG)
+        img.set_size_request(64, 64)
+        hbox = gtk.HBox()
+        dialog.vbox.pack_start(hbox)
+        hbox.pack_start(img,False,False)
+        vbox = gtk.VBox(True)
+        vbox.set_border_width(8)
+        vbox.set_spacing(8)
+        hbox.pack_end(vbox)
+        vtitle = gtk.Label(title)
+        vtitle.set_markup(_("<b>%s</b>" % title))
+        vbox.pack_start(vtitle)
         self.status = gtk.Label("")
-        dialog.vbox.pack_start(self.status, False, False)
-        self.status.show()
+        vbox.pack_end(self.status)
+        dialog.show_all()
         # start job in bg thread
         job=BgJob(dialog, self.burn)
         job.start()
         progress=BgJob(None, self.updateStatus)
         progress.start()
         dialog.run()
-        res=job.result
         dialog.destroy()
 
         msg=_("Thank you!\n\nIf you like this music, please consider\ngoing to jamendo.com and donating to\nthe Artist, so that you can enjoy their\nmusic also in the future.")
@@ -231,30 +292,41 @@ class BurnCDLayout(gtk.Layout):
         self.burnCd()
 
     def draw(self, a, b, c, d):
-        self.mVbox = gtk.VBox(True)
-        self.title = gtk.Label(_("Burning Music"))
-        self.mVbox.pack_start(self.title, True, True, 0)
+        self.pyjama.window.tvList.clear()
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.table = gtk.HBox(True)
+        self.table.set_size_request(800, 400)
+        self.table.set_border_width(50)
+        self.table.set_spacing(100)
 
-        self.lWarning = gtk.Label()
-        self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
-        self.mVbox.pack_end(self.lWarning, True, True, 0)
-
-        self.mHbox = gtk.HBox(True)
-        self.mVbox.pack_start(self.mHbox)
-
-        self.bData = gtk.Button(label="",stock=gtk.STOCK_FILE)
+        self.iData = gtk.Image()
+        self.iData.set_from_file(os.path.join(functions.install_dir(), "images", "file-mp3-cd.png"))
+        #self.iData.set_size_request(256,256)
+        self.bData = gtk.Button()
+        self.bData.set_image(self.iData)
+        #self.bData.set_size_request(256,256)
         self.bData.set_tooltip_text(_("Burn as Data - MP3"))
         self.bData.connect("clicked", self.on_bData_activated)
         self.bData.connect("button_press_event", self.on_bData_activated)
-        self.mHbox.pack_start(self.bData, True, True, 0)
+        self.table.pack_start(self.bData)
 
-        self.bAudio = gtk.Button(label="",stock=gtk.STOCK_CDROM)
+        self.iAudio = gtk.Image()
+        self.iAudio.set_from_file(os.path.join(functions.install_dir(), "images", "file-audio-cd.png"))
+        #self.iAudio.set_size_request(256,256)
+        self.bAudio  = gtk.Button()
+        self.bAudio.set_image(self.iAudio)
+        #self.bAudio.set_size_request(256,256)
         self.bAudio.set_tooltip_text(_("Burn as Audio"))
         self.bAudio.connect("clicked", self.on_bAudio_activated)
         self.bAudio.connect("button_press_event", self.on_bAudio_activated)
-        self.mHbox.pack_start(self.bAudio, True, True, 0)
+        self.table.pack_end(self.bAudio)
 
-        self.put(self.mVbox, 0, 0)
+        self.lWarning = gtk.Label()
+        self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
+        self.table.pack_end(self.lWarning, True, True, 0)
+
+        self.put(self.table, 0, 0)
         self.show_all()
 
         self.cb_playlist_changed(0,0,0)
@@ -268,21 +340,21 @@ class BurnCDLayout(gtk.Layout):
 class BurnUSBLayout(gtk.Layout):
     def __init__(self, pyjama):
         self.pyjama = pyjama
-        
+
         gtk.Layout.__init__(self)
-        self.set_size(700,300)                
+        self.set_size(700,300)
 
         # might be obsolet
         self.pyjama.window.setcolor(self)
 
     def draw(self, a, b, c, d):
+        self.pyjama.window.tvList.clear()
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.pyjama.window.toolbar.lbAppendAlbum.hide()
         # draw the burn-cd dialog
 
-        if(!check_usb()):
-            pass
-        else:
+        self.put(combo, 0, 0)
 
-               
         self.show_all()
 
     class ToolBar(gtk.HBox):

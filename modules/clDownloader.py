@@ -37,7 +37,8 @@ class Downloader(threading.Thread):
         return tmp
 
     def queue_push(self, track):
-        self.queue.append(track)
+        if not os.path.isfile(self.get_local_name(track)) and track not in self.queue:
+            self.queue.append(track)
 
     def priorize_burn(self, tracks):
         pl = []
@@ -48,9 +49,15 @@ class Downloader(threading.Thread):
                 pl.append(track)
         self.queue = pl + self.queue
 
+    def get_local_name(self, track):
+        tmp = os.path.join(functions.install_dir(), "cache")
+        tmp = os.path.join(tmp, str(track.artist_id))
+        tmp = os.path.join(tmp, str(track.album_id))
+        return os.path.join(tmp, str(track.id)) + '.mp3'
+
     def download(self, track):
-        uri = track.stream.replace('mp31', 'mp32')
-        tmp = os.path.realpath('cache')
+        uri = track.stream #.replace('mp31', 'mp32')
+        tmp = os.path.join(functions.install_dir(), "cache")
         if not os.path.isdir(tmp):
             os.mkdir(tmp)
         if not os.path.isdir(os.path.join(tmp, str(track.artist_id))):
@@ -60,7 +67,10 @@ class Downloader(threading.Thread):
             os.mkdir(os.path.join(tmp, str(track.album_id)))
         tmp = os.path.join(tmp, str(track.album_id))
         target = os.path.join(tmp, str(track.id)) + '.mp3'
-        os.system('wget -O ' + target + ' -q ' + uri)
+        #print "[!] downloading %s to %s" % (uri, target)
+        cmd='(wget -c -O %s.part -q "%s" && mv %s.part %s)' % (target, uri, target, target)
+        #print "[!] command:", cmd
+        os.system(cmd)
         track.local = 'file://' + target
 
     def get_status(self):
@@ -71,4 +81,3 @@ class Downloader(threading.Thread):
             else:
                 tmp.append((track, 'D'))
         return tmp
-         
