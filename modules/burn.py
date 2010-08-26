@@ -2,16 +2,17 @@
 
 import re, sys
 import os, os.path
-import mp3info, ogg.vorbis
+import mp3info, ogg.vorbis, functions
 from string import replace
 from popen2 import popen3
 from time import sleep
 if (sys.platform != "win32"):
     from popen2 import Popen3
 
-logPath='/tmp/burnstation'
-spoolPath='/tmp/burnstation'
-tmpPath='/tmp/burnstation'
+
+logPath=os.path.join(functions.install_dir(), "log")
+spoolPath=os.path.join(functions.install_dir(), "spool")
+tmpPath=os.path.join(functions.install_dir(), "tmp/")
 logfile = 'decoder.log'
 RE=re.compile('cdrskin: Media : (.*)')
 
