@@ -184,11 +184,11 @@ class BurnCDLayout(gtk.Layout):
         dialog.destroy()
 
     def cb_playlist_changed(self, _tm, _iter, _x=None):
+        for track in self.pyjama.player.playlist:
+            self.pyjama.downloader.queue_push(track)
         if not 'mediaSize' in dir(self.pyjama): return
         dl=self.pyjama.downloader.get_status()
-        print "[!] dl", dl
-        files=[t[0].local for t in dl if t[0].local]
-        print "[!] files", files
+        files=[t[0].local[7:] for t in dl if t[0].local]
         if not len(files) == len(dl):
             # pop up dialog displaying how many are missing
             # wait until complete, continue
