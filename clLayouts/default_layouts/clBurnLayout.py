@@ -274,13 +274,13 @@ class BurnCDLayout(gtk.Layout):
 
     def burn(self):
         if self.format=='AUDIO':
-            tracks=[x.startswith('file://') and x.local[7:] or x.local for x in self.tracks]
+            tracks=[x.local.startswith('file://') and x.local[7:] or x.local for x in self.tracks]
         else:
             tracks=["%s.mp3=%s" %
                     (os.path.join(track.artist_name.replace(' ','_'),
                                   track.album_name.replace(' ','_'),
                                   "%02d_-_%s" % (int(track.numalbum), track.name.replace(' ','_'))),
-                     track.startswith('file://') and track.local[7:] or track.local)
+                     track.local.startswith('file://') and track.local[7:] or track.local)
                     for track in self.tracks]
             tracks.append(os.path.join(functions.install_dir(),'burnstation.txt'))
             tracks.append(self.genInfoFile())
