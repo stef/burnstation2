@@ -72,9 +72,9 @@ class Downloader(threading.Thread):
         cmd='(wget -c -O %s.part -q "%s" && mv %s.part %s)' % (target, uri, target, target)
         #print "[!] command:", cmd
         os.system(cmd)
-        file = open(track, "rb")
-        mpeg3info = mp3info.MP3Info(target)
-        file.close()
+        mp3 = open(target, "rb")
+        mpeg3info = mp3info.MP3Info(mp3)
+        mp3.close()
         if mpeg3info.valid:
             track.local = 'file://' + target
         else:
