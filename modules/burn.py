@@ -275,8 +275,6 @@ if __name__ == "__main__":
     #(isWritable,msg)=a.cdIsWritable()
     #print msg
     #if True:
-    #    tracks=['/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/01-beastie_boys-b_for_my_name-ftd.mp3',
-    #            '/home/stef/music/Beastie_Boys-The_Mix_Up-Advance-2007-FTD/02-beastie_boys-14th_st._break-ftd.mp3']
     #    a.BurnCD(tracks, 'AUDIO')
     a.GetStatus()
     a.GetStatus()
