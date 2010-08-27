@@ -177,6 +177,64 @@ msgid ""
 "or Jamendo did not update their dump, yet"
 msgstr "Ez az előadó nincs az adatbázisban. Lehetséges, hogy elavult a helyi adatbázis, vagy a Jamendo még nem frissítette a központit."
 
+#: clLayouts/default_layouts/clBurnLayout.py:92
+msgid "Checking disc status..."
+msgstr "Lemez állapotának vizsgálata..."
+
+#: clLayouts/default_layouts/clBurnLayout.py:95
+msgid "Blanking disc..."
+msgstr "Lemez törlése"
+
+#: clLayouts/default_layouts/clBurnLayout.py:106
+msgid "Blank CD"
+msgstr "Lemez törlés"
+
+#: clLayouts/default_layouts/clBurnLayout.py:111
+msgid "Please insert a writable CD/DVD!"
+msgstr "Kérem tegyen be írható CD/DVD-t"
+
+#: clLayouts/default_layouts/clBurnLayout.py:165
+msgid "Waiting for download to complete"
+msgstr "Várakozás, amíg a letöltés befejeződik"
+
+#: clLayouts/default_layouts/clBurnLayout.py:268
+msgid "contents.txt"
+msgstr "tartalom.txt"
+
+#: clLayouts/default_layouts/clBurnLayout.py:290
+msgid "Burning %s disc"
+msgstr "%s lemez írása"
+
+#: clLayouts/default_layouts/clBurnLayout.py:320
+msgid ""
+"Thank you!\n"
+"\n"
+"If you like this music, please consider\n"
+"visiting jamendo.com and donating to\n"
+"the Artist, so that you can enjoy their\n"
+"music also in the future."
+msgstr "Köszönjük!\n"
+"Ha tetszik a zene, kérjük fontolja meg\n"
+"a jamendo.com meglátogatását és a művész\n"
+"támogatását adományával. Ezzel biztosítva\n"
+"további hasonló zene születését."
+
+#: clLayouts/default_layouts/clBurnLayout.py:356
+msgid "Burn as Data - MP3"
+msgstr "Adatlemez (MP3) írása"
+
+#: clLayouts/default_layouts/clBurnLayout.py:367
+msgid "Burn as Audio"
+msgstr "Audiolemez írása"
+
+#: clLayouts/default_layouts/clBurnLayout.py:373
+msgid ""
+"<b>Rock'n'Roll overload</b>\n"
+"Too many tracks on playlist, please remove some to continue burning."
+msgstr "<b>Rock'n'Roll túlcsordulás</b>\n"
+"Túl sok zene van a lejátszási listában,\n"
+"kérjük töröljön párat az írás megkezdéséhez."
+
 #: extended_modules/clBookmarkDialog.py:28 extended_modules/clBookmarks.py:216
 msgid "Bookmarks"
 msgstr ""
@@ -294,6 +352,10 @@ msgstr ""
 #: extended_modules/clPlaylists.py:239
 msgid "Load Playlist"
 msgstr ""
+
+#: modules/burn.py:132
+msgid "Decoding to wav"
+msgstr "Dekódolás wav fájlba"
 
 #: modules/clJamendo.py:262
 msgid "From Cache. Reload in %iD, %i:%i:%i"
