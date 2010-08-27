@@ -39,6 +39,7 @@ class BurnLayout(gtk.Layout):
         self.pyjama.window.tvList.clear()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.TVListFrame.get_label_widget().set_markup("")
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
         self.table.set_border_width(25)
@@ -102,12 +103,12 @@ class BurnLayout(gtk.Layout):
         while not isWritable:
             buttons=None
             if msg == "** closed ** CD-RW":
-                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                buttons=(_("Cancel"), gtk.RESPONSE_REJECT,
                          _("Blank CD"), gtk.RESPONSE_APPLY,
-                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                         _("Retry"), gtk.RESPONSE_ACCEPT)
             else:
-                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                buttons=(_("Cancel"), gtk.RESPONSE_REJECT,
+                         _("Retry"), gtk.RESPONSE_ACCEPT)
             msg=_("Please insert a writable CD/DVD!")
             dialog = clWidgets.MyDialog(msg,
                                         self.pyjama.window,

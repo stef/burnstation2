@@ -183,13 +183,23 @@ msgstr "Lemez állapotának vizsgálata..."
 
 #: clLayouts/default_layouts/clBurnLayout.py:95
 msgid "Blanking disc..."
-msgstr "Lemez törlése"
+msgstr "Lemez törlése..."
 
 #: clLayouts/default_layouts/clBurnLayout.py:106
+#: clLayouts/default_layouts/clBurnLayout.py:110
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: clLayouts/default_layouts/clBurnLayout.py:107
 msgid "Blank CD"
 msgstr "Lemez törlés"
 
+#: clLayouts/default_layouts/clBurnLayout.py:108
 #: clLayouts/default_layouts/clBurnLayout.py:111
+msgid "Retry"
+msgstr "Újra"
+
+#: clLayouts/default_layouts/clBurnLayout.py:112
 msgid "Please insert a writable CD/DVD!"
 msgstr "Kérem tegyen be írható CD/DVD-t"
 
