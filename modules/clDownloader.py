@@ -7,6 +7,7 @@ import time
 import os
 import threading
 import copy
+import mp3info
 
 class Downloader(threading.Thread):
     def __init__(self, pyjama):
@@ -20,7 +21,7 @@ class Downloader(threading.Thread):
         while(self.running):
             if not self.is_queue_empty():
                 self.download(self.queue_shift())
-            time.sleep(1)
+            time.sleep(3)
 
     def quit(self):
         self.running = False
@@ -71,7 +72,15 @@ class Downloader(threading.Thread):
         cmd='(wget -c -O %s.part -q "%s" && mv %s.part %s)' % (target, uri, target, target)
         #print "[!] command:", cmd
         os.system(cmd)
-        track.local = 'file://' + target
+        mp3 = open(target, "rb")
+        mpeg3info = mp3info.MP3Info(mp3)
+        mp3.close()
+        if mpeg3info.valid:
+            track.local = 'file://' + target
+        else:
+            print "[!] failed to download %s, putting back in queue" % (target)
+            os.unlink(target)
+            self.queue_push(track)
 
     def get_status(self):
         tmp = []

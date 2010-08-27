@@ -5,7 +5,7 @@
 # Burn Layout - CD/USB burning layout
 #
 
-import gtk, os, threading, time
+import gtk, os, threading, time, operator
 from modules import clWidgets, clThreadedDownload, clEntry, functions, burn, mp3info
 
 class BgJob(threading.Thread):
@@ -39,10 +39,11 @@ class BurnLayout(gtk.Layout):
         self.pyjama.window.tvList.clear()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.TVListFrame.get_label_widget().set_markup("")
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
-        self.table.set_border_width(50)
-        self.table.set_spacing(100)
+        self.table.set_border_width(25)
+        self.table.set_spacing(50)
 
         self.put(self.table, 0, 0)
 
@@ -89,22 +90,25 @@ class BurnLayout(gtk.Layout):
         return res
 
     def cdStatus(self):
-        return self.bgJob(_("Checking disc status"),self.burner.cdIsWritable)
+        return self.bgJob(_("Checking disc status..."),self.burner.cdIsWritable)
 
     def blankCD(self):
-        return self.bgJob(_("Blanking disc"),self.burner.BlankCD)
+        return self.bgJob(_("Blanking disc..."),self.burner.BlankCD)
 
     def cb_target_cd_clicked(self, ev):
-        (isWritable,msg)=self.cdStatus()
+        try:
+            (isWritable,msg)=self.cdStatus()
+        except Exception, e:
+            print "cdStatus failed:", e
         while not isWritable:
             buttons=None
             if msg == "** closed ** CD-RW":
-                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                buttons=(_("Cancel"), gtk.RESPONSE_REJECT,
                          _("Blank CD"), gtk.RESPONSE_APPLY,
-                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                         _("Retry"), gtk.RESPONSE_ACCEPT)
             else:
-                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                         gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)
+                buttons=(_("Cancel"), gtk.RESPONSE_REJECT,
+                         _("Retry"), gtk.RESPONSE_ACCEPT)
             msg=_("Please insert a writable CD/DVD!")
             dialog = clWidgets.MyDialog(msg,
                                         self.pyjama.window,
@@ -118,7 +122,10 @@ class BurnLayout(gtk.Layout):
                 return
             if response == -10:
                 self.blankCD()
-            (isWritable,msg)=self.cdStatus()
+            try:
+                (isWritable,msg)=self.cdStatus()
+            except Exception, e:
+                print "cdStatus failed:", e
         self.pyjama.mediaSize=msg
         self.pyjama.layouts.show_layout("burn_cd", 0, 0)
 
@@ -195,14 +202,13 @@ class BurnCDLayout(gtk.Layout):
             self.waitForDl()
         size=0
         length=0
-        self.tracks=[]
+        self.tracks=[t[0] for t in dl if t[0]]
         for track in files:
             size+=os.path.getsize(track)
             file = open(track, "rb")
             mpeg3info = mp3info.MP3Info(file)
             file.close()
             length+= mpeg3info.mpeg.length
-            self.tracks.append((track,length,size))
         mediaLength = (self.pyjama.mediaSize*2352*8) / 1411200 # bit/s
         #print mediaLength, length
         #print self.pyjama.mediaSize*2048, size
@@ -235,8 +241,50 @@ class BurnCDLayout(gtk.Layout):
                 gtk.gdk.threads_leave()
             time.sleep(0.4)
 
+    def genInfoFile(self):
+        # Todo for eyecandy download and add to image:
+        #http://api.jamendo.com/get2/image/album/redirect/?id=%s&imagesize=%i" % (album[ALBUM_ID], 100)
+        tracklist=[("      %s\n        - Licence: %s\n        - Track page: http://www.jamendo.com/en/track/%s" %
+                    (os.path.join(track.artist_name.replace(' ','_'),
+                                  track.album_name.replace(' ','_'),
+                                  "%02d_-_%s" % (int(track.numalbum), track.name.replace(' ','_'))),
+                     track.license,
+                     track.id),
+                    track)
+                   for track in self.tracks]
+        tracklist.sort()
+        res=[]
+        curArtist=0
+        curAlbum=0
+        for track in tracklist:
+            if track[1].artist_id != curArtist:
+                res.append("")
+                res.append("Artist: %s\n  - Donate: http://www.jamendo.com/en/artist/%s/donate" % (track[1].artist_name,track[1].artist_name.replace(' ','_')))
+                curArtist=track[1].artist_id
+            if track[1].album_id != curAlbum:
+                res.append("")
+                res.append("  Album: %s\n    - Page: http://www.jamendo.com/en/album/%s" % (track[1].album_name,track[1].album_id))
+                curAlbum=track[1].album_id
+            res.append(track[0])
+        fname=os.path.join(functions.install_dir(), 'spool', _("contents.txt"))
+        infofile=open(fname,'w')
+        infofile.write("\n".join(res))
+        infofile.close()
+        return fname
+
     def burn(self):
-        self.burner.BurnCD([x[0] for x in self.tracks], self.format)
+        if self.format=='AUDIO':
+            tracks=[x.local[7:] for x in self.tracks]
+        else:
+            tracks=["%s.mp3=%s" %
+                    (os.path.join(track.artist_name.replace(' ','_'),
+                                  track.album_name.replace(' ','_'),
+                                  "%02d_-_%s" % (int(track.numalbum), track.name.replace(' ','_'))),
+                     track.local[7:])
+                    for track in self.tracks]
+            tracks.append(os.path.join(functions.install_dir(),'burnstation.txt'))
+            tracks.append(self.genInfoFile())
+        self.burner.BurnCD(tracks, self.format)
 
     def burnCd(self):
         self.burner = burn.Burner()
@@ -270,7 +318,7 @@ class BurnCDLayout(gtk.Layout):
         dialog.run()
         dialog.destroy()
 
-        msg=_("Thank you!\n\nIf you like this music, please consider\ngoing to jamendo.com and donating to\nthe Artist, so that you can enjoy their\nmusic also in the future.")
+        msg=_("Thank you!\n\nIf you like this music, please consider\nvisiting jamendo.com and donating to\nthe Artist, so that you can enjoy their\nmusic also in the future.")
         dialog = clWidgets.MyDialog(msg,
                                     self.pyjama.window,
                                     gtk.DIALOG_MODAL,
