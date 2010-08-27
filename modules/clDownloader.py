@@ -20,7 +20,7 @@ class Downloader(threading.Thread):
         while(self.running):
             if not self.is_queue_empty():
                 self.download(self.queue_shift())
-            time.sleep(1)
+            time.sleep(3)
 
     def quit(self):
         self.running = False
