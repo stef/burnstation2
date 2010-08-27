@@ -78,6 +78,7 @@ class Downloader(threading.Thread):
         if mpeg3info.valid:
             track.local = 'file://' + target
         else:
+            print "[!] failed to download %s, putting back in queue" % (target)
             os.unlink(target)
             self.queue_push(track)
 
