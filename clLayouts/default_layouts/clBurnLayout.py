@@ -327,6 +327,7 @@ class BurnCDLayout(gtk.Layout):
                                     msg)
         dialog.run() # gtk.RESPONSE_NONE,
         dialog.destroy()
+        del self.pyjama.mediaSize
         self.pyjama.layouts.show_layout("burn", 0, 0)
 
     def on_bData_activated(self, ev):
