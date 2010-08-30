@@ -119,6 +119,7 @@ class BurnLayout(gtk.Layout):
             response=dialog.run() # gtk.RESPONSE_NONE,
             dialog.destroy()
             if response in [-2,-4]:
+                del self.pyjama.mediaSize
                 return
             if response == -10:
                 self.blankCD()
