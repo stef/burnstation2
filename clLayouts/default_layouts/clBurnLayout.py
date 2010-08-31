@@ -220,14 +220,14 @@ class BurnCDLayout(gtk.Layout):
         if length<mediaLength:
             #print "can write as AUDIO"
             self.bAudio.set_sensitive(True)
-            self.lWarning.hide()
+            #self.lWarning.hide()
         else:
             self.bAudio.set_sensitive(False)
         if size<=self.pyjama.mediaSize*2048:
             # write data
             #print "can write as DATA"
             self.bData.set_sensitive(True)
-            self.lWarning.hide()
+            #self.lWarning.hide()
         else:
             self.bData.set_sensitive(False)
             # remove items from list in order to proceed.
@@ -235,7 +235,7 @@ class BurnCDLayout(gtk.Layout):
             #print "music overload"
             self.bAudio.hide(True)
             self.bData.hide(True)
-            self.lWarning.show()
+            #self.lWarning.show()
 
     def updateStatus(self):
         while not self.burner.Finished:
