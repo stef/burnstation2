@@ -15,6 +15,7 @@ class Downloader(threading.Thread):
         self.pyjama = pyjama
         self.queue = []
         self.running = False
+        self.retries = {}
 
     def run(self):
         self.running = True
@@ -58,6 +59,10 @@ class Downloader(threading.Thread):
 
     def download(self, track):
         uri = track.stream #.replace('mp31', 'mp32')
+        if uri in self.retries:
+            if self.retries[uri]>9:
+                return
+            time.sleep(self.retries[uri]**2)
         tmp = os.path.join(functions.install_dir(), "cache")
         if not os.path.isdir(tmp):
             os.mkdir(tmp)
@@ -76,12 +81,13 @@ class Downloader(threading.Thread):
         mp3.load()
         type = mp3.file(target)
         print uri
-        print type
-        if type[:4] == 'MPEG':
+        print 'file type',type
+        if type[:4] == 'MPEG' or type[:5] == 'Audio':
             track.local = target
         else:
-            print "[!] failed to download %s, putting back in queue" % (target)
             os.unlink(target)
+            self.retries[uri]=self.retries.get(uri,0)+1
+            print "[!] failed to download %s, putting back in queue (retry:%d)" % (target,self.retries[uri])
             self.queue_push(track)
 
     def get_status(self):
@@ -89,6 +95,8 @@ class Downloader(threading.Thread):
         for track in self.pyjama.player.playlist:
             if track in self.queue:
                 tmp.append((track, 'Q'))
+            elif track.stream in self.retries:
+                tmp.append((track, 'F'))
             else:
                 tmp.append((track, 'D'))
         return tmp

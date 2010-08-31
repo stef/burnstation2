@@ -154,8 +154,9 @@ class BurnCDLayout(gtk.Layout):
         ready=False
         while not ready:
             dl=self.pyjama.downloader.get_status()
+            failed=reduce(lambda (t,s), c: c+(s=='F' and 1 or 0), dl)
             files=[t[0].local for t in dl if t[0].local]
-            if len(files) == len(dl):
+            if len(files)+failed == len(dl):
                 ready=True
             else:
                 gtk.gdk.threads_enter()
@@ -347,8 +348,8 @@ class BurnCDLayout(gtk.Layout):
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
-        self.table.set_border_width(50)
-        self.table.set_spacing(100)
+        self.table.set_border_width(25)
+        self.table.set_spacing(30)
 
         self.iData = gtk.Image()
         self.iData.set_from_file(os.path.join(functions.install_dir(), "images", "file-mp3-cd.png"))
@@ -358,7 +359,7 @@ class BurnCDLayout(gtk.Layout):
         #self.bData.set_size_request(256,256)
         self.bData.set_tooltip_text(_("Burn as Data - MP3"))
         self.bData.connect("clicked", self.on_bData_activated)
-        self.bData.connect("button_press_event", self.on_bData_activated)
+        #self.bData.connect("button_press_event", self.on_bData_activated)
         self.table.pack_start(self.bData)
 
         self.iAudio = gtk.Image()
@@ -369,12 +370,12 @@ class BurnCDLayout(gtk.Layout):
         #self.bAudio.set_size_request(256,256)
         self.bAudio.set_tooltip_text(_("Burn as Audio"))
         self.bAudio.connect("clicked", self.on_bAudio_activated)
-        self.bAudio.connect("button_press_event", self.on_bAudio_activated)
+        #self.bAudio.connect("button_press_event", self.on_bAudio_activated)
         self.table.pack_end(self.bAudio)
 
-        self.lWarning = gtk.Label()
-        self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
-        self.table.pack_end(self.lWarning, True, True, 0)
+        #self.lWarning = gtk.Label()
+        #self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
+        #self.table.pack_end(self.lWarning, True, True, 0)
 
         self.put(self.table, 0, 0)
         self.show_all()
