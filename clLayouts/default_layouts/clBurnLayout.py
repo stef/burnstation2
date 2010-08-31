@@ -43,7 +43,7 @@ class BurnLayout(gtk.Layout):
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
         self.table.set_border_width(25)
-        self.table.set_spacing(50)
+        self.table.set_spacing(30)
 
         self.put(self.table, 0, 0)
 
@@ -119,7 +119,10 @@ class BurnLayout(gtk.Layout):
             response=dialog.run() # gtk.RESPONSE_NONE,
             dialog.destroy()
             if response in [-2,-4]:
-                del self.pyjama.mediaSize
+                try:
+                    del self.pyjama.mediaSize
+                except:
+                    pass
                 return
             if response == -10:
                 self.blankCD()
@@ -329,7 +332,10 @@ class BurnCDLayout(gtk.Layout):
                                     msg)
         dialog.run() # gtk.RESPONSE_NONE,
         dialog.destroy()
-        del self.pyjama.mediaSize
+        try:
+            del self.pyjama.mediaSize
+        except:
+            pass
         self.pyjama.layouts.show_layout("burn", 0, 0)
 
     def on_bData_activated(self, ev):
