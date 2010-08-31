@@ -353,7 +353,7 @@ class BurnCDLayout(gtk.Layout):
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
         self.table = gtk.HBox(True)
-        self.table.set_size_request(800, 400)
+        self.table.set_size_request(700, 350)
         self.table.set_border_width(25)
         self.table.set_spacing(30)
 
