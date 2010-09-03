@@ -483,6 +483,8 @@ class winGTK(gtk.Window):
         self.show_all()
         self.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.toolbar.lbAppendAlbum.hide()
+        self.toolbar.lbArtistsAlbumsToPlaylist.hide()
+        self.toolbar.Separator2.hide()
 
         # Insert a Menu item for showing / hiding vbCover
         #stf

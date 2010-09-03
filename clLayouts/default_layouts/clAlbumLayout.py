@@ -204,6 +204,8 @@ class AlbumLayout(gtk.Layout):
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Showing informations and albums from '%s'") % artist_name)
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.show()
         self.pyjama.window.toolbar.lbAppendAlbum.show()
+        self.pyjama.window.toolbar.lbArtistsAlbumsToPlaylist.hide()
+        self.pyjama.window.toolbar.Separator2.show()
         #self.toolbar.sbDownloadAlbum.tag = album_id
 
         for albuminfo in self.albuminfos:

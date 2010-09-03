@@ -509,10 +509,11 @@ class Player:
             #~ print "GstError: %s" % err, debug
             uri = self.src.get_property('uri')
             #~ print self.cur_playing.stream
-            self.pyjama.Events.raise_event("error", err, "<b>Playback Error</b>: %s\n\nIn most cases this means that jamendo is not available for pyjama.\n\nPlease report this error to me, if it persists." % err, "%s\n\n%s" % (debug, uri))
+            #self.pyjama.Events.raise_event("error", err, "<b>Playback Error</b>: %s\n\nIn most cases this means that jamendo is not available for pyjama.\n\nPlease report this error to me, if it persists." % err, "%s\n\n%s" % (debug, uri))
+            print "<b>Playback Error</b>: %s\n\nIn most cases this means that jamendo is not available for pyjama.\n\nPlease report this error to me, if it persists." % err, "%s\n\n%s" % (debug, uri)
             self.stop()
+            self.next()
             return
-
             if self.EOS:
                 self.on_eos()
             else:

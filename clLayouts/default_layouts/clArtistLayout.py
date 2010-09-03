@@ -124,6 +124,7 @@ class ArtistLayout(gtk.Layout):
                 print ("Could not load image")
                 return None
 
+        self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.tag = artistID
         #self.toolbar.ibDonate.tag = url #stf
         #self.toolbar.sbGotoWebArtist.tag = url #stf
 
@@ -198,6 +199,8 @@ class ArtistLayout(gtk.Layout):
         self.show()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.toolbar.lbArtistsAlbumsToPlaylist.show()
+        self.pyjama.window.toolbar.Separator2.show()
 
     def arrange_artistdetail(self):
         if self.albuminfos == {}: return None

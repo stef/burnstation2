@@ -24,6 +24,7 @@ import time
 import functions
 
 from modules.clWidgets import EqualizerBox
+from modules.clGstreamer010 import Track
 
 ## @package clToolbar
 # Holds Pyjama's Toolbar Class
@@ -100,11 +101,21 @@ class Toolbar(gtk.Toolbar):
         self.lbAppendAlbum.connect("clicked", self.on_lbAppendAlbum_clicked)
         self.insert(self.lbAppendAlbum, -1)
         # GET MORE ALBUMS FROM THIS PLAYLIST
+        self.lbArtistsAlbumsToPlaylist = gtk.ToolButton(label=_("Append"))
+        self.lbArtistsAlbumsToPlaylist.set_stock_id(gtk.STOCK_ADD)
+        self.lbArtistsAlbumsToPlaylist.set_tooltip_text(_("Append artists albums to playlist"))
+        self.lbArtistsAlbumsToPlaylist.connect("clicked", self.on_lbAppendArtistsAlbums_clicked)
+        self.insert(self.lbArtistsAlbumsToPlaylist, -1)
+        # GET MORE ALBUMS FROM THIS PLAYLIST
         self.lbMoreAlbumsFromThisArtist2 = gtk.ToolButton(label=_("Artist"))
         self.set_image(self.lbMoreAlbumsFromThisArtist2, os.path.join(functions.install_dir(), "images", "personal.png"))
         self.lbMoreAlbumsFromThisArtist2.set_tooltip_text(_("Get more music from this artist"))
         self.lbMoreAlbumsFromThisArtist2.connect("clicked", self.on_lbMoreAlbumsFromThisArtist_clicked)
         self.insert(self.lbMoreAlbumsFromThisArtist2, -1)
+
+        ## Seperator
+        self.Separator2 = gtk.SeparatorToolItem()
+        self.insert(self.Separator2, -1)
 
         ## Expander
         self.space_fs = gtk.ToolItem()
@@ -206,6 +217,14 @@ class Toolbar(gtk.Toolbar):
         for track in tracks: # for track in self.main.tracks:
             track.uid = "%f%s" % (time.time(), track.id)
             self.pyjama.add2playlist(track)
-            status = self.pyjama.player.status
-            if status == "Error" or status == "End" or status == None:
-                self.pyjama.window.on_bPlay_clicked(None)
+        status = self.pyjama.player.status
+        if status == "Error" or status == "End" or status == None:
+            self.pyjama.window.on_bPlay_clicked(None)
+
+    def on_lbAppendArtistsAlbums_clicked(self, ev):
+        for track in self.pyjama.db.artisttracks(self.lbMoreAlbumsFromThisArtist2.tag):
+            track.uid = "%f%s" % (time.time(), track.id)
+            self.pyjama.add2playlist(track)
+        status = self.pyjama.player.status
+        if status == "Error" or status == "End" or status == None:
+            self.pyjama.window.on_bPlay_clicked(None)

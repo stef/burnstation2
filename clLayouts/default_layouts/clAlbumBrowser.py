@@ -150,7 +150,9 @@ class AlbumBrowser(gtk.Layout):
 
         self.show()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
+        self.pyjama.window.toolbar.lbArtistsAlbumsToPlaylist.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.toolbar.Separator2.hide()
         
     def arrange_topoftheweek(self):
         if self.albuminfos == {}: return None

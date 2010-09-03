@@ -39,6 +39,8 @@ class BurnLayout(gtk.Layout):
         self.pyjama.window.tvList.clear()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.toolbar.lbArtistsAlbumsToPlaylist.hide()
+        self.pyjama.window.toolbar.Separator2.hide()
         self.pyjama.window.TVListFrame.get_label_widget().set_markup("")
         self.table = gtk.HBox(True)
         self.table.set_size_request(800, 400)
@@ -352,6 +354,7 @@ class BurnCDLayout(gtk.Layout):
         self.pyjama.window.tvList.clear()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.toolbar.Separator2.hide()
         self.table = gtk.HBox(True)
         self.table.set_size_request(700, 350)
         self.table.set_border_width(25)
@@ -381,7 +384,7 @@ class BurnCDLayout(gtk.Layout):
 
         #self.lWarning = gtk.Label()
         #self.lWarning.set_markup(_("<b>Rock'n'Roll overload</b>\nToo many tracks on playlist, please remove some to continue burning."))
-        #self.table.pack_end(self.lWarning, True, True, 0)
+       #self.table.pack_end(self.lWarning, True, True, 0)
 
         self.put(self.table, 0, 0)
         self.show_all()
@@ -408,6 +411,7 @@ class BurnUSBLayout(gtk.Layout):
         self.pyjama.window.tvList.clear()
         self.pyjama.window.toolbar.lbMoreAlbumsFromThisArtist2.hide()
         self.pyjama.window.toolbar.lbAppendAlbum.hide()
+        self.pyjama.window.toolbar.lbArtistsAlbumsToPlaylist.hide()
         # draw the burn-cd dialog
 
         self.put(combo, 0, 0)
